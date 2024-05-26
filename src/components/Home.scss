@@ -1,0 +1,18 @@
+//variables
+$primary-color: green;
+$secondary-color: white;
+$font-stack: Arial, sans-serif;
+
+h1 {
+    font-family:'Montserrat', sans-serif ;
+    font-style: italic;
+    background-color: $primary-color;
+    color: $secondary-color;
+    padding-left: 5%;
+    text-align:justify;
+}
+
+.description {
+    font-family: $font-stack;
+    padding-left: 10px;
+}
