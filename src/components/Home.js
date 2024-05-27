@@ -1,5 +1,5 @@
 import React from 'react';
-import RecipeList from './Recipe';
+import RecipeList from './RecipeList';
 import './Home.scss';
 
 const Home = () => {
