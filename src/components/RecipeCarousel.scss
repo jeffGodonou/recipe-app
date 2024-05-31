@@ -1,0 +1,52 @@
+.carousel-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; // Full height of the viewport
+    width: 100%;
+    overflow: hidden;
+}
+
+.carousel .slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.recipe-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 300px; // Adjust width as needed
+    height: auto;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center;
+}
+
+.image {
+    position: center;
+    align-self: center;
+    //height: 50%;
+    //width: 50%;
+}
+
+.recipe-info {
+    // position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.recipe-button {
+    background-color: (0, 0, 0, 0.5);
+    border: none;
+    color: white;
+    padding: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 50%;
+}

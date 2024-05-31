@@ -1,57 +1,43 @@
-import React, { useEffect, useState } from "react";
-import './Recipe.scss'
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
-const RecipeList = () => {
-    const [recipes, setRecipes] = useState([]);
-    const [searchTerm, setSearchTerm ] = useState('');
+const Recipe = () => {
+    const { id } = useParams();
+    const [recipe, setRecipe] = useState(null);
 
-    useEffect(() => {
-        const fecthRecipes = async ()=> {
+    useEffect( () => {
+        const fetchRecipe = async () => {
             try {
-                const response = await fetch(`https://api.spoonacular.com/recipes/random?number=10&apiKey=16f08fcd71a9490db41c6d5827ad4bce`);
+                const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
                 const data = await response.json();
-                setRecipes(data.recipes);
+                setRecipe(data);
             } catch (error) {
-                console.error('Error met while fetching recipes: ', error);
-            } 
-        }
+                console.log("Error met while fetching the details of the recipe");
+            }
+        };
 
-        fecthRecipes();
-    }, []);
+        fetchRecipe()
+    }, [id]);
 
-    const handleSearch = async (event) => {
-        event.preventDefault();
+    if(!recipe)
+        return <div> Loading... </div>;
 
-        try {
-            const response = await fetch(`https://api.spoonacular.com/recipes/complexSearch?query=${searchTerm}&apiKey=16f08fcd71a9490db41c6d5827ad4bce`);
-            const data = await response.json();
-            setSearchTerm(data.recipes);
-        } catch (error) {
-            console.error('Error met while searching recipes: ', error);
-        }
-    };
-    
     return (
-        <div className="recipe-list-container">
-            <form className="search-form"  onSubmit={handleSearch}>
-                <input 
-                    type="text"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Looking for something ?"
-                />
-                <button type="submit">Search</button>
-            </form>
-            <h2> Some recipes for you: </h2>
+        <div>
+            <h1> {recipe.strMeal} </h1>
+            <img src={recipe.strMealThumb} alt={recipe.strMeal} />
+            <p> {recipe.strInstructions} </p>
+
             <ul>
-                {recipes.map(recipe => (
-                    <li key = {recipe.id}> 
-                        {recipe.title} 
-                    </li>
-                ))}
+                {   
+                    Object.keys(recipe).filter((key) => key.startsWith('strIngredient') && recipe[key])
+                        .map((key) => (
+                                <li key={key}>{recipe[key]}</li>
+                        ))
+                }
             </ul>
         </div>
     );
 };
 
-export default RecipeList;
+export default Recipe;

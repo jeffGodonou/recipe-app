@@ -1,8 +1,9 @@
 import React from 'react';
-import RecipeList from './RecipeList';
+//import RecipeList from './RecipeList';
+import RecipeCarousel from './RecipeCarousel';
 import './Home.scss';
 
-const Home = () => {
+const Home = () => {  
   return (
     <div>
       <h1>
@@ -11,7 +12,8 @@ const Home = () => {
       <p className='description'>
         Find and share inspiration to cook with what you have in your fridge.
       </p>
-      <RecipeList />
+      <RecipeCarousel/>
+      
     </div>
   );
 };

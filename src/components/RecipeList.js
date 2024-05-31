@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from 'react-router-dom';
 import './RecipeList.scss'
 
 const RecipeList = () => {
@@ -61,7 +62,9 @@ const RecipeList = () => {
                 ):(
                         <ul>
                             {recipes.map((recipe) => (
-                                <li key={recipe.id}>{recipe.title}</li>
+                                <li key={recipe.id}>
+                                    <Link to={`/recipe/${recipe.id}`}>{recipe.title}</Link>
+                                </li>
                             ))}
                         </ul>
             )}
