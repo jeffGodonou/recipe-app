@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Carousel } from 'react-responsive-carousel'
+import { Card, CardContent, CardMedia, Typography, IconButton } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add' ;
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Link } from 'react-router-dom';
 import './RecipeCarousel.scss';
@@ -25,23 +27,29 @@ const RecipeCarousel = () => {
         return <div> Loading... </div>; // Show a loading state or a message if there are no recipes
 
     return (
-        <div className='carousel-wrapper'>
+        
         <Carousel showThumbs={false} infiniteLoop useKeyboardArrows>
-            {
-                recipes.map((recipe) => (
-                    <div key={recipe.idMeal} className='recipe-card'>
-                        <img src={recipe.strMealThumb} alt={recipe.strMeal} />
-                        <div className='recipe-info'>
-                            <h2> {recipe.strMeal} </h2>
-                            <Link to = {`/recipe/${recipe.idMeal}`}>
-                                <button className='recipe-button'> + </button>
-                            </Link>
-                        </div>
-                    </div>
-                ))
-            }
+        {
+            recipes.map((recipe) => (
+                <Card key={recipe.idMeal} sx={{ maxWidth: 345, margin: 'auto', boxShadow: 3}}>
+                    <CardMedia
+                        component="img"
+                        height="300"
+                        image={recipe.strMealThumb}
+                        alt={recipe.strMeal}
+                    />
+                    <CardContent>
+                        <Typography gutterBottom variant="h5" component="div">
+                            {recipe.strMeal}
+                        </Typography>
+                        <IconButton component={Link} to={`/recipe/${recipe.idMeal}`} color="primary">
+                            <AddIcon />
+                        </IconButton>
+                    </CardContent>
+                </Card>
+            ))}
         </Carousel>
-        </div>
+        
     );
 };
 

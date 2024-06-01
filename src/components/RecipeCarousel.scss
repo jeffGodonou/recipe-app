@@ -11,6 +11,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 85vh;
 }
 
 .recipe-card {
@@ -30,15 +31,13 @@
 .image {
     position: center;
     align-self: center;
-    //height: 50%;
-    //width: 50%;
 }
 
 .recipe-info {
-    // position: absolute;
     bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
+    text-align: center;
 }
 
 .recipe-button {
@@ -49,4 +48,5 @@
     font-size: 20px;
     cursor: pointer;
     border-radius: 50%;
+    margin-top: 10px;
 }
