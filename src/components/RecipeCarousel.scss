@@ -5,3 +5,45 @@
     height: 85vh;
 }
 
+.carousel-card {
+    transition: transform 0.5s ease;
+}
+
+.carousel-slide-prev .carousel-card {
+    transform: scale(0.8);
+    opacity: 0.6;
+}
+
+.carousel-slide-next .carousel-card {
+    transform: scale(0.8);
+    opacity: 0.6;
+}
+
+.recipe-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 300px;
+    height: auto;
+    background-color: white;
+    // padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center;
+}
+
+.recipe-info {
+    margin-top: 10px;
+}
+
+.recipe-button {
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: white;
+    padding: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    border-radius: 50%;
+    margin-top: 10px;
+}

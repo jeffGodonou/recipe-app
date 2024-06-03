@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Carousel } from 'react-responsive-carousel'
+import Carousel from 'react-material-ui-carousel'; 
 import { Card, CardContent, CardMedia, Typography, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add' ;
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
@@ -20,7 +20,7 @@ const RecipeCarousel = () => {
             }
         };
 
-        fetchRecipes();
+        fetchRecipes(); 
     }, []);
 
     if (!recipes || recipes.length === 0) 
@@ -28,10 +28,26 @@ const RecipeCarousel = () => {
 
     return (
         
-        <Carousel showThumbs={false} infiniteLoop useKeyboardArrows>
+        <Carousel showThumbs={false} infiniteLoop useKeyboardArrows
+            navButtonsAlwaysVisible
+            indicatorContainerProps={{
+            style: {
+                position: 'relative',
+                marginTop: '50px',
+                // height: '90vh',
+                backgroundColor:'white',
+            },
+            }}
+            navButtonsProps={{
+            style: {
+                backgroundColor: 'transparent',
+                color: '#000',
+            },
+            }}
+        >
         {
             recipes.map((recipe) => (
-                <Card key={recipe.idMeal} sx={{ maxWidth: 345, margin: 'auto', boxShadow: 3}}>
+                <Card key={recipe.idMeal} sx={{ maxWidth: 345, margin: 'auto', boxShadow: 3}} className='recipe-card'>
                     <CardMedia
                         component="img"
                         height="300"

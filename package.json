@@ -13,6 +13,7 @@
     "node-sass": "^9.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-material-ui-carousel": "^3.4.2",
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.23.1",
     "react-scripts": "^5.0.1",
