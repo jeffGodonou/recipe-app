@@ -16,3 +16,9 @@ h1 {
     font-family: $font-stack;
     padding-left: 10px;
 }
+
+.search-bar-container {
+    display: flex;
+    justify-content: flex-end;
+    margin: 20px;
+}
