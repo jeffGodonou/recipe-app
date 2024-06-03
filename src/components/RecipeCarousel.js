@@ -1,11 +1,9 @@
 import React from 'react';
-// import Carousel from 'react-material-ui-carousel'; , { useEffect, useState }  
 import Slider from 'react-slick';
 import { Card, CardContent, CardMedia, Typography, IconButton } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add' ;
-// import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import AddIcon from '@mui/icons-material/Add';
 import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css'
+import 'slick-carousel/slick/slick-theme.css';
 import { Link } from 'react-router-dom';
 import './RecipeCarousel.scss';
 
@@ -35,7 +33,7 @@ const SamplePrevArrow = (props) => {
 
 const RecipeCarousel = ({recipes}) => {
     if (!Array.isArray(recipes) || recipes.length === 0) 
-        return <div> There is no recipe to show </div>; // Show a loading state or a message if there are no recipes
+        return <div> There is no recipe to show </div>;
 
     const settings = {
         infinite: true,
