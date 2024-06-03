@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-// import Carousel from 'react-material-ui-carousel'; 
+import React from 'react';
+// import Carousel from 'react-material-ui-carousel'; , { useEffect, useState }  
 import Slider from 'react-slick';
 import { Card, CardContent, CardMedia, Typography, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add' ;
@@ -33,27 +33,9 @@ const SamplePrevArrow = (props) => {
     );
 }
 
-const RecipeCarousel = () => {
-    const [recipes, setRecipes] = useState([]);
-
-    
-    useEffect(() => {
-        const fetchRecipes = async () => {
-
-                    try {
-                        const response = await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=');
-                        const data = await response.json();
-                        setRecipes(data.meals);
-                    } catch (error) {
-                        console.error("Error met while fetching the recipes: ", error);
-                    }
-        };
-
-        fetchRecipes(); 
-    }, []);    
-
-    if (!recipes || recipes.length === 0) 
-        return <div> Loading... </div>; // Show a loading state or a message if there are no recipes
+const RecipeCarousel = ({recipes}) => {
+    if (!Array.isArray(recipes) || recipes.length === 0) 
+        return <div> There is no recipe to show </div>; // Show a loading state or a message if there are no recipes
 
     const settings = {
         infinite: true,
@@ -67,26 +49,7 @@ const RecipeCarousel = () => {
     };
 
     return (
-        
-/*        <Carousel showThumbs={false} infiniteLoop useKeyboardArrows
-            navButtonsAlwaysVisible
-            indicatorContainerProps={{
-            style: {
-                position: 'relative',
-                marginTop: '50px',
-                backgroundColor:'white',
-            },
-            }}
-            navButtonsProps={{
-            style: {
-                backgroundColor: 'transparent',
-                color: '#000',
-            },
-            }}
-        > */
-        < Slider {...settings}>
-
-        
+        < Slider {...settings}>        
         {
             recipes.map((recipe) => (
                 <div key={recipe.idMeal}  className='carousel-card'>
@@ -109,7 +72,6 @@ const RecipeCarousel = () => {
                 </div>
             ))}
         </Slider>
- //       </Carousel>
         
     );
 };

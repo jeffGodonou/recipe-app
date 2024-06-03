@@ -1,23 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import RecipeCarousel from './RecipeCarousel';
 import SearchBar from './SearchBar';
 import './Home.scss';
 
 const Home = () => {  
   const [ searchTerm, setSearchTerm ] = useState('');
-  const [ , setRecipes] = useState([]); 
-  const [, setLoading ] = useState(true);
+  const [ recipes, setRecipes] = useState([]); 
+  const [ loading, setLoading ] = useState(true);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   }; 
 
-  let debounceTimer;
-
-  const handleSearch = async () => {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(async () => {
-      setLoading(true);
+  const debounceTimer = useRef(null);
+  
+  const handleSearch = useCallback(async () => {
       try {
         const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${searchTerm}`);
         const data = await response.json();
@@ -27,12 +24,20 @@ const Home = () => {
       } finally {
         setLoading (false);
       }
-    }, 300);
-  };
+    }, [searchTerm]);
 
   useEffect(() => { 
-    handleSearch(); 
-  });
+    if(debounceTimer.current)
+      clearTimeout(debounceTimer.current);
+
+    debounceTimer.current = setTimeout(() => {
+      handleSearch();
+    }, 300);
+
+    return () => {
+      clearTimeout(debounceTimer.current);
+    };
+  }, [searchTerm, handleSearch]);
   
   return (
     <div>
@@ -50,10 +55,13 @@ const Home = () => {
         />
       </div>
       <div>
-        
+
       </div>
-      <RecipeCarousel/>
-      
+      {loading ? (
+        <div> Loading...</div>
+      ): (
+        <RecipeCarousel recipes = {recipes} />
+      )}
     </div>
   );
 };
