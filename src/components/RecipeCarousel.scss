@@ -1,22 +1,27 @@
-.carousel .slide {
+.slick-slide {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 85vh;
+}
+
+.slick-center .carousel-card {
+    transform: scale(1.2);
+    transition: transform 0.3s;
 }
 
 .carousel-card {
-    transition: transform 0.5s ease;
+    opacity: 0.6;
+    transition: opacity 0.3s, transform 0.3s;
+    height: fit-content;
 }
 
-.carousel-slide-prev .carousel-card {
-    transform: scale(0.8);
-    opacity: 0.6;
+.slick-center .carousel-card {
+    opacity: 1;
 }
 
-.carousel-slide-next .carousel-card {
-    transform: scale(0.8);
-    opacity: 0.6;
+.carousel-card > div {
+    width: auto;
+    margin: 0 40px;
 }
 
 .recipe-card {
@@ -25,9 +30,8 @@
     justify-content: center;
     align-items: center;
     width: 300px;
-    height: auto;
+    height: 500px;
     background-color: white;
-    // padding: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     text-align: center;
