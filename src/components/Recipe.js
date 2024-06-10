@@ -1,6 +1,7 @@
-import { Button, Card, CardMedia, CardContent, Typography, CircularProgress, List, ListItem, ListItemText, TextField } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Button, Card, CardMedia, CardContent, CircularProgress, List, ListItem, ListItemText, TextField, Typography } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import './Recipe.scss';
 
 const Recipe = () => {
     const { id } = useParams();
@@ -46,15 +47,22 @@ const Recipe = () => {
     });
 
     return (
-        <Card key={recipe.idMeal}>
-            <CardMedia 
-                component = "img"
-                height = "140"
-                image = { recipe.strMealThumb }
-                alt = { recipe.strMeal }
-            />  
+        <Card key={recipe.idMeal} className="recipe-card">
+            <div className='image-container'>
+                <CardMedia 
+                    component = "img"
+                    height = "140"
+                    image = { recipe.strMealThumb }
+                    alt = { recipe.strMeal }
+                />
+            </div>
+
             <CardContent>
-                <Typography gutterBottom variant = "h4" component = "div">
+                <Typography 
+                    gutterBottom variant = "h4" 
+                    component = "div" 
+                    className='recipe-name'
+                    >
                     { recipe.strMeal }
                 </Typography>
                 <Typography variant = "h6" > 
@@ -72,11 +80,11 @@ const Recipe = () => {
                 <Typography variant = "h6" > 
                     Instructions
                 </Typography>
-                <List textColor="textSecondary">
+                <List className="instructions-list">
                     { 
                         instructions.map((instruction, index) => ( instruction && (
                             <ListItem key={index}>
-                                <ListItemText primary={instruction} />
+                                <ListItemText primary={instruction} className='instructions-text'/>
                             </ListItem>
                             )
                     ))}
