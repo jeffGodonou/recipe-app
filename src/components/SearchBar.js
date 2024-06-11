@@ -12,10 +12,11 @@ const SearchBar = ({ value, onChange, onSearch }) => {
             onChange={onChange}
             placeholder="Search for recipes"
             InputProps={{
+                style: { color: 'white' },
                 endAdornment: (
                     <InputAdornment position="end">
                         <IconButton onClick={onSearch}>
-                            <SearchIcon />
+                            <SearchIcon style={{color: 'white' }}/>
                         </IconButton>
                     </InputAdornment>
                 ),

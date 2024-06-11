@@ -12,7 +12,7 @@ const Home = () => {
     setSearchTerm(event.target.value);
   }; 
 
-  const debounceTimer = useRef(null);
+  const debounceTimer = useRef(null); // used to reduce the number of requests sent and time them
   
   const handleSearch = useCallback(async () => {
       try {
@@ -40,27 +40,34 @@ const Home = () => {
   }, [searchTerm, handleSearch]);
   
   return (
-    <div>
-      <h1>
-        Welcome to Let's Eat !!!
-      </h1>
+    <div className='home-container'>
+      <div className='header'>
+        <h1>
+          Welcome to Let's Eat !!!
+        </h1>
+        <div className='search-bar-container'>
+          <SearchBar
+            value={searchTerm}
+            onChange={handleSearchChange}
+            onSearch={handleSearch}
+          />
+        </div>
+      </div>
+      
       <p className='description'>
         Find and share inspiration to cook with what you have in your fridge.
       </p>
-      <div className='search-bar-container'>
-        <SearchBar
-          value={searchTerm}
-          onChange={handleSearchChange}
-          onSearch={handleSearch}
-        />
-      </div>
+      
       <div>
 
       </div>
-      {loading ? (
-        <div> Loading...</div>
-      ): (
-        <RecipeCarousel recipes = {recipes} />
+      {
+        loading ? (
+          <div> Loading...</div>
+        ): (
+          <div className='carousel-container'> 
+            <RecipeCarousel recipes = {recipes} />
+          </div>
       )}
     </div>
   );

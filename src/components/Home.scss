@@ -3,13 +3,25 @@ $primary-color: green;
 $secondary-color: white;
 $font-stack: Arial, sans-serif;
 
+.home-container {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    background-color: $primary-color;
+    color: $secondary-color;
+}
+
 h1 {
     font-family:'Montserrat', sans-serif ;
     font-style: italic;
-    background-color: $primary-color;
-    color: $secondary-color;
     padding-left: 5%;
     text-align:justify;
+    justify-content: flex-start;
 }
 
 .description {
@@ -20,5 +32,10 @@ h1 {
 .search-bar-container {
     display: flex;
     justify-content: flex-end;
-    margin: 20px;
+    color: $secondary-color;
+    margin: 20px;    
+}
+
+.carousel-container {
+    margin-top: 60px;
 }
