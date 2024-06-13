@@ -36,19 +36,23 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     text-align: center;
+
+    .card-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
 }
 
 .recipe-info {
     margin-top: 10px;
 }
 
-.recipe-button {
-    background-color: rgba(0, 0, 0, 0.5);
-    border: none;
-    color: white;
-    padding: 10px;
-    font-size: 20px;
+.add-recipe-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
     cursor: pointer;
-    border-radius: 50%;
-    margin-top: 10px;
 }

@@ -1,10 +1,10 @@
 import React from 'react';
 import Slider from 'react-slick';
-import { Card, CardContent, CardMedia, Typography, IconButton } from '@mui/material';
+import { Card, CardContent, CardMedia, Typography, IconButton, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './RecipeCarousel.scss';
 
 const SampleNextArrow = (props) => {
@@ -32,6 +32,12 @@ const SamplePrevArrow = (props) => {
 }
 
 const RecipeCarousel = ({recipes}) => {
+    const navigate = useNavigate();
+
+    const handleAddRecipeClick = () => {
+        navigate('/add-recipe');
+    };
+
     if (!Array.isArray(recipes) || recipes.length === 0) 
         return <div> There is no recipe to show </div>;
 
@@ -47,30 +53,42 @@ const RecipeCarousel = ({recipes}) => {
     };
 
     return (
-        < Slider {...settings}>        
-        {
-            recipes.map((recipe) => (
-                <div key={recipe.idMeal}  className='carousel-card'>
-                <Card key={recipe.idMeal} sx={{ maxWidth: 345, margin: 'auto', boxShadow: 3}} className='recipe-card'>
-                    <CardMedia
-                        component="img"
-                        height="300"
-                        image={recipe.strMealThumb}
-                        alt={recipe.strMeal}
-                    />
-                    <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
-                            {recipe.strMeal}
-                        </Typography>
-                        <IconButton component={Link} to={`/recipe/${recipe.idMeal}`} color="primary">
-                            <AddIcon />
-                        </IconButton>
-                    </CardContent>
-                </Card>
+        <><Slider {...settings}>
+            {recipes.map((recipe) => (
+                <div key={recipe.idMeal} className='carousel-card'>
+                    <Card key={recipe.idMeal} sx={{ maxWidth: 345, margin: 'auto', boxShadow: 3 }} className='recipe-card'>
+                        <CardMedia
+                            component="img"
+                            height="300"
+                            image={recipe.strMealThumb}
+                            alt={recipe.strMeal} />
+                        <CardContent className='card-content'>
+                            <Typography gutterBottom variant="h5" component="div">
+                                {recipe.strMeal}
+                            </Typography>
+                            {recipe.personal && (
+                                <Typography variant='body2' color='textSecondary'>
+                                    Personal
+                                </Typography>
+                            )}
+                            <IconButton component={Link} to={`/recipe/${recipe.idMeal}`} color='success'>
+                                <AddIcon />
+                            </IconButton>
+                        </CardContent>
+                    </Card>
                 </div>
             ))}
         </Slider>
-        
+        <div className='add-recipe-button'>
+                <Button
+                    variant='contained'
+                    color='success'
+                    onClick={handleAddRecipeClick}
+                >
+                    Add Recipe
+                </Button>
+        </div>
+        </>
     );
 };
 

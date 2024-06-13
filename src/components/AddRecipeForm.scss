@@ -1,0 +1,21 @@
+.add-recipe-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    margin-top: 50px;
+
+    form {
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .MuiTypography-root {
+        margin-bottom: 20px;
+    }
+
+    .MuiButton-root {
+        margin-top: 20px;
+    }
+}

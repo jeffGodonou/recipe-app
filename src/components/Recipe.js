@@ -98,8 +98,9 @@ const Recipe = () => {
                     fullWidth
                     value={notes}
                     onChange={handleNotesChange}
+                    color="success"
                 />
-                <Button variant="contained" color="primary" onClick={handleSaveNotes} style={{ marginTop: '10px' }}>
+                <Button variant="contained" color="success" onClick={handleSaveNotes} style={{ marginTop: '10px' }}>
                     Save Notes
                 </Button>
             </CardContent>        

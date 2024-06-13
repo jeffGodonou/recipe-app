@@ -11,7 +11,17 @@ const Home = () => {
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   }; 
+  
+  const handleAddRecipe = () => {
+    const newRecipe = {
+      name: 'New personal recipe',
+      image: 'path/to/image.jpeg',
+      personal: true,
+    };
 
+    setRecipes([...recipes, newRecipe]);
+  };
+  
   const debounceTimer = useRef(null); // used to reduce the number of requests sent and time them
   
   const handleSearch = useCallback(async () => {
@@ -66,7 +76,7 @@ const Home = () => {
           <div> Loading...</div>
         ): (
           <div className='carousel-container'> 
-            <RecipeCarousel recipes = {recipes} />
+            <RecipeCarousel recipes={recipes}  onAddRecipe={handleAddRecipe} />
           </div>
       )}
     </div>
