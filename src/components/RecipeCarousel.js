@@ -8,7 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import './RecipeCarousel.scss';
 
 const SampleNextArrow = (props) => {
-    const {className, style, onClick} = props;
+    const { className, style, onClick } = props;
     
     return (
         <div

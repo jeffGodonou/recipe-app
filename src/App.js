@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import Home from './components/Home';
 import Recipe from './components/Recipe';
@@ -8,8 +8,16 @@ import './App.scss'
 const App = () => {
     const [recipes, setRecipes] = useState([]);
 
+    useEffect(() => {
+        const storedRecipes = localStorage.getItem('recipes');
+        if (storedRecipes)
+            setRecipes(JSON.parse(storedRecipes));
+    }, []);
+
     const handleAddRecipe = (newRecipe) => {
-        setRecipes([...recipes, newRecipe]);
+        const updatedRecipes = [...recipes, newRecipe];
+        setRecipes(updatedRecipes);
+        localStorage.setItem('recipes', JSON.stringify(updatedRecipes));
     };
 
     return (

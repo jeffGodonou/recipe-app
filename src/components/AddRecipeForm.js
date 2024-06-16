@@ -13,15 +13,32 @@ const AddRecipeForm = ({ onAddRecipe }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         const newRecipe = { 
-                            name, 
-                            image, 
-                            ingredients, 
-                            instructions, 
-                            personal: true 
+            idMeal: Date.now().toString(), 
+            strMeal: name,
+            strMealThumb: image,
+            strInstructions: instructions,
+            strIngredients: ingredients,
+            personal: true
                         };
         onAddRecipe(newRecipe);
         navigate('/');
     };
+
+    const handleNameChange = (event) => {
+        setName(event.target.value);
+    }
+
+    const handleImageChange = (event) => {
+        setImage(event.target.value);
+    }
+
+    const handleIngredientsChange = (event) => {
+        setIngredients(event.target.value);
+    }
+
+    const handleInstructionsChange = (event) => {
+        setInstructions(event.target.value);
+    }
 
     return (
         <Container className="add-recipe-form">
@@ -32,7 +49,7 @@ const AddRecipeForm = ({ onAddRecipe }) => {
                 <TextField
                     label="Recipe name"
                     value={name}
-                    onChange={(e) => setName(e.value.target)}
+                    onChange={ handleNameChange }
                     fullWidth
                     margin="normal"
                     color="success"
@@ -40,7 +57,7 @@ const AddRecipeForm = ({ onAddRecipe }) => {
                 <TextField
                     label="Image URL"
                     value={image}
-                    onChange={(e) => setImage(e.value.target)}
+                    onChange={ handleImageChange }
                     fullWidth
                     margin="normal"
                     color="success"
@@ -50,7 +67,7 @@ const AddRecipeForm = ({ onAddRecipe }) => {
                     multiline
                     rows={4}
                     value={ingredients}
-                    onChange={(e) => setIngredients(e.value.target)}
+                    onChange={ handleIngredientsChange }
                     fullWidth
                     margin="normal"
                     color="success"
@@ -60,7 +77,7 @@ const AddRecipeForm = ({ onAddRecipe }) => {
                     multiline
                     rows={4}
                     value={instructions}
-                    onChange={(e) => setInstructions(e.value.target)}
+                    onChange={ handleInstructionsChange }
                     fullWidth
                     margin="normal"
                     color="success"

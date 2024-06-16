@@ -3,24 +3,14 @@ import RecipeCarousel from './RecipeCarousel';
 import SearchBar from './SearchBar';
 import './Home.scss';
 
-const Home = () => {  
+const Home = ({ recipes, onAddRecipe }) => {  
   const [ searchTerm, setSearchTerm ] = useState('');
-  const [ recipes, setRecipes] = useState([]); 
+  const [ filteredRecipes, setFilteredRecipes] = useState(recipes); 
   const [ loading, setLoading ] = useState(true);
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   }; 
-  
-  const handleAddRecipe = () => {
-    const newRecipe = {
-      name: 'New personal recipe',
-      image: 'path/to/image.jpeg',
-      personal: true,
-    };
-
-    setRecipes([...recipes, newRecipe]);
-  };
   
   const debounceTimer = useRef(null); // used to reduce the number of requests sent and time them
   
@@ -28,13 +18,13 @@ const Home = () => {
       try {
         const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${searchTerm}`);
         const data = await response.json();
-        setRecipes(data.meals);
+        setFilteredRecipes(prevRecipes => [...recipes, ...(data.meals || [])]); // append the list of recipes in combining the new one and the old ones
       } catch (error) {
         console.log("Error met while fetching the recipes: ", error);
       } finally {
         setLoading (false);
       }
-    }, [searchTerm]);
+    }, [searchTerm, recipes]);
 
   useEffect(() => { 
     if(debounceTimer.current)
@@ -48,6 +38,10 @@ const Home = () => {
       clearTimeout(debounceTimer.current);
     };
   }, [searchTerm, handleSearch]);
+
+  useEffect(() => {
+    setFilteredRecipes(recipes);
+  }, [recipes]);
   
   return (
     <div className='home-container'>
@@ -76,7 +70,7 @@ const Home = () => {
           <div> Loading...</div>
         ): (
           <div className='carousel-container'> 
-            <RecipeCarousel recipes={recipes}  onAddRecipe={handleAddRecipe} />
+            <RecipeCarousel recipes={filteredRecipes}  onAddRecipe={onAddRecipe} />
           </div>
       )}
     </div>
