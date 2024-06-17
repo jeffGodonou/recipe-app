@@ -6,9 +6,22 @@ import './AddRecipeForm.scss';
 const AddRecipeForm = ({ onAddRecipe }) => {
     const [name, setName] = useState('');
     const [image, setImage] = useState('');
+    const [imagePreview, setImagePreview] = useState('');
     const [ingredients, setIngredients] = useState('');
     const [instructions, setInstructions] = useState('');
     const navigate = useNavigate();
+
+    const handleImageUpload = (event) => {
+        const file = event.target.files[0]; // create a file localy to store the image uploaded
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImage(reader.result);
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -62,6 +75,21 @@ const AddRecipeForm = ({ onAddRecipe }) => {
                     margin="normal"
                     color="success"
                 />
+                <input
+                    accept="image/*"
+                    type="file"
+                    onChange={handleImageUpload}
+                    style={{ display:'block', margin: '20px 0'}}
+                />
+                {
+                    imagePreview && (
+                        <img 
+                            src={imagePreview}
+                            alt="Preview"
+                            style={{ width:'100%', height: 'auto'}}
+                        />
+                    )
+                }
                 <TextField
                     label="Ingredients"
                     multiline
