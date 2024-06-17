@@ -3,7 +3,7 @@ import RecipeCarousel from './RecipeCarousel';
 import SearchBar from './SearchBar';
 import './Home.scss';
 
-const Home = ({ recipes, onAddRecipe }) => {  
+const Home = ({ recipes, onAddRecipe, onDeleteRecipe }) => {  
   const [ searchTerm, setSearchTerm ] = useState('');
   const [ filteredRecipes, setFilteredRecipes] = useState(recipes); 
   const [ loading, setLoading ] = useState(true);
@@ -18,7 +18,7 @@ const Home = ({ recipes, onAddRecipe }) => {
       try {
         const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${searchTerm}`);
         const data = await response.json();
-        setFilteredRecipes(prevRecipes => [...recipes, ...(data.meals || [])]); // append the list of recipes in combining the new one and the old ones
+        setFilteredRecipes([...recipes, ...(data.meals || [])]); // append the list of recipes in combining the new one and the old ones
       } catch (error) {
         console.log("Error met while fetching the recipes: ", error);
       } finally {
@@ -70,7 +70,7 @@ const Home = ({ recipes, onAddRecipe }) => {
           <div> Loading...</div>
         ): (
           <div className='carousel-container'> 
-            <RecipeCarousel recipes={filteredRecipes}  onAddRecipe={onAddRecipe} />
+            <RecipeCarousel recipes={filteredRecipes}  onAddRecipe={onAddRecipe} onDeleteRecipe={onDeleteRecipe}/>
           </div>
       )}
     </div>

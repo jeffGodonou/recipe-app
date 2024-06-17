@@ -2,6 +2,7 @@ import React from 'react';
 import Slider from 'react-slick';
 import { Card, CardContent, CardMedia, Typography, IconButton, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import DeleteIcon from '@mui/icons-material/Delete';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Link, useNavigate } from 'react-router-dom';
@@ -31,7 +32,7 @@ const SamplePrevArrow = (props) => {
     );
 }
 
-const RecipeCarousel = ({recipes}) => {
+const RecipeCarousel = ({recipes, onDeleteRecipe}) => {
     const navigate = useNavigate();
 
     const handleAddRecipeClick = () => {
@@ -67,9 +68,14 @@ const RecipeCarousel = ({recipes}) => {
                                 {recipe.strMeal}
                             </Typography>
                             {recipe.personal && (
-                                <Typography variant='body2' color='textSecondary'>
-                                    Personal
-                                </Typography>
+                                <>
+                                    <Typography variant='body2' color='textSecondary'>
+                                        Personal
+                                    </Typography>
+                                    <IconButton onClick={() => onDeleteRecipe(recipe.idMeal)} color='error'>
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </>
                             )}
                             <IconButton component={Link} to={`/recipe/${recipe.idMeal}`} color='success'>
                                 <AddIcon />

@@ -20,10 +20,16 @@ const App = () => {
         localStorage.setItem('recipes', JSON.stringify(updatedRecipes));
     };
 
+    const handleDeleteRecipe = (idMeal) => {
+        const updatedRecipes = recipes.filter(recipe => recipe.idMeal !== idMeal);
+        setRecipes(updatedRecipes);
+        localStorage.setItem('recipes', JSON.stringify(updatedRecipes));
+    };
+
     return (
         <Router>
             <Routes>
-                <Route exact path="/" element={<Home recipes={recipes} onAddRecipe={ handleAddRecipe }/>} />
+                <Route exact path="/" element={<Home recipes={recipes} onAddRecipe={handleAddRecipe} onDeleteRecipe={handleDeleteRecipe}/>} />
                 <Route path="/recipe/:id" element={<Recipe/>}/>
                 <Route path="/add-recipe" element={<AddRecipeForm onAddRecipe={ handleAddRecipe }/>} />
             </Routes>
