@@ -8,11 +8,24 @@ import './App.scss'
 const App = () => {
     const [recipes, setRecipes] = useState([]);
 
+    // fetch recipes from API and append the list with the stored recipes
     useEffect(() => {
-        const storedRecipes = localStorage.getItem('recipes');
-        if (storedRecipes)
-            setRecipes(JSON.parse(storedRecipes));
+        const storedRecipes = JSON.parse(localStorage.getItem('recipes')) || [];
+        fetchRecipefromApi().then(apiRecipes => {
+            setRecipes([...storedRecipes, ...apiRecipes]);
+        });
     }, []);
+
+    const fetchRecipefromApi = async() => {
+        try {
+            const response = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=`);
+            const data = await response.json();
+            return data.meal || [];
+        } catch (error) {
+            console.error('Error met while fetching the recipe from API: ', error);
+            return [];
+        }
+    }
 
     const handleAddRecipe = (newRecipe) => {
         const updatedRecipes = [...recipes, newRecipe];
@@ -30,8 +43,8 @@ const App = () => {
         <Router>
             <Routes>
                 <Route exact path="/" element={<Home recipes={recipes} onAddRecipe={handleAddRecipe} onDeleteRecipe={handleDeleteRecipe}/>} />
-                <Route path="/recipe/:id" element={<Recipe/>}/>
-                <Route path="/add-recipe" element={<AddRecipeForm onAddRecipe={ handleAddRecipe }/>} />
+                <Route path="/recipe/:id" element={<Recipe recipes={recipes}/>}/>
+                <Route path="/add-recipe" element={<AddRecipeForm onAddRecipe={handleAddRecipe}/>} />
             </Routes>
         </Router>
     );

@@ -1,11 +1,11 @@
 import { Button, Card, CardMedia, CardContent, CircularProgress, List, ListItem, ListItemText, TextField, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './Recipe.scss';
 
-const Recipe = () => {
+const Recipe = ({recipes}) => {
     const { id } = useParams();
-    const [ recipe, setRecipe ] = useState(null);
+    const [ fullRecipes, setFullRecipes] = useState(recipes);
     const [ loading, setLoading ] = useState(true);
     const [ notes, setNotes ] = useState('');
 
@@ -14,7 +14,7 @@ const Recipe = () => {
             try {
                 const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
                 const data = await response.json();
-                setRecipe(data.meals[0]);
+                setFullRecipes([...recipes, ...data.meals||[]]);
                 const savedNotes = localStorage.getItem(`recipe-notes-${id}`);
                 if(savedNotes)
                     setNotes(savedNotes);
@@ -26,7 +26,11 @@ const Recipe = () => {
         };
 
         fetchRecipe()
-    }, [id]);
+    }, [id, recipes, setFullRecipes]);
+    
+    const recipe = fullRecipes.find(r => r.idMeal === id);
+
+    console.log(recipe);
 
     const handleNotesChange = (event) => {
         setNotes(event.target.value);
@@ -42,9 +46,8 @@ const Recipe = () => {
     if(!recipe)
         return <div> There is no recipe to show :( </div>;
 
-    const instructions = recipe.strInstructions.split('. ').map((instruction, index) => {
-        return instruction.trim() ? `${index + 1}. ${instruction.trim()}.` : '';
-    });
+    const ingredients = recipe.strIngredients ? recipe.strIngredients.split(',') : [];
+    const instructions = recipe.strInstructions ? recipe.strInstructions.split('. ') : [];
 
     return (
         <Card key={recipe.idMeal} className="recipe-card">
@@ -65,6 +68,11 @@ const Recipe = () => {
                     >
                     { recipe.strMeal }
                 </Typography>
+                {recipe.personal && (
+                    <Typography variant='body2' color='textSecondary'>
+                        Personal Recipe
+                    </Typography>
+                )}
                 <Typography variant = "h6" > 
                     Ingredients
                 </Typography>
@@ -74,7 +82,13 @@ const Recipe = () => {
                                             .map(( key ) => (
                                                 <li key = { key } >
                                                     { recipe[key] }
-                                                </li>))
+                                                </li>))}
+                    {
+                        ingredients.map((ingredient, index) => (
+                            <ListItem key={index}>
+                                <ListItemText primary={ingredient} />
+                            </ListItem>
+                        ))
                     }
                 </ul>
                 <Typography variant = "h6" > 
