@@ -1,6 +1,8 @@
-import { Button, Card, CardMedia, CardContent, CircularProgress, List, ListItem, ListItemText, TextField, Typography } from '@mui/material';
+import { Button, Card, CardMedia, CardContent, CircularProgress, List, ListItem, ListItemText, Typography } from '@mui/material';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import TextEditor from './TextEditor.js';
+import ShoppingList from './ShoppingList.js';
 import './Recipe.scss';
 
 const Recipe = ({recipes}) => {
@@ -29,8 +31,6 @@ const Recipe = ({recipes}) => {
     }, [id, recipes, setFullRecipes]);
     
     const recipe = fullRecipes.find(r => r.idMeal === id);
-
-    console.log(recipe);
 
     const handleNotesChange = (event) => {
         setNotes(event.target.value);
@@ -104,19 +104,21 @@ const Recipe = ({recipes}) => {
                     ))}
                 </List>
                 <Typography variant="h6">Notes</Typography>
-                <TextField
+                <TextEditor
                     label="Your notes"
-                    multiline
-                    rows={4}
-                    variant="outlined"
+                    // multiline
+                    // rows={4}
+                    // variant="outlined"
                     fullWidth
                     value={notes}
                     onChange={handleNotesChange}
                     color="success"
                 />
+                
                 <Button variant="contained" color="success" onClick={handleSaveNotes} style={{ marginTop: '10px' }}>
                     Save Notes
                 </Button>
+                <ShoppingList />
             </CardContent>        
         </Card>
     )
