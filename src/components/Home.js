@@ -62,9 +62,6 @@ const Home = ({ recipes, onAddRecipe, onDeleteRecipe }) => {
         Find and share inspiration to cook with what you have in your fridge.
       </p>
       
-      <div>
-
-      </div>
       {
         loading ? (
           <div> Loading...</div>

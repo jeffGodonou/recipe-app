@@ -2,7 +2,8 @@ import React from 'react';
 import Slider from 'react-slick';
 import { Card, CardContent, CardMedia, Typography, IconButton, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
+// import DeleteIcon from '@mui/icons-material/Delete';
+import CloseIcon from '@mui/icons-material/Close';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Link, useNavigate } from 'react-router-dom';
@@ -58,6 +59,19 @@ const RecipeCarousel = ({recipes, onDeleteRecipe}) => {
             {recipes.map((recipe) => (
                 <div key={recipe.idMeal} className='carousel-card'>
                     <Card key={recipe.idMeal} sx={{ maxWidth: 345, margin: 'auto', boxShadow: 3 }} className='recipe-card'>
+                        <div className='banier'>
+                        {recipe.personal && (
+                            <>
+                                <Typography variant='body2' color='textSecondary' className='personal-sticker'>
+                                        Personal
+                                </Typography>
+                                < IconButton onClick={() => onDeleteRecipe(recipe.idMeal)} color='error' className='close-button'>
+                                    <CloseIcon />
+                                </IconButton>
+                            </>
+                        )}
+                        </div>
+                        
                         <CardMedia
                             component="img"
                             height="300"
@@ -67,16 +81,6 @@ const RecipeCarousel = ({recipes, onDeleteRecipe}) => {
                             <Typography gutterBottom variant="h5" component="div">
                                 {recipe.strMeal}
                             </Typography>
-                            {recipe.personal && (
-                                <>
-                                    <Typography variant='body2' color='textSecondary'>
-                                        Personal
-                                    </Typography>
-                                    <IconButton onClick={() => onDeleteRecipe(recipe.idMeal)} color='error'>
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </>
-                            )}
                             <IconButton component={Link} to={`/recipe/${recipe.idMeal}`} color='success'>
                                 <AddIcon />
                             </IconButton>

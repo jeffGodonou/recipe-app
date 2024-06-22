@@ -2,11 +2,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 60vh;
+    margin-top: 30px;
+    min-height: 65vh;
 }
 
 .slick-center .carousel-card {
-    transform: scale(1.2);
+    transform: scale(1.1);
     transition: transform 0.3s;
 }
 
@@ -31,16 +32,33 @@
     justify-content: center;
     align-items: center;
     width: 300px;
-    height: 5300px;
+    height: 4300px;
     background-color: white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     text-align: center;
 
+    .banier {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+
     .card-content {
         display: flex;
         flex-direction: column;
         justify-content: center;
+    }
+
+    .personal-sticker {
+        padding: 5px;
+        justify-content: flex-start;
+        font-family:'Montserrat', sans-serif ;
+        font-style: italic;
+    }
+    .close-button {
+        // position: absolute;
+        justify-content: flex-end;
     }
 }
 
