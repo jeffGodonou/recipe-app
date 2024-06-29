@@ -5,7 +5,7 @@ import TextEditor from './TextEditor.js';
 import ShoppingList from './ShoppingList.js';
 import './Recipe.scss';
 
-const Recipe = ({recipes}) => {
+const Recipe = ({recipes, onAddShoppingList}) => {
     const { id } = useParams();
     const [ fullRecipes, setFullRecipes] = useState(recipes);
     const [ loading, setLoading ] = useState(true);
@@ -41,13 +41,13 @@ const Recipe = ({recipes}) => {
     }
 
     if (loading) 
-        return <CircularProgress />
+        return <CircularProgress  color="success"/>
 
     if(!recipe)
         return <div> There is no recipe to show :( </div>;
 
     const ingredients = recipe.strIngredients ? recipe.strIngredients.split(',') : [];
-    const instructions = recipe.strInstructions ? recipe.strInstructions.split('. ') : [];
+    const instructions = recipe.strInstructions ? recipe.strInstructions.split(/\.|STEP/) : [];
 
     return (
         <Card key={recipe.idMeal} className="recipe-card">
@@ -106,9 +106,6 @@ const Recipe = ({recipes}) => {
                 <Typography variant="h6">Notes</Typography>
                 <TextEditor
                     label="Your notes"
-                    // multiline
-                    // rows={4}
-                    // variant="outlined"
                     fullWidth
                     value={notes}
                     onChange={handleNotesChange}
@@ -118,7 +115,7 @@ const Recipe = ({recipes}) => {
                 <Button variant="contained" color="success" onClick={handleSaveNotes} style={{ marginTop: '10px' }}>
                     Save Notes
                 </Button>
-                <ShoppingList />
+                <ShoppingList onAddShoppingList={onAddShoppingList}/>
             </CardContent>        
         </Card>
     )

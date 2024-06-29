@@ -1,12 +1,18 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import RecipeCarousel from './RecipeCarousel';
 import SearchBar from './SearchBar';
+// import ShoppingList from './ShoppingList.js'; 
+import {IconButton} from '@mui/material';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import './Home.scss';
+import { Link } from 'react-router-dom';
+
 
 const Home = ({ recipes, onAddRecipe, onDeleteRecipe }) => {  
-  const [ searchTerm, setSearchTerm ] = useState('');
   const [ filteredRecipes, setFilteredRecipes] = useState(recipes); 
   const [ loading, setLoading ] = useState(true);
+  const [ searchTerm, setSearchTerm ] = useState('');
+  
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -55,11 +61,19 @@ const Home = ({ recipes, onAddRecipe, onDeleteRecipe }) => {
             onChange={handleSearchChange}
             onSearch={handleSearch}
           />
+          <IconButton component={Link} to={`/shopping-list`}>
+            <ShoppingCartIcon style={{color: 'white'}}/>
+          </IconButton>
         </div>
       </div>
       
       <p className='description'>
-        Find and share inspiration to cook with what you have in your fridge.
+          Let's unleash your culinary creativity. <br/>
+          Weather you are looking to make the most of what's in your fridge or 
+        try to whisk something new and exciting, you can explore the wide range 
+        of dishes, get inspired by different cuisines, and turn everyday ingredients 
+        into delightful meal. <br/>
+          Here you can organize, try, create and discover fun recipes with ease.  
       </p>
       
       {
