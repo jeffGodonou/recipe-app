@@ -1,13 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Slider from 'react-slick';
 import { Card, CardContent, CardMedia, Typography, IconButton, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-// import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Link, useNavigate } from 'react-router-dom';
 import './RecipeCarousel.scss';
+import ConfirmDialog from './ConfirmDialog';
 
 const SampleNextArrow = (props) => {
     const { className, style, onClick } = props;
@@ -33,7 +33,18 @@ const SamplePrevArrow = (props) => {
     );
 }
 
-const RecipeCarousel = ({recipes, onDeleteRecipe}) => {
+const RecipeCarousel = ({recipes, handleDeleteRecipe}) => {
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpen = ()=> { setOpen(true) };
+
+    const handleClose = () => { setOpen(false) };
+
+    const handleConfirm = (id) => {
+        handleDeleteRecipe(id);
+        setOpen(false);
+    };
+    
     const navigate = useNavigate();
 
     const handleAddRecipeClick = () => {
@@ -65,9 +76,10 @@ const RecipeCarousel = ({recipes, onDeleteRecipe}) => {
                                 <Typography variant='body2' color='textSecondary' className='personal-sticker'>
                                         Personal
                                 </Typography>
-                                < IconButton onClick={() => onDeleteRecipe(recipe.idMeal)} color='error' className='close-button'>
+                                < IconButton onClick={() => handleClickOpen(recipe.idMeal)} color='error' className='close-button'>
                                     <CloseIcon />
                                 </IconButton>
+                                <ConfirmDialog open={open} handleClose={handleClose} handleConfirm={handleConfirm}/>
                             </>
                         )}
                         </div>
