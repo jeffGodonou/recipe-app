@@ -61,10 +61,10 @@ const App = () => {
     }
 
     return (
-        <Router>
+        <Router>    
             <Routes>
                 <Route exact path="/" element={<Home recipes={recipes} onAddRecipe={handleAddRecipe} onDeleteRecipe={handleDeleteRecipe}/>} />
-                <Route path="/recipe/:id" element={<Recipe recipes={recipes}/>}/>
+                <Route path="/recipe/:id" element={<Recipe recipes={recipes} onAddShoppingList={handleAddShoppingList}/>}/>
                 <Route path="/add-recipe" element={<AddRecipeForm onAddRecipe={handleAddRecipe}/>} />
                 <Route path="/shopping-list" element={<ShoppingListPage shoppingLists={shoppingLists} onAddShoppingList={handleAddShoppingList} onDeleteShoppingList={handleDeleteShoppingLists} />} />
             </Routes>
