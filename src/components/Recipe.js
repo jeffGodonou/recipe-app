@@ -10,6 +10,11 @@ const Recipe = ({recipes, onAddShoppingList}) => {
     const [ fullRecipes, setFullRecipes] = useState(recipes);
     const [ loading, setLoading ] = useState(true);
     const [ notes, setNotes ] = useState('');
+    const [open, setOpen] = useState(false);
+
+    const handleClickOpen = ()=> { setOpen(true) };
+
+    const handleClose = () => { setOpen(false) };
 
     useEffect( () => {
         const fetchRecipe = async () => {
@@ -61,13 +66,24 @@ const Recipe = ({recipes, onAddShoppingList}) => {
             </div>
 
             <CardContent>
-                <Typography 
-                    gutterBottom variant = "h4" 
-                    component = "div" 
-                    className='recipe-name'
+                <div className='header-div'> 
+                    <Typography 
+                        gutterBottom variant = "h4" 
+                        component = "div" 
+                        className='recipe-name'
                     >
-                    { recipe.strMeal }
-                </Typography>
+                        { recipe.strMeal }
+                    </Typography>
+                    <Button
+                        variant="contained"
+                        
+                        onClick={() => handleClickOpen()}    
+                    >
+                        Shopping list
+                    </Button>
+                    <ShoppingList open={open} handleClose={handleClose} onAddShoppingList={onAddShoppingList}/>
+                </div>
+                
                 {recipe.personal && (
                     <Typography variant='body2' color='textSecondary'>
                         Personal Recipe
@@ -115,7 +131,6 @@ const Recipe = ({recipes, onAddShoppingList}) => {
                 <Button variant="contained" color="success" onClick={handleSaveNotes} style={{ marginTop: '10px' }}>
                     Save Notes
                 </Button>
-                <ShoppingList onAddShoppingList={onAddShoppingList}/>
             </CardContent>        
         </Card>
     )
