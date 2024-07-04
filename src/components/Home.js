@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import RecipeCarousel from './RecipeCarousel';
-import SearchBar from './SearchBar';
-// import ShoppingList from './ShoppingList.js'; 
-import {IconButton} from '@mui/material';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+// import SearchBar from './SearchBar';
+import Navbar from './Navbar';
+// import {IconButton} from '@mui/material';
+// import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import './Home.scss';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 
 const Home = ({ recipes, onAddRecipe, onDeleteRecipe }) => {  
@@ -13,7 +13,6 @@ const Home = ({ recipes, onAddRecipe, onDeleteRecipe }) => {
   const [ loading, setLoading ] = useState(true);
   const [ searchTerm, setSearchTerm ] = useState('');
   
-
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   }; 
@@ -51,22 +50,7 @@ const Home = ({ recipes, onAddRecipe, onDeleteRecipe }) => {
   
   return (
     <div className='home-container'>
-      <div className='header'>
-        <h1>
-          Welcome to Let's Eat !!!
-        </h1>
-        <div className='search-bar-container'>
-          <SearchBar
-            value={searchTerm}
-            onChange={handleSearchChange}
-            onSearch={handleSearch}
-          />
-          <IconButton component={Link} to={`/shopping-list`}>
-            <ShoppingCartIcon style={{color: 'white'}}/>
-          </IconButton>
-        </div>
-      </div>
-      
+      <Navbar searchTerm={searchTerm} handleSearchChange={handleSearchChange} handleSearch={handleSearch} handleAddRecipeClick={handleSearch}/>
       <p className='description'>
           Let's unleash your culinary creativity. <br/>
           Weather you are looking to make the most of what's in your fridge or 
