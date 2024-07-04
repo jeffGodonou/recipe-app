@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import Slider from 'react-slick';
-import { Card, CardContent, CardMedia, Typography, IconButton, Button } from '@mui/material';
+import { Card, CardContent, CardMedia, Typography, IconButton} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './RecipeCarousel.scss';
 import ConfirmDialog from './ConfirmDialog';
 
@@ -45,12 +45,6 @@ const RecipeCarousel = ({recipes, handleDeleteRecipe}) => {
         setOpen(false);
     };
     
-    const navigate = useNavigate();
-
-    const handleAddRecipeClick = () => {
-        navigate('/add-recipe');
-    };
-
     if (!Array.isArray(recipes) || recipes.length === 0) 
         return <div> There is no recipe to show </div>;
 
@@ -101,15 +95,6 @@ const RecipeCarousel = ({recipes, handleDeleteRecipe}) => {
                 </div>
             ))}
         </Slider>
-        <div className='add-recipe-button'>
-                <Button
-                    variant='contained'
-                    color='success'
-                    onClick={handleAddRecipeClick}
-                >
-                    Add Recipe
-                </Button>
-        </div>
         </>
     );
 };
