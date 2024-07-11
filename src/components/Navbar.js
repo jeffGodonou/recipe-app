@@ -1,14 +1,14 @@
 import React from "react";
-import SearchBar from "./SearchBar";
-// import SearchIcon from '@mui/icons-material/Search';
+import SearchIcon from '@mui/icons-material/Search';
 import EditIcon from '@mui/icons-material/Edit';
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { Link } from 'react-router-dom';
-// import { alpha, styled } from '@mui/material/styles'
-import { AppBar, Button, Toolbar, Typography } from "@mui/material";
+import { alpha, styled } from '@mui/material/styles'
+import { AppBar, Button, InputBase, InputAdornment, IconButton, Toolbar, Typography } from "@mui/material";
 import './Navbar.scss'
 
-/*const Search = styled('div')(({ theme }) => ({
+const Search = styled('div')(({ theme }) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: alpha(theme.palette.common.white, 0.15),
@@ -48,7 +48,7 @@ const StyledInputBase = styled(InputBase) (({ theme }) => ({
             },
         },
     },
-})); */
+})); 
 
 const Navbar = ({searchTerm, handleSearchChange, handleSearch,  }) => {
     return (
@@ -57,33 +57,34 @@ const Navbar = ({searchTerm, handleSearchChange, handleSearch,  }) => {
                 <Typography variant='h6' component='div' sx={{ flexGrow: 1}} className="title" >
                     Welcome to Let's eat!
                 </Typography>
-                {
-                    /*
-                        <Search>
-                    <SearchIconWrapper>
-                        <SearchIcon />
-                    </SearchIconWrapper>
+
+                <Search>
                     <StyledInputBase
                         value={searchTerm}
                         placeholder="Search..."
-                        inputProps={{ 'aria-label': 'search' }}
-                        onChange={(e) => handleSearch(e.target.value)}
-                        onSearch={}
+                        onChange={handleSearchChange}
+                    endAdornment={
+                            <InputAdornment position="start">
+                                <IconButton onClick={handleSearch}>
+                                    <SearchIconWrapper>
+                                        <SearchIcon sx={{ color:'white' }}/>
+                                    </SearchIconWrapper>
+                                </IconButton>
+                            </InputAdornment>                
+                        }
+                        inputProps={{ 'aria-label': 'search',}}
+                        
                     />
                 </Search>
-                    */
-                }
-                <SearchBar
-                    value={searchTerm}
-                    onChange={handleSearchChange}
-                    onSearch={handleSearch}
-                />
                 <Button color='inherit' component={Link} to={`/shopping-list`}>
                     <ShoppingCartIcon/>
                 </Button>
 
-                < Button color='inherit' component={Link} to={`/add-recipe`}>
+                <Button color='inherit' component={Link} to={`/add-recipe`}>
                     <EditIcon />
+                </Button>
+                <Button color='inherit' component={Link} to={`/mealplan`}>
+                    <CalendarTodayIcon/>
                 </Button>
             </Toolbar>
         </AppBar>

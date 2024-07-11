@@ -5,11 +5,11 @@ import Recipe from './components/Recipe';
 import AddRecipeForm from './components/AddRecipeForm';
 import ShoppingListPage from './components/ShoppingListPage';
 import './App.scss'
+import MealPlanPage from './components/MealPlanPage';
 
 const App = () => {
     const [recipes, setRecipes] = useState([]);
     const [shoppingLists, setShoppingLists] = useState([]);
-
     
     useEffect(() => {
         // fetch recipes from API and append the list with the stored recipes
@@ -50,23 +50,32 @@ const App = () => {
         localStorage.setItem('recipes', JSON.stringify(updatedRecipes));
     };
 
+    const updateRecipe = (updatedRecipe) => {
+        setRecipes(
+            prevRecipes => prevRecipes.map( recipe =>
+                recipe.id === updatedRecipe.id ? updatedRecipe : recipe
+            )
+        );
+    };
+
     const handleAddShoppingList = (newList) => {
         const updatedShoppingLists = [...shoppingLists, {...newList, id: Date.now()}];
         setShoppingLists(updatedShoppingLists);
-    }
+    };
 
     const handleDeleteShoppingLists = (id) => {
         const updatedShoppingLists = shoppingLists.filter(list => list.id !== id);
         setShoppingLists(updatedShoppingLists);
-    }
+    };
 
     return (
         <Router>    
             <Routes>
                 <Route exact path="/" element={<Home recipes={recipes} onAddRecipe={handleAddRecipe} onDeleteRecipe={handleDeleteRecipe}/>} />
-                <Route path="/recipe/:id" element={<Recipe recipes={recipes} onAddShoppingList={handleAddShoppingList}/>}/>
-                <Route path="/add-recipe" element={<AddRecipeForm onAddRecipe={handleAddRecipe}/>} />
+                <Route path="/recipe/:id" element={<Recipe recipes={recipes} updateRecipe={updateRecipe} onAddShoppingList={handleAddShoppingList}/>}/>
+                <Route path="/add-recipe" element={<AddRecipeForm/>} />
                 <Route path="/shopping-list" element={<ShoppingListPage shoppingLists={shoppingLists} onAddShoppingList={handleAddShoppingList} onDeleteShoppingList={handleDeleteShoppingLists} />} />
+                <Route path="/mealplan" element={<MealPlanPage recipes={recipes}/>}/>
             </Routes>
         </Router>
     );
