@@ -1,10 +1,12 @@
 import React, {useState} from "react";
 import ShoppingList from "./ShoppingList";
-import { Button, Card, CardContent, IconButton, List, ListItem, ListItemText, Grid, Typography, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField } from "@mui/material";
+import { Button, Card, CardContent, List, ListItem, ListItemText, Grid, Typography, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import emailjs from 'emailjs-com';
 import './ShoppingListPage.scss';
+import { Link } from "react-router-dom";
+import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
 
 const ShoppingListPage = ({shoppingLists, onAddShoppingList, onDeleteShoppingList }) => {
     const [open, setOpen] = useState(false);
@@ -46,16 +48,22 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onDeleteShoppingLis
     };
 
     return (
-        <><div className="shopping-list-page">
-            <div className="lists-container">
-                <div className="header-bar">
-                    <h2> Lists </h2>
-                    <IconButton onClick={() => handleClickOpen()} color='error' className='add-button'>
-                        <AddIcon />
-                    </IconButton>
+        <>
+            <div className='header-div'>
+                <Typography variant='h4' className='title'> Add a recipe </Typography>
+                <div className="button-div">
+                    <Button onClick={() => handleClickOpen()} variant='contained' className='button'>
+                        <AddIcon/>
+                    </Button>    
                     <ShoppingList open={open} handleClose={handleClose} onAddShoppingList={onAddShoppingList} />
+                    <Button component={Link} to='/' variant='contained' className='button'>
+                        <HomeTwoToneIcon/>
+                    </Button>
                 </div>
+            </div>
 
+            <div className="shopping-list-page">
+                <div className="lists-container">
                 {shoppingLists.length === 0 ? (
                     <Typography> No shopping lists saved </Typography>
                 ) : (

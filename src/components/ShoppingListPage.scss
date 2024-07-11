@@ -3,11 +3,6 @@
     padding: 20px;
 }
 
-.header-bar {
-    display: flex;
-    justify-content: space-between;
-}
-
 .lists-container {
     margin-left: 20px;
 }
@@ -17,3 +12,27 @@
     max-width: 350px;
 }
 
+.header-div {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    width: 100%;
+    padding: 10px;
+    background-color: green;
+    
+    .title {
+        font-family:'Montserrat', sans-serif ;
+        font-style: italic;
+        color: white;
+        margin-left: 2rem;
+    }
+
+    .button-div {
+        margin-right: 2rem;
+    }
+
+    .button {
+        margin-right: 0rem;
+        background-color: transparent;
+    }
+}

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { TextField, Button, Container, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
+import { useNavigate, Link } from "react-router-dom";
 import './AddRecipeForm.scss';
 
 const AddRecipeForm = ({ onAddRecipe }) => {
@@ -54,71 +55,67 @@ const AddRecipeForm = ({ onAddRecipe }) => {
     }
 
     return (
-        <Container className="add-recipe-form">
-            <Typography variant="h4"> 
-                Add a recipe
-            </Typography>
-            <form onSubmit={ handleSubmit }>
-                <TextField
-                    label="Recipe name"
-                    value={name}
-                    onChange={ handleNameChange }
-                    fullWidth
-                    margin="normal"
-                    color="success"
-                />
-                <TextField
-                    label="Image URL"
-                    value={image}
-                    onChange={ handleImageChange }
-                    fullWidth
-                    margin="normal"
-                    color="success"
-                />
-                <input
-                    accept="image/*"
-                    type="file"
-                    onChange={handleImageUpload}
-                    style={{ display:'block', margin: '20px 0'}}
-                />
-                {
-                    imagePreview && (
-                        <img 
+        <>
+            <div className='header-div'>
+                <Typography variant='h4' className='title'> Add a recipe </Typography>
+                <Button component={Link} to='/' variant='contained' className='home-button'>
+                    <HomeTwoToneIcon />
+                </Button>
+            </div>
+            <Container className="add-recipe-form">
+                <form onSubmit={handleSubmit}>
+                    <TextField
+                        label="Recipe name"
+                        value={name}
+                        onChange={handleNameChange}
+                        fullWidth
+                        margin="normal"
+                        color="success" />
+                    <TextField
+                        label="Image URL"
+                        value={image}
+                        onChange={handleImageChange}
+                        fullWidth
+                        margin="normal"
+                        color="success" />
+                    <input
+                        accept="image/*"
+                        type="file"
+                        onChange={handleImageUpload}
+                        style={{ display: 'block', margin: '20px 0' }} />
+                    {imagePreview && (
+                        <img
                             src={imagePreview}
                             alt="Preview"
-                            style={{ width:'100%', height: 'auto'}}
-                        />
-                    )
-                }
-                <TextField
-                    label="Ingredients"
-                    multiline
-                    rows={4}
-                    value={ingredients}
-                    onChange={ handleIngredientsChange }
-                    fullWidth
-                    margin="normal"
-                    color="success"
-                />
-                <TextField
-                    label="Instructions"
-                    multiline
-                    rows={4}
-                    value={instructions}
-                    onChange={ handleInstructionsChange }
-                    fullWidth
-                    margin="normal"
-                    color="success"
-                />
-                <Button
-                    type="submit"
-                    variant="contained"
-                    color="success"
-                >
-                    Submit
-                </Button>
-            </form>
-        </Container>
+                            style={{ width: '100%', height: 'auto' }} />
+                    )}
+                    <TextField
+                        label="Ingredients"
+                        multiline
+                        rows={4}
+                        value={ingredients}
+                        onChange={handleIngredientsChange}
+                        fullWidth
+                        margin="normal"
+                        color="success" />
+                    <TextField
+                        label="Instructions"
+                        multiline
+                        rows={4}
+                        value={instructions}
+                        onChange={handleInstructionsChange}
+                        fullWidth
+                        margin="normal"
+                        color="success" />
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        color="success"
+                    >
+                        Submit
+                    </Button>
+                </form>
+            </Container></>
     );
 };
 
