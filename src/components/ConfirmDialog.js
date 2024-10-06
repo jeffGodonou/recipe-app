@@ -11,10 +11,10 @@ const ConfirmDialog = ({ open, handleClose, handleConfirm }) => {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
         >
-            <DialogTitle id="alert-dialog-title" className='dialog-title'> {"Confirm deletion"} </DialogTitle>
+            <DialogTitle id="alert-dialog-title" sx={{backgroundColor:'green', color:'white', fontFamily:'Montserrat, sans-serif', fontStyle: 'italic'}}>Confirm deletion </DialogTitle>
             <DialogContent className="dialog-content">
                 <DialogContentText id="alert-dialog-description">
-                    Do you want to confirm deleting this recipe ?
+                    Do you want to confirm deleting this item ?
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
