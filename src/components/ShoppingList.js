@@ -73,12 +73,13 @@ const ShoppingList = ({ open, handleClose, onAddShoppingList }) => {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
         >
-            <DialogTitle id="alert-dialog-title"> {"Shopping List"} </DialogTitle>
+            <DialogTitle id="alert-dialog-title" sx={{backgroundColor:'green', color:'white', fontFamily:'Montserrat, sans-serif', fontStyle: 'italic'}}> Shopping List </DialogTitle>
             <DialogContent>
                 <div className="shopping-list-input">
                     <TextField
                         label='Add Item'
                         value={newItem}
+                        margin="20px"
                         onChange={(e) => setNewItem(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleAddItem()}
                         fullWidth />
