@@ -3,16 +3,26 @@ import ShoppingList from "./ShoppingList";
 import { Button, Card, CardContent, List, ListItem, ListItemText, Grid, Typography, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
+import SendIcon from "@mui/icons-material/Send"
 import emailjs from 'emailjs-com';
 import './ShoppingListPage.scss';
 import { Link } from "react-router-dom";
 import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
+import Snackbar from "@mui/material/Snackbar";
+import Alert from '@mui/material/Alert';
 
 const ShoppingListPage = ({shoppingLists, onAddShoppingList, onDeleteShoppingList }) => {
     const [open, setOpen] = useState(false);
     const [openMailBox, setOpenMailBox] = useState(false);
     const [selectedList, setSelectedList] = useState(null);
     const [email, setEmail] = useState('');
+    const [state, setState] = useState({
+        openMessage: false,
+        vertical: 'bottom',
+        horizontal: 'center',
+        message: "Your shoppinglist was sent successfully"
+    });
+    const { openMessage, vertical, horizontal, message } = state;
 
     const handleClickOpen = () => { setOpen(true) };
 
@@ -23,6 +33,10 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onDeleteShoppingLis
 
     const handleClose = () => { setOpen(false) };
 
+    const handleCloseMessage = () => {
+        setState({...state, openMessage: false});
+    };
+
     const handleCloseMailBox = () => { 
         setOpenMailBox(false);
         setEmail('');
@@ -30,8 +44,7 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onDeleteShoppingLis
 
     const sendEmail = () => {
         if(!selectedList) return;
-        const formattedItems =  selectedList.items.map(item => `${item}`) ;
-        console.log(formattedItems);
+        const formattedItems =  selectedList.items.map(item => `${item}`);
         const templateParams = {
             items: formattedItems,
             email: email,
@@ -42,15 +55,17 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onDeleteShoppingLis
                 .then((response) => {
                     console.log('Email sent', response.status, response.text);
                     handleCloseMailBox();
+                    setState({ message: 'Your shopping list was sent successfully!', openMessage: true });
                 }, (error) => {
                     console.log('Email sending failed', error);
+                    setState({ message: 'There were an issue with your mail!', openMessage:true });
                 });
     };
 
     return (
         <>
             <div className='header-div'>
-                <Typography variant='h4' className='title'> Add a recipe </Typography>
+                <Typography variant='h4' className='title'> Shopping Lists </Typography>
                 <div className="button-div">
                     <Button onClick={() => handleClickOpen()} variant='contained' className='button'>
                         <AddIcon/>
@@ -90,13 +105,14 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onDeleteShoppingLis
                                                 startIcon={<DeleteIcon />}
                                                 onClick={() => onDeleteShoppingList(list.id)}
                                             >
-                                                Delete List
+                                                Delete
                                             </Button>
                                             <Button
                                                 variant="contained"
                                                 color="primary"
                                                 onClick={() => handleClickOpenMailBox(list)}
                                                 style={{ marginLeft: '10px' }}
+                                                endIcon={ <SendIcon /> }
                                             >
                                                 Send to email
                                             </Button>
@@ -110,9 +126,9 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onDeleteShoppingLis
             </div>
         </div>
         <Dialog open={openMailBox} onClose={handleCloseMailBox} aria-labelledby="form-dialog-title">
-            <DialogTitle id="form-dialog-title"> Email </DialogTitle>
+            <DialogTitle id="form-dialog-title" sx={{backgroundColor:'green', color:'white', fontFamily:'Montserrat, sans-serif', fontStyle: 'italic'}}> Email </DialogTitle>
             <DialogContent>
-                <DialogContentText>
+                <DialogContentText margin="10px">
                     Enter your email to receive your shopping list
                 </DialogContentText>
                 <TextField
@@ -124,13 +140,25 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onDeleteShoppingLis
                     fullWidth
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+                    color='success'
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleCloseMailBox} color="primary"> Cancel </Button>
-                <Button onClick={sendEmail} color="primary"> Send </Button>
+                <Button onClick={handleCloseMailBox} color='error'> Cancel </Button>
+                <Button onClick={sendEmail} color='success'> Send </Button>
             </DialogActions>
         </Dialog>
+        <Snackbar
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            open={openMessage}
+            autoHideDuration={5000}
+            onClose={handleCloseMessage}
+            key={vertical + horizontal}
+        >
+            <Alert onClose={handleCloseMessage} severity="success" variant="filled" sx={{ width: '100%' }}>
+                {message}
+            </Alert>
+        </Snackbar>
     </>
     );
 };
