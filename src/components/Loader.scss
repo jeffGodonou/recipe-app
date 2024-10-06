@@ -1,0 +1,237 @@
+/******************************************************************
+* Extract from: 
+* https://github.com/atherosai/ui/blob/main/loaders-01/style.css
+*******************************************************************/
+
+.loader-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+/* Cube */
+.cube-wrapper {
+    min-height: 4rem;
+    position: relative;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotateX(-37.5deg) rotateY(45deg);
+    }
+    50% {
+        transform: rotateX(-37.5deg) rotateY(405deg);
+    }
+    100% {
+        transform: rotateX(-37.5deg) rotateY(405deg);
+    }
+}
+
+.cube, .cube * {
+    position: absolute;
+    width: var(--cube-side);
+    height: var(--cube-side);
+    top: 0.25rem;
+    left: -0.4rem;
+}
+
+.sides {
+    animation: rotate 3s ease infinite;
+    animation-delay: 0.8s;
+    transform-style: preserve-3d;
+    transform: rotateX(-37.5deg) rotateY(45deg);
+}
+
+.cube .sides * {
+    box-sizing: border-box;
+    background: var(--primary);
+    border: 0.1rem solid white;
+}
+
+.cube .sides .top {
+    animation: top-animation 3s ease infinite;
+    animation-delay: 0ms;
+    transform: rotateX(90deg) translateZ(var(--cube-side));
+    animation-fill-mode: forwards;
+    transform-origin: 50% 50%;
+}
+
+@keyframes top-animation {
+    0% {
+        opacity: 1;
+        transform: rotateX(90deg) translateZ(var(--cube-side));
+    }
+    20% {
+        opacity: 1;
+        transform: rotateX(90deg) translateZ(var(--cube-side-half));
+    }
+    70% {
+        opacity: 1;
+        transform: rotateX(90deg) translateZ(var(--cube-side-half));
+    }
+    90% {
+        opacity: 1;
+        transform: rotateX(90deg) translateZ(var(--cube-side));
+    }
+    100% {
+        opacity: 1;
+        transform: rotateX(90deg) translateZ(var(--cube-side));
+    }
+}
+
+.cube .sides .bottom {
+    animation: bottom-animation 3s ease infinite;
+    animation-delay: 0ms;
+    transform: rotateX(-90deg) translateZ(var(--cube-side));
+    animation-fill-mode: forwards;
+    transform-origin: 50% 50%;
+}
+
+@keyframes bottom-animation {
+    0% {
+        opacity: 1;
+        transform: rotateX(-90deg) translateZ(var(--cube-side));
+    }
+    20% {
+        opacity: 1;
+        transform: rotateX(-90deg) translateZ(var(--cube-side-half));
+    }
+    70% {
+        opacity: 1;
+        transform: rotateX(-90deg) translateZ(var(--cube-side-half));
+    }
+    90% {
+        opacity: 1;
+        transform: rotateX(-90deg) translateZ(var(--cube-side));
+    }
+    100% {
+        opacity: 1;
+        transform: rotateX(-90deg) translateZ(var(--cube-side));
+    }
+}
+
+.cube .sides .front {
+    animation: front-animation 3s ease infinite;
+    animation-delay: 100ms;
+    transform: rotateY(0deg) translateZ(var(--cube-side));
+    animation-fill-mode: forwards;
+    transform-origin: 50% 50%;
+}
+
+@keyframes front-animation {
+    0% {
+        opacity: 1;
+        transform: rotateY(0deg) translateZ(var(--cube-side));
+    }
+    20% {
+        opacity: 1;
+        transform: rotateY(0deg) translateZ(var(--cube-side-half));
+    }
+    70% {
+        opacity: 1;
+        transform: rotateY(0deg) translateZ(var(--cube-side-half));
+    }
+    90% {
+        opacity: 1;
+        transform: rotateY(0deg) translateZ(var(--cube-side));
+    }
+    100% {
+        opacity: 1;
+        transform: rotateY(0deg) translateZ(var(--cube-side));
+    } 
+}
+
+.cube .sides .back {
+    animation: back-animation 3s ease infinite;
+    animation-delay: 100ms;
+    transform: rotateY(-180deg) translateZ(var(--cube-side));
+    animation-fill-mode: forwards;
+    transform-origin: 50% 50%;
+}
+
+@keyframes back-animation {
+    0% {
+        opacity: 1;
+        transform: rotateY(-180deg) translateZ(var(--cube-side));
+    }
+    20% {
+        opacity: 1;
+        transform: rotateY(-180deg) translateZ(var(--cube-side-half));
+    }
+    70% {
+        opacity: 1;
+        transform: rotateY(-180deg) translateZ(var(--cube-side-half));
+    }
+    90% {
+        opacity: 1;
+        transform: rotateY(-180deg) translateZ(var(--cube-side));
+    }
+    100% {
+        opacity: 1;
+        transform: rotateY(-180deg) translateZ(var(--cube-side));
+    }
+}
+
+.cube .sides .left {
+    animation: left-animation 3s ease infinite;
+    animation-delay: 100ms;
+    transform: rotateY(-90deg) translateZ(var(--cube-side));
+    animation-fill-mode: forwards;
+    transform-origin: 50% 50%;
+}
+
+@keyframes left-animation {
+    0% {
+        opacity: 1;
+        transform: rotateY(-90deg) translateZ(var(--cube-side));
+    }
+    20% {
+        opacity: 1;
+        transform: rotateY(-90deg) translateZ(var(--cube-side-half));
+    }
+    70% {
+        opacity: 1;
+        transform: rotateY(-90deg) translateZ(var(--cube-side-half));
+    }
+    90% {
+        opacity: 1;
+        transform: rotateY(-90deg) translateZ(var(--cube-side));
+    }
+    100% {
+        opacity: 1;
+        transform: rotateY(-90deg) translateZ(var(--cube-side));
+    }
+}
+
+.cube .sides .right {
+    animation: right-animation 3s ease infinite;
+    animation-delay: 100ms;
+    transform: rotateY(90deg) translateZ(var(--cube-side));
+    animation-fill-mode: forwards;
+    transform-origin: 50% 50%;
+}
+
+@keyframes right-animation {
+    0% {
+        opacity: 1;
+        transform: rotateY(90deg) translateZ(var(--cube-side));
+    }
+    20% {
+        opacity: 1;
+        transform: rotateY(90deg) translateZ(var(--cube-side-half));
+    }
+    70% {
+        opacity: 1;
+        transform: rotateY(90deg) translateZ(var(--cube-side-half));
+    }
+    90% {
+        opacity: 1;
+        transform: rotateY(90deg) translateZ(var(--cube-side));
+    }
+    100% {
+        opacity: 1;
+        transform: rotateY(90deg) translateZ(var(--cube-side));
+    }
+}
