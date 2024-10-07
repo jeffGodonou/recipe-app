@@ -63,7 +63,7 @@ const RecipeCarousel = ({recipes, handleDeleteRecipe}) => {
         <><Slider {...settings}>
             {recipes.map((recipe) => (
                 <div key={recipe.idMeal} className='carousel-card'>
-                    <Card key={recipe.idMeal} sx={{ maxWidth: 345, margin: 'auto', boxShadow: 3 }} className='recipe-card'>
+                    <Card key={recipe.idMeal} sx={{ maxWidth: 345, margin: 'auto', boxShadow: 3, backgroundColor: 'rgb(216, 120, 24)' }} className='recipe-card'>
                         <div className='banier'>
                         {recipe.personal && (
                             <>
@@ -84,10 +84,10 @@ const RecipeCarousel = ({recipes, handleDeleteRecipe}) => {
                             image={recipe.strMealThumb}
                             alt={recipe.strMeal} />
                         <CardContent className='card-content'>
-                            <Typography gutterBottom variant="h5" component="div">
+                            <Typography gutterBottom variant="h5" component="div" color="rgb(18, 26, 25)" sx={{ fontFamily: 'Montserrat, sans-serif', fontWeight:'bold'}}>
                                 {recipe.strMeal}
                             </Typography>
-                            <IconButton component={Link} to={`/recipe/${recipe.idMeal}`} color='success'>
+                            <IconButton component={Link} to={`/recipe/${recipe.idMeal}`} color="rgb(18, 26, 25)">
                                 <AddIcon />
                             </IconButton>
                         </CardContent>

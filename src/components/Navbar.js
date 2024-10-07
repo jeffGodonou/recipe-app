@@ -1,12 +1,12 @@
 import React from "react";
 import SearchIcon from '@mui/icons-material/Search';
 import EditIcon from '@mui/icons-material/Edit';
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { Link } from 'react-router-dom';
 import { alpha, styled } from '@mui/material/styles'
 import { AppBar, Button, InputBase, InputAdornment, IconButton, Toolbar, Typography } from "@mui/material";
-import './Navbar.scss'
+import './Navbar.scss';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -52,9 +52,9 @@ const StyledInputBase = styled(InputBase) (({ theme }) => ({
 
 const Navbar = ({searchTerm, handleSearchChange, handleSearch,  }) => {
     return (
-        <AppBar position='static' color='success'>
+        <AppBar position='static' sx={{ backgroundColor: 'rgb(18, 26, 25)'}}>
             <Toolbar>
-                <Typography variant='h6' component='div' sx={{ flexGrow: 1}} className="title" >
+                <Typography variant='h6' component='div' sx={{ flexGrow: 1}} className="title">
                     Welcome to Let's eat!
                 </Typography>
 
@@ -63,7 +63,7 @@ const Navbar = ({searchTerm, handleSearchChange, handleSearch,  }) => {
                         value={searchTerm}
                         placeholder="Search..."
                         onChange={handleSearchChange}
-                    endAdornment={
+                        endAdornment={
                             <InputAdornment position="start">
                                 <IconButton onClick={handleSearch}>
                                     <SearchIconWrapper>
@@ -73,18 +73,16 @@ const Navbar = ({searchTerm, handleSearchChange, handleSearch,  }) => {
                             </InputAdornment>                
                         }
                         inputProps={{ 'aria-label': 'search',}}
-                        
                     />
                 </Search>
-                <Button color='inherit' component={Link} to={`/shopping-list`}>
-                    <ShoppingCartIcon/>
+                <Button color='inherit' size="small" component={Link} to={`/shopping-list`}>
+                    <AddShoppingCartIcon fontSize="small"/>
                 </Button>
-
-                <Button color='inherit' component={Link} to={`/add-recipe`}>
-                    <EditIcon />
+                <Button color='inherit' size="small" component={Link} to={`/add-recipe`}>
+                    <EditIcon fontSize="small"/>
                 </Button>
-                <Button color='inherit' component={Link} to={`/mealplan`}>
-                    <CalendarTodayIcon/>
+                <Button color='inherit' size="small" component={Link} to={`/mealplan`}>
+                    <CalendarTodayIcon fontSize="small"/>
                 </Button>
             </Toolbar>
         </AppBar>

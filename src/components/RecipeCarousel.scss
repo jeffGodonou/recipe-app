@@ -33,10 +33,11 @@
     align-items: center;
     width: 300px;
     height: 4300px;
-    background-color: white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     text-align: center;
+    font-family:'Montserrat', sans-serif ;
+    font-weight: bold;
 
     .banier {
         display: flex;
@@ -57,7 +58,6 @@
         font-style: italic;
     }
     .close-button {
-        // position: absolute;
         justify-content: flex-end;
     }
 }

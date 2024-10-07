@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback, useRef } from 'react';
 import RecipeCarousel from './RecipeCarousel';
 // import SearchBar from './SearchBar';
 import Navbar from './Navbar';
+import Loader from './Loader';
 // import {IconButton} from '@mui/material';
 // import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import './Home.scss';
@@ -62,7 +63,10 @@ const Home = ({ recipes, onAddRecipe, onDeleteRecipe }) => {
       
       {
         loading ? (
-          <div> Loading...</div>
+          <div>
+            <div> Loading...</div>
+            <Loader color='green'/>
+          </div>
         ): (
           <div className='carousel-container'> 
             <RecipeCarousel recipes={filteredRecipes}  onAddRecipe={onAddRecipe} onDeleteRecipe={onDeleteRecipe}/>
