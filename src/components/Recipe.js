@@ -1,8 +1,10 @@
 import { Button, Card, CardMedia, CardContent, CircularProgress, List, ListItem, ListItemText, TextField, Typography } from '@mui/material';
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import TextEditor from './TextEditor.js';
 import ShoppingList from './ShoppingList.js';
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
 import './Recipe.scss';
 
 const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
@@ -70,10 +72,10 @@ const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
         return <div> There is no recipe to show :( </div>;
 
     const ingredients = recipe.strIngredients ? recipe.strIngredients.split(',') : [];
-    const instructions = recipe.strInstructions ? recipe.strInstructions.split(/\.|STEP/) : [];
+    const instructions = recipe.strInstructions ? recipe.strInstructions.split(/\.|STEP|0|1|2|3|4|5|6|7|8|9|:/) : [];
 
     return (
-        <Card key={recipe.idMeal} className="recipe-card">
+        <Card key={recipe.idMeal} sx={{backgroundColor: 'rgb(173, 51, 10)'}} className="recipe-card">
             <div className='image-container'>
                 <CardMedia 
                     component = "img"
@@ -83,7 +85,7 @@ const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
                 />
             </div>
 
-            <CardContent>
+            <CardContent sx={{backgroundColor: 'rgb(216, 120, 24)'}} >
                 <div className='header-div'> 
                     <Typography 
                         gutterBottom variant = "h4" 
@@ -93,11 +95,11 @@ const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
                         { recipe.strMeal }
                     </Typography>
                     <div>
-                        <Button
-                            variant="contained"
-                            onClick={() => handleClickOpen()}    
-                        >
-                            Shopping list
+                        <Button color='warning' sx={{ marginTop: '20px'}} onClick={() => handleClickOpen()}>
+                            <AddShoppingCartIcon/>
+                        </Button>
+                        <Button component={Link} color='warning' sx={{ marginTop: '20px', size: 'xx-large'}} to='/'>
+                            <HomeTwoToneIcon/>
                         </Button>
                         {recipe.personal && (
                             <Button variant="contained" onClick={handleEditClick}>
@@ -153,9 +155,11 @@ const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
                             </Button>
                         </div>
                     ) : (
-                        <><Typography variant="h6">
+                        <>
+                            <Typography variant="h6">
                                 Ingredients
-                            </Typography><ul>
+                            </Typography>
+                                <ul>
                                     {!recipe.personal && (Object.keys(recipe).filter((key) => key.startsWith('strIngredient') && recipe[key])
                                         .map((key) => (
                                             <li key={key}>
@@ -166,16 +170,20 @@ const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
                                             <ListItemText primary={ingredient} />
                                         </ListItem>
                                     ))}
-                                </ul><Typography variant="h6">
-                                    Instructions
-                                </Typography><List className="instructions-list">
+                                </ul>
+                                
+                                <List className="instructions-list">
+                                    <Typography variant="h6">
+                                        Instructions
+                                    </Typography>
                                     {instructions.map((instruction, index) => (instruction && (
                                         <ListItem key={index}>
                                             <ListItemText primary={instruction} className='instructions-text' />
                                         </ListItem>
-                                    )
+                                        )
                                     ))}
-                                </List></>
+                                </List>
+                            </>
                         )
                 }
 
@@ -188,7 +196,7 @@ const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
                     color="success"
                 />
                 
-                <Button variant="contained" color="success" onClick={handleSaveNotes} style={{ marginTop: '10px' }}>
+                <Button variant="contained" onClick={handleSaveNotes} style={{ marginTop: '10px', backgroundColor: 'rgb(18, 26, 25)'}}>
                     Save Notes
                 </Button>
             </CardContent>        

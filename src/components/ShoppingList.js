@@ -34,56 +34,23 @@ const ShoppingList = ({ open, handleClose, onAddShoppingList }) => {
 
     return (
         <>
-        {
-        /*
-        <div className="shopping-list">
-            <h3> Shopping List </h3>
-            <div className="shopping-list-input">
-                <TextField
-                    label='Add Item'
-                    value={newItem}
-                    onChange={(e) => setNewItem(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleAddItem()}
-                    fullWidth />
-                <Button onClick={handleAddItem} variant="contained" color="success">
-                    Add
-                </Button>
-            </div>
-            <Button onClick={handleSaveList} variant="contained" color="secondary">
-                Save List
-            </Button>
-            {showList &&
-                <List>
-                    {items.map((item, index) => (
-                        <ListItem key={index} secondaryAction={<IconButton
-                            edge='end'
-                            aria-label='delete'
-                            onClick={() => handleDeleteItem(index)}>
-                            <DeleteIcon />
-                        </IconButton>}>
-                            <ListItemText primary={item} />
-                        </ListItem>
-                    ))}
-                </List>}
-        </div>
-        */}
         <Dialog
             open={open}
             onClose={handleClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
         >
-            <DialogTitle id="alert-dialog-title" sx={{backgroundColor:'green', color:'white', fontFamily:'Montserrat, sans-serif', fontStyle: 'italic'}}> Shopping List </DialogTitle>
-            <DialogContent>
+            <DialogTitle id="alert-dialog-title" sx={{backgroundColor:'rgb(18, 26, 25)', color:'white', fontFamily:'Montserrat, sans-serif', fontStyle: 'italic'}}> Shopping List </DialogTitle>
+            <DialogContent sx={{backgroundColor: 'rgb(249, 221, 128)'}}>
                 <div className="shopping-list-input">
                     <TextField
                         label='Add Item'
                         value={newItem}
-                        margin="20px"
+                        sx={{marginTop: '20px', marginBottom: '20px'}}
                         onChange={(e) => setNewItem(e.target.value)}
                         onKeyDown={(e) => e.key === 'Enter' && handleAddItem()}
                         fullWidth />
-                    <Button onClick={handleAddItem} variant="contained" color="success">
+                    <Button onClick={handleAddItem} variant="contained" sx={{backgroundColor: 'rgb(216, 120, 24)'}}>
                         Add
                     </Button>
                 </div>
@@ -101,11 +68,11 @@ const ShoppingList = ({ open, handleClose, onAddShoppingList }) => {
                     ))}
                 </List>}
             </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClose} color="error">
+            <DialogActions sx={{backgroundColor: 'rgb(249, 221, 128)'}}>
+                <Button onClick={handleClose} variant="contained" sx={{backgroundColor: 'rgb(216, 120, 24)'}}>
                     Cancel
                 </Button>
-                <Button onClick={handleSaveList} variant="contained" color="secondary" autoFocus>
+                <Button onClick={handleSaveList} variant="contained" sx={{backgroundColor: 'rgb(173, 51, 10)'}} autoFocus>
                     Save List
                 </Button>
             </DialogActions>
