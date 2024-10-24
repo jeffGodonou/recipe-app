@@ -1,10 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import { Button, Card, CardContent, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { loadMealPlan, saveMealPlans } from './localStorageUtils.js';
-import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
+import Navbar from './Navbar.js';
 import './MealPlanPage.scss';
 
 const MealPlanPage = ({ recipes }) => {
@@ -57,13 +56,8 @@ const MealPlanPage = ({ recipes }) => {
 
     return (
         <div className='meal-plan-container'>
-            <div className='header-div'>
-                <Typography variant='h4' className='title'> Meal Plan </Typography>
-                <Button component={Link} to='/' variant='contained' className='home-button'>
-                    <HomeTwoToneIcon/>
-                </Button>
-            </div>
-            
+            <Navbar/>
+
             <LocalizationProvider dateAdapter={AdapterDateFns} className='date-setter'>
                 <DatePicker 
                     date={selectedDate} 

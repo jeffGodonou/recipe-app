@@ -1,18 +1,14 @@
 import React, {useState} from "react";
-import ShoppingList from "./ShoppingList";
 import { Button, Card, CardContent, List, ListItem, ListItemText, Grid, Typography, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import AddIcon from "@mui/icons-material/Add";
 import SendIcon from "@mui/icons-material/Send"
 import emailjs from 'emailjs-com';
 import './ShoppingListPage.scss';
-import { Link } from "react-router-dom";
-import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
 import Snackbar from "@mui/material/Snackbar";
 import Alert from '@mui/material/Alert';
+import Navbar from "./Navbar";
 
 const ShoppingListPage = ({shoppingLists, onAddShoppingList, onDeleteShoppingList }) => {
-    const [open, setOpen] = useState(false);
     const [openMailBox, setOpenMailBox] = useState(false);
     const [selectedList, setSelectedList] = useState(null);
     const [email, setEmail] = useState('');
@@ -24,14 +20,10 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onDeleteShoppingLis
     });
     const { openMessage, vertical, horizontal, message } = state;
 
-    const handleClickOpen = () => { setOpen(true) };
-
     const handleClickOpenMailBox = (list) => { 
         setSelectedList(list);
         setOpenMailBox(true); 
     };
-
-    const handleClose = () => { setOpen(false) };
 
     const handleCloseMessage = () => {
         setState({...state, openMessage: false});
@@ -64,18 +56,7 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onDeleteShoppingLis
 
     return (
         <>
-            <div className='header-div'>
-                <Typography variant='h4' className='title'> Shopping Lists </Typography>
-                <div className="button-div">
-                    <Button onClick={() => handleClickOpen()} variant='contained' className='button'>
-                        <AddIcon/>
-                    </Button>    
-                    <ShoppingList open={open} handleClose={handleClose} onAddShoppingList={onAddShoppingList} />
-                    <Button component={Link} to='/' variant='contained' className='button'>
-                        <HomeTwoToneIcon/>
-                    </Button>
-                </div>
-            </div>
+            <Navbar onAddShoppingList={onAddShoppingList}/>
 
             <div className="shopping-list-page">
                 <div className="lists-container">

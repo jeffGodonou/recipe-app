@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { TextField, Button, Container, Typography } from "@mui/material";
-import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
-import { useNavigate, Link } from "react-router-dom";
+import { TextField, Button, Container } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import Navbar from "./Navbar";
 import './AddRecipeForm.scss';
 
 const AddRecipeForm = ({ onAddRecipe }) => {
@@ -56,12 +56,7 @@ const AddRecipeForm = ({ onAddRecipe }) => {
 
     return (
         <>
-            <div className='header-div'>
-                <Typography variant='h4' className='title'> Add a recipe </Typography>
-                <Button component={Link} to='/' variant='contained' className='home-button'>
-                    <HomeTwoToneIcon />
-                </Button>
-            </div>
+            <Navbar/>
             <Container className="add-recipe-form">
                 <form onSubmit={handleSubmit}>
                     <TextField
