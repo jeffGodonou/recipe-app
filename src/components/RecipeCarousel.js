@@ -35,13 +35,18 @@ const SamplePrevArrow = (props) => {
 
 const RecipeCarousel = ({recipes, handleDeleteRecipe}) => {
     const [open, setOpen] = useState(false);
+    const [selectedRecipeId, setSelectedRecipeId] = useState(null);
+    const [currentSlide, setCurrentSlide] = useState(0);
 
-    const handleClickOpen = ()=> { setOpen(true) };
+    const handleClickOpen = (id)=> { 
+        setSelectedRecipeId(id);
+        setOpen(true); 
+    };
 
     const handleClose = () => { setOpen(false) };
 
-    const handleConfirm = (id) => {
-        handleDeleteRecipe(id);
+    const handleConfirm = () => {
+        handleDeleteRecipe(selectedRecipeId);
         setOpen(false);
     };
     
@@ -49,20 +54,48 @@ const RecipeCarousel = ({recipes, handleDeleteRecipe}) => {
         return <div> There is no recipe to show </div>;
 
     const settings = {
+        autoplay: true,
+        autoplaySpeed: 100,
         infinite: true,
         centerMode: true,
-        centerPadding: '40px',
-        slidesToShow: 3,
+        slidesToShow: 5,
         speed: 500,
         focusOnSelect: true,
         nextArrow: < SampleNextArrow />,
-        prevArrow: < SamplePrevArrow />
+        prevArrow: < SamplePrevArrow />,
+        beforeChange: (current, next) => setCurrentSlide(next)
+    };
+
+    const getCardClass = (index) => {
+        if (recipes.length === 0) return '';
+
+        let distanceFromCenter;
+        const totalSlides = recipes.length;
+
+        if (index <= totalSlides / 2) {
+            distanceFromCenter = (index - currentSlide + totalSlides) % totalSlides;
+        } else {
+            distanceFromCenter = (index - currentSlide - totalSlides) % totalSlides;
+        }
+
+        // Normalize distanceFromCenter
+        distanceFromCenter = (distanceFromCenter + totalSlides) % totalSlides;
+        if (distanceFromCenter > totalSlides / 2) {
+            distanceFromCenter -= totalSlides;
+        }
+        
+        if (distanceFromCenter === 0) return 'slick-center';
+        if (distanceFromCenter === -1 || distanceFromCenter === 1) return distanceFromCenter < 0 ? 'left-1' : 'right-1';
+        if (distanceFromCenter === -2 || distanceFromCenter === 2) return distanceFromCenter < 0 ? 'left-2' : 'right-2';
+        return '';
     };
 
     return (
         <><Slider {...settings}>
-            {recipes.map((recipe) => (
-                <div key={recipe.idMeal} className='carousel-card'>
+            {recipes.map((recipe, index) => { 
+                const cardClass = getCardClass(index);
+                return (
+                <div key={recipe.idMeal} className={`carousel-card ${cardClass}`}>
                     <Card key={recipe.idMeal} sx={{ maxWidth: 345, margin: 'auto', boxShadow: 3, backgroundColor: 'rgb(216, 120, 24)' }} className='recipe-card'>
                         <div className='banier'>
                         {recipe.personal && (
@@ -93,7 +126,7 @@ const RecipeCarousel = ({recipes, handleDeleteRecipe}) => {
                         </CardContent>
                     </Card>
                 </div>
-            ))}
+            )})}
         </Slider>
         </>
     );
