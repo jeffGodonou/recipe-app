@@ -1,5 +1,5 @@
 import { Button, Card, CardMedia, CardContent, CircularProgress, List, ListItem, ListItemText, TextField, Typography } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import TextEditor from './TextEditor.js';
 import ShoppingList from './ShoppingList.js';
@@ -11,7 +11,8 @@ const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
     const { id } = useParams();
     const [ fullRecipes, setFullRecipes] = useState(recipes);
     const [ loading, setLoading ] = useState(true);
-    const [ notes, setNotes ] = useState('');
+    const [ notes, setNotes ] = useState([]);
+    const [ newNote, setNewNote ] = useState('');
     const [ open, setOpen ] = useState(false);
     
     const handleClickOpen = ()=> { setOpen(true) };
@@ -22,32 +23,52 @@ const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
         const fetchRecipe = async () => {
             try {
                 const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
                 const data = await response.json();
-                setFullRecipes([...recipes, ...data.meals||[]]);
-                const savedNotes = localStorage.getItem(`recipe-notes-${id}`);
-                if(savedNotes)
-                    setNotes(savedNotes);
+                if ( data && data.meals ) {
+                    setFullRecipes([...recipes, ...data.meals||[]]);
+                } else {
+                    console.log("No recipe found with the given id:", id);
+                }
+                
             } catch (error) {
-                console.log("Error met while fetching the details of the recipe");
+                console.log("Error met while fetching the details of the recipe:", error);
             } finally{
                 setLoading(false);
             }
         };
 
         fetchRecipe()
-    }, [id, recipes, setFullRecipes]);
-    
+    }, [id, recipes]);
+
+    useEffect(() => {
+        try {
+            const savedNotes = JSON.parse(localStorage.getItem(`recipe-notes-${id}`)) || [];
+            setNotes(savedNotes);
+        } catch (error) {
+            console.log("Error met while fetching the notes of the recipe:", error);
+            setNotes([]);
+        }
+    }, [id]);
+
     const recipe = fullRecipes.find(r => r.idMeal === id);
     const [ isEditing,  setIsEditing ] = useState(false);
-    const [ editableRecipe, setEditableRecipe ] = useState(recipe);
+    const [ editableRecipe, setEditableRecipe ] = useState({});
+
+    useEffect(() => {
+        const recipe = fullRecipes.find(r => r.idMeal === id);
+        setEditableRecipe(recipe || {});
+    }, [fullRecipes, id]);
 
     const handleEditClick = () => {
         setIsEditing(true);
     }
 
-    const handleNotesChange = (event) => {
-        setNotes(event.target.value);
-    }
+    const handleNotesChange = useCallback( (content) => {
+        setNewNote(content);
+    }, []);
 
     // capture the changes in editableRecipe
     const handleChange = (e) => {
@@ -61,8 +82,27 @@ const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
         setIsEditing(false);
     }
 
-    const handleSaveNotes = () => {
-        localStorage.setItem(`recipe-notes-${id}`, notes);
+    const handleAddNote = () => {
+        if (newNote.trim()) {
+            const updatedNotes = [...notes, newNote.trim()];
+            setNotes(updatedNotes);
+            setNewNote('');
+            localStorage.setItem(`recipe-notes-${id}`, JSON.stringify(updatedNotes));
+        }
+    }
+
+    const handleDeleteNote = (index) => {
+        setNotes(notes.filter((_, i) => i !== index));
+
+        const updatedNotes = notes.filter((_, i) => i !== index);
+        setNotes(updatedNotes);
+        
+        if (updatedNotes.length === 0) {
+            const updatedList = { ...notes };
+            // delete updatedList[selectedDate.toDateString()];
+            setNotes(updatedList);
+            // saveMealPlans(updatedPlan);
+        }
     }
 
     if (loading) 
@@ -72,7 +112,7 @@ const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
         return <div> There is no recipe to show :( </div>;
 
     const ingredients = recipe.strIngredients ? recipe.strIngredients.split(',') : [];
-    const instructions = recipe.strInstructions ? recipe.strInstructions.split(/\.|STEP|0|1|2|3|4|5|6|7|8|9|:/) : [];
+    const instructions = recipe.strInstructions ? recipe.strInstructions.split(/(?:Step \d+|\.|:)/).filter(instruction => instruction.trim() !== '') : []
 
     return (
         <Card key={recipe.idMeal} sx={{backgroundColor: 'rgb(173, 51, 10)'}} className="recipe-card">
@@ -98,7 +138,7 @@ const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
                         <Button color='warning' sx={{ marginTop: '20px'}} onClick={() => handleClickOpen()}>
                             <AddShoppingCartIcon/>
                         </Button>
-                        <Button component={Link} color='warning' sx={{ marginTop: '20px', size: 'xx-large'}} to='/'>
+                        <Button component={Link} color='warning' sx={{ marginTop: '20px'}} to='/'>
                             <HomeTwoToneIcon/>
                         </Button>
                         {recipe.personal && (
@@ -187,16 +227,29 @@ const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
                         )
                 }
 
+                <List sx={{marginTop: '2rem'}}>
+                    {notes.map((note, index) => (
+                        <>
+                            <ListItem key={index}>
+                                <ListItemText primary={<span dangerouslySetInnerHTML={{ __html: note}} />} />
+                            </ListItem>
+                            <Button variant="contained" onClick={() => handleDeleteNote(index)} style={{ marginTop: '10px', backgroundColor: 'rgb(18, 26, 25)'}}>
+                                Delete Note
+                            </Button>
+                        </>
+                    ))}
+                </List>
+                
                 <Typography variant="h6">Notes</Typography>
                 <TextEditor
                     label="Your notes"
                     fullWidth
-                    value={notes}
+                    value={newNote}
                     onChange={handleNotesChange}
                     color="success"
                 />
                 
-                <Button variant="contained" onClick={handleSaveNotes} style={{ marginTop: '10px', backgroundColor: 'rgb(18, 26, 25)'}}>
+                <Button variant="contained" onClick={() => handleAddNote()} style={{ marginTop: '10px', backgroundColor: 'rgb(18, 26, 25)'}}>
                     Save Notes
                 </Button>
             </CardContent>        
