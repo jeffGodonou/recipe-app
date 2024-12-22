@@ -93,16 +93,6 @@ const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
 
     const handleDeleteNote = (index) => {
         setNotes(notes.filter((_, i) => i !== index));
-
-        const updatedNotes = notes.filter((_, i) => i !== index);
-        setNotes(updatedNotes);
-        
-        if (updatedNotes.length === 0) {
-            const updatedList = { ...notes };
-            // delete updatedList[selectedDate.toDateString()];
-            setNotes(updatedList);
-            // saveMealPlans(updatedPlan);
-        }
     }
 
     if (loading) 
