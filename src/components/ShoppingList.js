@@ -11,7 +11,6 @@ const ShoppingList = ({ open, handleClose, onAddShoppingList }) => {
     useEffect(() => {
         // make the shopping list appearing depending on if there is an items in the list or not
         setShowList(items.length > 0);
-        console.log(items.length);
     }, [items]);
     
     const handleAddItem = () => {

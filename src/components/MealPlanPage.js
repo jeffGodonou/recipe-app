@@ -16,7 +16,6 @@ const MealPlanPage = ({ recipes }) => {
     const [open, setOpen] = useState(false);
     const [editingIndex, setEditingIndex] = useState(null);
     const [items, setItems] = useState([]); // table of meals
-    //const [newItem, setNewItem] = useState('');
     const [showList, setShowList] = useState(false);
 
     useEffect (() => {

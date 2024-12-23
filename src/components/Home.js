@@ -1,13 +1,8 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import RecipeCarousel from './RecipeCarousel';
-// import SearchBar from './SearchBar';
 import Navbar from './Navbar';
 import Loader from './Loader';
-// import {IconButton} from '@mui/material';
-// import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import './Home.scss';
-// import { Link } from 'react-router-dom';
-
 
 const Home = ({ recipes, onAddRecipe, onDeleteRecipe }) => {  
   const [ filteredRecipes, setFilteredRecipes] = useState(recipes); 
