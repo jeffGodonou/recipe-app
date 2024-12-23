@@ -1,10 +1,11 @@
-import { Button, Card, CardMedia, CardContent, CircularProgress, List, ListItem, ListItemText, TextField, Typography } from '@mui/material';
+import { Button, Card, CardMedia, CardContent, CircularProgress, List, ListItem, ListItemText, TextField, Typography, IconButton } from '@mui/material';
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import TextEditor from './TextEditor.js';
 import ShoppingList from './ShoppingList.js';
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
+import DeleteIcon from '@mui/icons-material/Delete';
 import './Recipe.scss';
 
 const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
@@ -13,6 +14,7 @@ const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
     const [ loading, setLoading ] = useState(true);
     const [ notes, setNotes ] = useState([]);
     const [ newNote, setNewNote ] = useState('');
+    const [ presentNotes, setPresentNotes ] = useState(false);
     const [ open, setOpen ] = useState(false);
     
     const handleClickOpen = ()=> { setOpen(true) };
@@ -47,6 +49,9 @@ const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
         try {
             const savedNotes = JSON.parse(localStorage.getItem(`recipe-notes-${id}`)) || [];
             setNotes(savedNotes);
+            if (savedNotes.length > 0) {
+                setPresentNotes(true);
+            }
         } catch (error) {
             console.log("Error met while fetching the notes of the recipe:", error);
             setNotes([]);
@@ -89,10 +94,19 @@ const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
             setNewNote('');
             localStorage.setItem(`recipe-notes-${id}`, JSON.stringify(updatedNotes));
         }
+
+        if (!presentNotes) {
+            setPresentNotes(true);
+        }
     }
 
     const handleDeleteNote = (index) => {
-        setNotes(notes.filter((_, i) => i !== index));
+        const updatedNotes = notes.filter((_, i) => i !== index);
+        setNotes(updatedNotes);
+        localStorage.setItem(`recipe-notes-${id}`, JSON.stringify(updatedNotes));
+        if (updatedNotes.length === 0) {
+            setPresentNotes(false);
+        }
     }
 
     if (loading) 
@@ -217,20 +231,23 @@ const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
                         )
                 }
 
-                <List sx={{marginTop: '2rem'}}>
-                    {notes.map((note, index) => (
-                        <>
-                            <ListItem key={index}>
-                                <ListItemText primary={<span dangerouslySetInnerHTML={{ __html: note}} />} />
-                            </ListItem>
-                            <Button variant="contained" onClick={() => handleDeleteNote(index)} style={{ marginTop: '10px', backgroundColor: 'rgb(18, 26, 25)'}}>
-                                Delete Note
-                            </Button>
-                        </>
-                    ))}
-                </List>
-                
                 <Typography variant="h6">Notes</Typography>
+
+                {presentNotes && (
+                    <List sx={{marginTop: '2rem'}}>
+                        {notes.map((note, index) => (
+                            <>
+                                <ListItem key={index}>
+                                    <ListItemText primary={<span dangerouslySetInnerHTML={{ __html: note}} />} />
+                                </ListItem>
+                                <IconButton edge='end' aria-label='delete' onClick={() => handleDeleteNote(index)}> 
+                                    <DeleteIcon />  
+                                </IconButton>
+                            </>
+                        ))}
+                    </List>
+                )}
+
                 <TextEditor
                     label="Your notes"
                     fullWidth
