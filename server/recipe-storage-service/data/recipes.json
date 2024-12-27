@@ -38,13 +38,5 @@
     "ingredients": "test",
     "name": "Test Recipe",
     "personal": true
-  },
-  {
-    "idMeal": "1735262675767",
-    "strMeal": "lentils",
-    "strMealThumb": "",
-    "strInstructions": "",
-    "strIngredients": "",
-    "personal": true
   }
 ]

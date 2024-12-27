@@ -33,7 +33,7 @@ const SamplePrevArrow = (props) => {
     );
 }
 
-const RecipeCarousel = ({recipes, handleDeleteRecipe}) => {
+const RecipeCarousel = ({recipes, onDeleteRecipe}) => {
     const [open, setOpen] = useState(false);
     const [selectedRecipeId, setSelectedRecipeId] = useState(null);
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -46,7 +46,7 @@ const RecipeCarousel = ({recipes, handleDeleteRecipe}) => {
     const handleClose = () => { setOpen(false) };
 
     const handleConfirm = () => {
-        handleDeleteRecipe(selectedRecipeId);
+        onDeleteRecipe(selectedRecipeId);
         setOpen(false);
     };
     

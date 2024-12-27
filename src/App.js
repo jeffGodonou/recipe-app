@@ -6,8 +6,7 @@ import AddRecipeForm from './components/AddRecipeForm';
 import ShoppingListPage from './components/ShoppingListPage';
 import './App.scss'
 import MealPlanPage from './components/MealPlanPage';
-import { getRecipes, addRecipe } from './api';
-import { set } from 'date-fns';
+import { getRecipes, addRecipe, deleteRecipe } from './api';
 
 const App = () => {
     const [recipes, setRecipes] = useState([]);
@@ -64,10 +63,15 @@ const App = () => {
         }
     }   
 
-    const handleDeleteRecipe = (idMeal) => {
-        const updatedRecipes = recipes.filter(recipe => recipe.idMeal !== idMeal);
-        setRecipes(updatedRecipes);
-        localStorage.setItem('recipes', JSON.stringify(updatedRecipes));
+    const handleDeleteRecipe = async (idMeal) => {
+        try {
+            // delete the recipe from the server storage
+            const updatedRecipes = await deleteRecipe(idMeal);
+            setRecipes(updatedRecipes);
+        } catch (error) {
+            console.error('Failed to delete recipe', error);
+            throw error;
+        }
     };
 
     const updateRecipe = (updatedRecipe) => {

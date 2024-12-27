@@ -39,11 +39,6 @@ router.post('/', (req, res) => {
         const recipes = readRecipes();
         const { idMeal, strMeal, strMealThumb, strInstructions, strIngredients, personal } = req.body;
 
-        // Debug logs
-        console.log('Parsed fields:', {
-            idMeal, strMeal, strMealThumb, strInstructions, strIngredients, personal
-        });
-
         const newRecipe = {
             idMeal: idMeal || Date.now().toString(),
             strMeal: strMeal || '',
@@ -53,17 +48,34 @@ router.post('/', (req, res) => {
             personal: personal !== undefined ? personal : true
         };
 
-        console.log('Received recipe', newRecipe);
-
         recipes.push(newRecipe);
         writeRecipes(recipes);
         res.status(201).json(newRecipe);
     } catch (error) {
         console.error('Failed to create recipe:', error.message);
-        res.status(400).json({ 
+        res.status(400).json({  // return 400 Bad Request in case of error
             error: error.message,
             received: req.body
         });
+    }
+});
+
+// Endpoint to delete a recipe
+router.delete('/:id', (req, res) => {
+    try {
+        const recipes = readRecipes();
+        const recipeIndex = recipes.findIndex(recipe => recipe.idMeal === req.params.id);
+        if(recipeIndex === -1) {
+            res.status(404).json({ error: 'Recipe not found' }); // return 404 Not Found if recipe not found
+            return;
+        }
+
+        recipes.splice(recipeIndex, 1);
+        writeRecipes(recipes);
+        res.status(204).send(); // return 204 No Content in case of success
+    } catch (error) {
+        console.error('Failed to delete recipe:', error.message);
+        res.status(500).json({ error: error.message });
     }
 });
 

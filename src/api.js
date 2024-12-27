@@ -23,3 +23,14 @@ export const addRecipe = async (recipe) => {
         throw error;
     }
 };
+
+// Funtion to delete a recipe from the server
+export const deleteRecipe = async (id) => {
+    try {
+        const response = await axios.delete(`${API_URL}/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Failed to delete recipe', error);
+        throw error;
+    }
+};
