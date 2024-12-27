@@ -6,18 +6,33 @@ import AddRecipeForm from './components/AddRecipeForm';
 import ShoppingListPage from './components/ShoppingListPage';
 import './App.scss'
 import MealPlanPage from './components/MealPlanPage';
+import { getRecipes, addRecipe } from './api';
+import { set } from 'date-fns';
 
 const App = () => {
     const [recipes, setRecipes] = useState([]);
     const [shoppingLists, setShoppingLists] = useState([]);
+
+    useEffect(() => { 
+        // fetch recipes from API and append the list with the stored recipes
+        const fetchRecipes = async () => {
+            try {
+                // fetch recipes from the API
+                const apiRecipes = await fetchRecipefromApi();
+
+                // fetch recipes from the server storage
+                const storedRecipes = await getRecipes();
+
+                setRecipes([...storedRecipes, ...apiRecipes]);
+            } catch (error) {
+                console.error('Failed to fetch recipes', error);
+            }
+        }
+
+        fetchRecipes();
+    }, []);
     
     useEffect(() => {
-        // fetch recipes from API and append the list with the stored recipes
-        const storedRecipes = JSON.parse(localStorage.getItem('recipes')) || [];
-        fetchRecipefromApi().then(apiRecipes => {
-            setRecipes([...storedRecipes, ...apiRecipes]);
-        });
-
         // fetch locally stored shopping lists
         const storedShoppingLists = JSON.parse(localStorage.getItem('shoppingLists')) || [];
         setShoppingLists(storedShoppingLists);
@@ -38,11 +53,16 @@ const App = () => {
         }
     }
 
-    const handleAddRecipe = (newRecipe) => {
-        const updatedRecipes = [...recipes, newRecipe];
-        setRecipes(updatedRecipes);
-        localStorage.setItem('recipes', JSON.stringify(updatedRecipes));
-    };
+    const handleAddRecipe = async (newRecipe) => {
+        try {
+            // add the recipe to the server storage
+            const updatedRecipe = await addRecipe(newRecipe);
+            setRecipes([...recipes, updatedRecipe]);
+        } catch (error) { 
+            console.error('Failed to add recipe', error);
+            throw error;    
+        }
+    }   
 
     const handleDeleteRecipe = (idMeal) => {
         const updatedRecipes = recipes.filter(recipe => recipe.idMeal !== idMeal);
@@ -73,7 +93,7 @@ const App = () => {
             <Routes>
                 <Route exact path="/" element={<Home recipes={recipes} onAddRecipe={handleAddRecipe} onDeleteRecipe={handleDeleteRecipe}/>} />
                 <Route path="/recipe/:id" element={<Recipe recipes={recipes} updateRecipe={updateRecipe} onAddShoppingList={handleAddShoppingList}/>}/>
-                <Route path="/add-recipe" element={<AddRecipeForm/>} />
+                <Route path="/add-recipe" element={<AddRecipeForm onAddRecipe={handleAddRecipe}/>} />
                 <Route path="/shopping-list" element={<ShoppingListPage shoppingLists={shoppingLists} onAddShoppingList={handleAddShoppingList} onDeleteShoppingList={handleDeleteShoppingLists} />} />
                 <Route path="/mealplan" element={<MealPlanPage recipes={recipes}/>}/>
             </Routes>

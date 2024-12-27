@@ -13,7 +13,12 @@ const readRecipes = () => {
     }
 
     const recipes = fs.readFileSync(recipesFilePath);
-    return JSON.parse(recipes);
+    try {
+        return JSON.parse(recipes);
+    } catch (error) {
+        console.error('Error parsing JSON data:', error);
+        return [];
+    }
 };
 
 // Helper function to write recipes to the file
@@ -24,24 +29,42 @@ const writeRecipes = (recipes) => {
 // Endpoint to get all recipes
 router.get('/', (req, res) => {
     const recipes = readRecipes();
-    res.join(recipes);
+    res.json(recipes);
 });
 
 // Endpoint to add a new recipe
 router.post('/', (req, res) => {
-    const recipes = readRecipes();
-    const newRecipe = req.body;
+    
     try {
-        if(!newRecipe.name || !newRecipe.ingredients || !newRecipe.instructions) {
-            throw new Error('Invalid recipe');
-        }
-    } catch (error) {
-        res.status(400).send(error.message);
-    }
+        const recipes = readRecipes();
+        const { idMeal, strMeal, strMealThumb, strInstructions, strIngredients, personal } = req.body;
 
-    recipes.push(newRecipe);
-    writeRecipes(recipes);
-    res.status(201).send();
+        // Debug logs
+        console.log('Parsed fields:', {
+            idMeal, strMeal, strMealThumb, strInstructions, strIngredients, personal
+        });
+
+        const newRecipe = {
+            idMeal: idMeal || Date.now().toString(),
+            strMeal: strMeal || '',
+            strMealThumb: strMealThumb || '',
+            strInstructions: strInstructions || '',
+            strIngredients: strIngredients || '',
+            personal: personal !== undefined ? personal : true
+        };
+
+        console.log('Received recipe', newRecipe);
+
+        recipes.push(newRecipe);
+        writeRecipes(recipes);
+        res.status(201).json(newRecipe);
+    } catch (error) {
+        console.error('Failed to create recipe:', error.message);
+        res.status(400).json({ 
+            error: error.message,
+            received: req.body
+        });
+    }
 });
 
 module.exports = router;
