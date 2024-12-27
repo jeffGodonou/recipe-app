@@ -22,6 +22,16 @@ app.post('/api/recipes', async (req, res) => {
   }
 });
 
+// Delete a recipe
+app.delete('/api/recipes/:id', async (req, res) => {
+  try {
+    const response = await axios.delete(`http://localhost:5001/api/recipes/${req.params.id}`);
+    res.status(response.status).send(response.data);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete recipe' });
+  }
+});
+
 // Get all recipes
 app.get('/api/recipes', async (req, res) => {
   try {
