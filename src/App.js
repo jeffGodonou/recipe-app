@@ -12,6 +12,7 @@ const App = () => {
     const [recipes, setRecipes] = useState([]);
     const [shoppingLists, setShoppingLists] = useState([]);
     const [ recipeAdded, setRecipeAdded ] = useState(false);
+    const [ recipeDeleted, setRecipeDeleted ] = useState(false);
 
     useEffect(() => { 
         // fetch recipes from API and append the list with the stored recipes
@@ -71,6 +72,8 @@ const App = () => {
             // delete the recipe from the server storage
             const updatedRecipes = await deleteRecipe(idMeal);
             setRecipes(updatedRecipes);
+            setRecipeDeleted(true);
+            setTimeout(() => setRecipeDeleted(false), 3000);
         } catch (error) {
             console.error('Failed to delete recipe', error);
             throw error;
@@ -98,7 +101,7 @@ const App = () => {
     return (
         <Router>    
             <Routes>
-                <Route exact path="/" element={<Home recipes={recipes} onDeleteRecipe={handleDeleteRecipe} recipeAdded={recipeAdded}/>} />
+                <Route exact path="/" element={<Home recipes={recipes} onDeleteRecipe={handleDeleteRecipe} recipeAdded={recipeAdded} recipeDeleted={recipeDeleted}/>} />
                 <Route path="/recipe/:id" element={<Recipe recipes={recipes} updateRecipe={updateRecipe} onAddShoppingList={handleAddShoppingList}/>}/>
                 <Route path="/add-recipe" element={<AddRecipeForm onAddRecipe={handleAddRecipe}/>} />
                 <Route path="/shopping-list" element={<ShoppingListPage shoppingLists={shoppingLists} onAddShoppingList={handleAddShoppingList} onDeleteShoppingList={handleDeleteShoppingLists} />} />
