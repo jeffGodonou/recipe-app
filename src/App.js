@@ -11,6 +11,7 @@ import { getRecipes, addRecipe, deleteRecipe } from './api';
 const App = () => {
     const [recipes, setRecipes] = useState([]);
     const [shoppingLists, setShoppingLists] = useState([]);
+    const [ recipeAdded, setRecipeAdded ] = useState(false);
 
     useEffect(() => { 
         // fetch recipes from API and append the list with the stored recipes
@@ -57,6 +58,8 @@ const App = () => {
             // add the recipe to the server storage
             const updatedRecipe = await addRecipe(newRecipe);
             setRecipes([...recipes, updatedRecipe]);
+            setRecipeAdded(true);
+            setTimeout(() => setRecipeAdded(false), 3000);
         } catch (error) { 
             console.error('Failed to add recipe', error);
             throw error;    
@@ -95,7 +98,7 @@ const App = () => {
     return (
         <Router>    
             <Routes>
-                <Route exact path="/" element={<Home recipes={recipes} onAddRecipe={handleAddRecipe} onDeleteRecipe={handleDeleteRecipe}/>} />
+                <Route exact path="/" element={<Home recipes={recipes} onDeleteRecipe={handleDeleteRecipe} recipeAdded={recipeAdded}/>} />
                 <Route path="/recipe/:id" element={<Recipe recipes={recipes} updateRecipe={updateRecipe} onAddShoppingList={handleAddShoppingList}/>}/>
                 <Route path="/add-recipe" element={<AddRecipeForm onAddRecipe={handleAddRecipe}/>} />
                 <Route path="/shopping-list" element={<ShoppingListPage shoppingLists={shoppingLists} onAddShoppingList={handleAddShoppingList} onDeleteShoppingList={handleDeleteShoppingLists} />} />
