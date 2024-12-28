@@ -5,7 +5,7 @@ import Loader from './Loader';
 import './Home.scss';
 import { Alert } from '@mui/material';
 
-const Home = ({ recipes, onDeleteRecipe, recipeAdded, recipeDeleted }) => {  
+const Home = ({ recipes, onDeleteRecipe, recipeAdded, recipeDeleted, errorRequest }) => {  
   const [ filteredRecipes, setFilteredRecipes] = useState(recipes); 
   const [ loading, setLoading ] = useState(true);
   const [ searchTerm, setSearchTerm ] = useState('');
@@ -83,6 +83,15 @@ const Home = ({ recipes, onDeleteRecipe, recipeAdded, recipeDeleted }) => {
           <div className='alert'>
             <Alert variant="outlined" severity="success"> 
               Your recipe have been deleted successfully!
+            </Alert>
+          </div>
+      )}
+      
+      {
+        errorRequest && ( 
+          <div className='alert'>
+            <Alert variant="outlined" severity="error"> 
+              Something went wrong. Please try again later!
             </Alert>
           </div>
       )}
