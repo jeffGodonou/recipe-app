@@ -73,7 +73,7 @@ const Home = ({ recipes, onDeleteRecipe, recipeAdded, recipeDeleted, errorReques
         recipeAdded && ( 
           <div className='alert'>
             <Alert variant="outlined" severity="success"> 
-              Your recipe have been added successfully!
+              Your recipe has been added successfully!
             </Alert>
           </div>
       )}
@@ -82,7 +82,7 @@ const Home = ({ recipes, onDeleteRecipe, recipeAdded, recipeDeleted, errorReques
         recipeDeleted && ( 
           <div className='alert'>
             <Alert variant="outlined" severity="success"> 
-              Your recipe have been deleted successfully!
+              Your recipe has been deleted successfully!
             </Alert>
           </div>
       )}
