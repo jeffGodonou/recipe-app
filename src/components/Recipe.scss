@@ -35,11 +35,25 @@
 
     .header-div {
         width: 98.5%;
-        // margin: 2rem;
         display: flex;
-        justify-content: space-between;
+        flex-direction: column;
+        justify-content:space-between;
+        align-items:end;
         background-color: rgb(18, 26, 25);
         border-radius: 5px;
+
+        .header{
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            background-color: inherit;
+        }
+
+        .banner{
+            display: flex;
+            justify-content: end;
+            width: 100%;
+            color: white;        }
     }
 
     .recipe-name {

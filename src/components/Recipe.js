@@ -62,7 +62,7 @@ const Recipe = ({recipes, onAddShoppingList}) => {
 
     const recipe = fullRecipes.find(r => r.idMeal === id);
     const [ isEditing,  setIsEditing ] = useState(false);
-    const [ editableRecipe, setEditableRecipe ] = useState({...recipe, strMealThumb: recipe.strMealThumb || ''});
+    const [ editableRecipe, setEditableRecipe ] = useState({});
 
     useEffect(() => {
         const recipe = fullRecipes.find(r => r.idMeal === id);
@@ -164,6 +164,7 @@ const Recipe = ({recipes, onAddShoppingList}) => {
 
             <CardContent sx={{backgroundColor: 'rgb(216, 120, 24)'}} >
                 <div className='header-div'> 
+                    <div className='header'>
                     <Typography 
                         gutterBottom variant = "h4" 
                         component = "div" 
@@ -185,12 +186,15 @@ const Recipe = ({recipes, onAddShoppingList}) => {
                         )}
                         <ShoppingList open={open} handleClose={handleClose} onAddShoppingList={onAddShoppingList}/>
                     </div>
+                    </div>
+                    
+                    
+                    {recipe.personal && (
+                        <Typography variant='body2' color='textSecondary' className='banner'>
+                            Personal Recipe
+                        </Typography>
+                    )}
                 </div>
-                {recipe.personal && (
-                    <Typography variant='body2' color='textSecondary'>
-                        Personal Recipe
-                    </Typography>
-                )}
 
                 {
                     isEditing ? (
