@@ -95,11 +95,28 @@ const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
     }
 
     // save the change that had been added 
-    const handleSave = () => {
+    const handleSave = async (event) => {
+        event.preventDefault();
         editableRecipe.id = id;
-        updateRecipe(editableRecipe);
-        editRecipe(editableRecipe);
-        setIsEditing(false);
+        try {
+            const updatedRecipe = await editRecipe(editableRecipe); // or however editRecipe returns promise
+            // Update local recipe state with the new data
+            setEditableRecipe(prev => ({ ...prev, ...updatedRecipe }));
+            // Update the recipe in the fullRecipes state
+            setFullRecipes(prevRecipes => {
+                const index = prevRecipes.findIndex(r => r.idMeal === updatedRecipe.idMeal);
+                if (index !== -1) {
+                    const updatedList = [...prevRecipes];
+                    updatedList[index] = updatedRecipe;
+                    return updatedList;
+                } else {
+                    return [...prevRecipes, updatedRecipe];
+                }
+            });
+            setIsEditing(false);
+        } catch (error) {
+            console.error('Failed to update recipe:', error);
+        }
     }
 
     const handleAddNote = () => {
