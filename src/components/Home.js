@@ -3,8 +3,9 @@ import RecipeCarousel from './RecipeCarousel';
 import Navbar from './Navbar';
 import Loader from './Loader';
 import './Home.scss';
+import { Alert } from '@mui/material';
 
-const Home = ({ recipes, onAddRecipe, onDeleteRecipe }) => {  
+const Home = ({ recipes, onDeleteRecipe, recipeAdded, recipeDeleted, errorRequest }) => {  
   const [ filteredRecipes, setFilteredRecipes] = useState(recipes); 
   const [ loading, setLoading ] = useState(true);
   const [ searchTerm, setSearchTerm ] = useState('');
@@ -64,9 +65,37 @@ const Home = ({ recipes, onAddRecipe, onDeleteRecipe }) => {
           </div>
         ): (
           <div className='carousel-container'> 
-            <RecipeCarousel recipes={filteredRecipes}  onAddRecipe={onAddRecipe} onDeleteRecipe={onDeleteRecipe}/>
+            <RecipeCarousel recipes={filteredRecipes} onDeleteRecipe={onDeleteRecipe}/>
           </div>
       )}
+
+      {
+        recipeAdded && ( 
+          <div className='alert'>
+            <Alert variant="outlined" severity="success"> 
+              Your recipe has been added successfully!
+            </Alert>
+          </div>
+      )}
+
+      {
+        recipeDeleted && ( 
+          <div className='alert'>
+            <Alert variant="outlined" severity="success"> 
+              Your recipe has been deleted successfully!
+            </Alert>
+          </div>
+      )}
+      
+      {
+        errorRequest && ( 
+          <div className='alert'>
+            <Alert variant="outlined" severity="error"> 
+              Something went wrong. Please try again later!
+            </Alert>
+          </div>
+      )}
+      
     </div>
   );
 };

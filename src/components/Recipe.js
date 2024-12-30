@@ -6,6 +6,7 @@ import ShoppingList from './ShoppingList.js';
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { editRecipe } from '../api.js';
 import './Recipe.scss';
 
 const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
@@ -16,7 +17,7 @@ const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
     const [ newNote, setNewNote ] = useState('');
     const [ presentNotes, setPresentNotes ] = useState(false);
     const [ open, setOpen ] = useState(false);
-    
+
     const handleClickOpen = ()=> { setOpen(true) };
 
     const handleClose = () => { setOpen(false) };
@@ -60,7 +61,7 @@ const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
 
     const recipe = fullRecipes.find(r => r.idMeal === id);
     const [ isEditing,  setIsEditing ] = useState(false);
-    const [ editableRecipe, setEditableRecipe ] = useState({});
+    const [ editableRecipe, setEditableRecipe ] = useState({...recipe, strMealThumb: recipe.strMealThumb || ''});
 
     useEffect(() => {
         const recipe = fullRecipes.find(r => r.idMeal === id);
@@ -75,6 +76,18 @@ const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
         setNewNote(content);
     }, []);
 
+    const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                // Update editableRecipe with the new image
+                setEditableRecipe(prev => ({ ...prev, strMealThumb: reader.result }));
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     // capture the changes in editableRecipe
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -83,7 +96,9 @@ const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
 
     // save the change that had been added 
     const handleSave = () => {
+        editableRecipe.id = id;
         updateRecipe(editableRecipe);
+        editRecipe(editableRecipe);
         setIsEditing(false);
     }
 
@@ -162,41 +177,51 @@ const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
                 {
                     isEditing ? (
                         <div>
-                            <TextField
-                                label="Recipe name"
-                                value={editableRecipe.strMeal}
-                                onChange={ handleChange }
-                                fullWidth
-                                margin="normal"
-                                color="success"
-                            />
-                            <TextField
-                                label="Ingredients"
-                                multiline
-                                rows={4}
-                                value={editableRecipe.strIngredients}
-                                onChange={ handleChange }
-                                fullWidth
-                                margin="normal"
-                                color="success"
-                            />
-                            <TextField
-                                label="Instructions"
-                                multiline
-                                rows={4}
-                                value={editableRecipe.strInstructions}
-                                onChange={ handleChange }
-                                fullWidth
-                                margin="normal"
-                                color="success"
-                            />
-                            <Button
-                                variant="contained"
-                                color="success"
-                                onClick={ handleSave }
-                            >      
-                                Save
-                            </Button>
+                            <form onSubmit={handleSave}>
+                                <TextField
+                                    name="strMeal"
+                                    label="Recipe name"
+                                    value={editableRecipe.strMeal}
+                                    onChange={ handleChange }
+                                    fullWidth
+                                    margin="normal"
+                                    color="success"
+                                />
+                                <TextField
+                                    name="strIngredients"
+                                    label="Ingredients"
+                                    multiline
+                                    rows={4}
+                                    value={editableRecipe.strIngredients}
+                                    onChange={ handleChange }
+                                    fullWidth
+                                    margin="normal"
+                                    color="success"
+                                />
+                                <TextField
+                                    name="strInstructions"
+                                    label="Instructions"
+                                    multiline
+                                    rows={4}
+                                    value={editableRecipe.strInstructions}
+                                    onChange={ handleChange }
+                                    fullWidth
+                                    margin="normal"
+                                    color="success"
+                                />
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleImageUpload}
+                                />
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    color="success"
+                                >      
+                                    Save
+                                </Button>
+                            </form>
                         </div>
                     ) : (
                         <>
