@@ -79,4 +79,31 @@ router.delete('/:id', (req, res) => {
     }
 });
 
+router.put('/:id', (req, res) => {
+    try {
+        const recipes = readRecipes();
+        const recipeIndex = recipes.findIndex(recipe => recipe.idMeal === String(req.params.id));
+        console.log(recipeIndex.idMeal, req.params.id);
+        if(recipeIndex === -1) {
+            res.status(404).json({ error: 'Recipe not found' }); // return 404 Not Found if recipe not found
+            return;
+        }
+
+        // Destructure fields from body
+        const { strMeal, strMealThumb, strInstructions, strIngredients } = req.body;
+
+        // Update any provided fields
+        if (strMeal !== undefined) recipes[recipeIndex].strMeal = strMeal;
+        if (strMealThumb !== undefined) recipes[recipeIndex].strMealThumb = strMealThumb;
+        if (strInstructions !== undefined) recipes[recipeIndex].strInstructions = strInstructions;
+        if (strIngredients !== undefined) recipes[recipeIndex].strIngredients = strIngredients;
+        
+        writeRecipes(recipes);
+        res.json(recipes[recipeIndex]);
+    } catch (error) {
+        console.error('Failed to update recipe:', error.message);
+        res.status(500).json({ error: error.message });
+    }
+}); 
+
 module.exports = router;

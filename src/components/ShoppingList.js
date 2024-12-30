@@ -28,6 +28,8 @@ const ShoppingList = ({ open, handleClose, onAddShoppingList }) => {
         if(items.length > 0) {
             onAddShoppingList({ items: items, createdAt: new Date().toLocaleDateString() });
             setItems([]);
+        //    setListsAdded(true);
+        //    setTimeout(() => setListsAdded(false), 3000);
         }
     }
 

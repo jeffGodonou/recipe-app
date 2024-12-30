@@ -34,3 +34,14 @@ export const deleteRecipe = async (id) => {
         throw error;
     }
 };
+
+// Function to edit a recipe on the server
+export const editRecipe = async (recipe) => {
+    try {
+        const response = await axios.put(`${API_URL}/${recipe.id}`, recipe);
+        return response.data;
+    } catch (error) {
+        console.error('Failed to update recipe', error);
+        throw error;
+    }
+}
