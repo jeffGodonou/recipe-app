@@ -6,6 +6,7 @@ import ShoppingList from './ShoppingList.js';
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
 import DeleteIcon from '@mui/icons-material/Delete';
+import DrawIcon from '@mui/icons-material/Draw';
 import { editRecipe } from '../api.js';
 import './Recipe.scss';
 
@@ -178,8 +179,8 @@ const Recipe = ({recipes, onAddShoppingList}) => {
                             <HomeTwoToneIcon/>
                         </Button>
                         {recipe.personal && (
-                            <Button variant="contained" onClick={handleEditClick}>
-                                Edit
+                            <Button color='warning' sx={{ marginTop: '20px'}} onClick={handleEditClick}>
+                                <DrawIcon/>
                             </Button>
                         )}
                         <ShoppingList open={open} handleClose={handleClose} onAddShoppingList={onAddShoppingList}/>
