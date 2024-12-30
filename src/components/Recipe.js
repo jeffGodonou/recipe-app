@@ -9,7 +9,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { editRecipe } from '../api.js';
 import './Recipe.scss';
 
-const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
+const Recipe = ({recipes, onAddShoppingList}) => {
     const { id } = useParams();
     const [ fullRecipes, setFullRecipes] = useState(recipes);
     const [ loading, setLoading ] = useState(true);

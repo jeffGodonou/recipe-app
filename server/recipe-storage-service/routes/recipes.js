@@ -83,7 +83,7 @@ router.put('/:id', (req, res) => {
     try {
         const recipes = readRecipes();
         const recipeIndex = recipes.findIndex(recipe => recipe.idMeal === String(req.params.id));
-        console.log(recipeIndex.idMeal, req.params.id);
+        
         if(recipeIndex === -1) {
             res.status(404).json({ error: 'Recipe not found' }); // return 404 Not Found if recipe not found
             return;

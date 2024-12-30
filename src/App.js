@@ -85,14 +85,6 @@ const App = () => {
         }
     };
 
-    const updateRecipe = (updatedRecipe) => {
-        setRecipes(
-            prevRecipes => prevRecipes.map( recipe =>
-                recipe.id === updatedRecipe.id ? updatedRecipe : recipe
-            )
-        );
-    };
-
     const handleAddShoppingList = (newList) => {
         const updatedShoppingLists = [...shoppingLists, {...newList, id: Date.now()}];
         setShoppingLists(updatedShoppingLists);
@@ -107,7 +99,7 @@ const App = () => {
         <Router>    
             <Routes>
                 <Route exact path="/" element={<Home recipes={recipes} onDeleteRecipe={handleDeleteRecipe} recipeAdded={recipeAdded} recipeDeleted={recipeDeleted} errorRequest={errorRequest}/>} />
-                <Route path="/recipe/:id" element={<Recipe recipes={recipes} updateRecipe={updateRecipe} onAddShoppingList={handleAddShoppingList}/>}/>
+                <Route path="/recipe/:id" element={<Recipe recipes={recipes} onAddShoppingList={handleAddShoppingList}/>}/>
                 <Route path="/add-recipe" element={<AddRecipeForm onAddRecipe={handleAddRecipe}/>} />
                 <Route path="/shopping-list" element={<ShoppingListPage shoppingLists={shoppingLists} onAddShoppingList={handleAddShoppingList} onDeleteShoppingList={handleDeleteShoppingLists} />} />
                 <Route path="/mealplan" element={<MealPlanPage recipes={recipes}/>}/>
