@@ -250,31 +250,31 @@ const Recipe = ({recipes, onAddShoppingList}) => {
                             <Typography variant="h6">
                                 Ingredients
                             </Typography>
-                                <ul>
-                                    {!recipe.personal && (Object.keys(recipe).filter((key) => key.startsWith('strIngredient') && recipe[key])
-                                        .map((key) => (
-                                            <li key={key}>
-                                                {recipe[key]}
-                                            </li>))) }
-                                    {ingredients.map((ingredient, index) => (
-                                        <ListItem key={index}>
-                                            <ListItemText primary={ingredient} />
-                                        </ListItem>
-                                    ))}
-                                </ul>
+                            <ul>
+                                {!recipe.personal && (Object.keys(recipe).filter((key) => key.startsWith('strIngredient') && recipe[key])
+                                    .map((key) => (
+                                        <li key={key}>
+                                            {recipe[key]}
+                                        </li>))) }
+                                {ingredients.map((ingredient, index) => (
+                                    <li key={index}>
+                                        {ingredient}
+                                    </li>
+                                ))}
+                            </ul>
                                 
-                                <List className="instructions-list">
-                                    <Typography variant="h6">
-                                        Instructions
-                                    </Typography>
-                                    {instructions.map((instruction, index) => (instruction && (
-                                        <ListItem key={index}>
-                                            <ListItemText primary={instruction} className='instructions-text' />
-                                        </ListItem>
-                                        )
-                                    ))}
-                                </List>
-                            </>
+                            <List className="instructions-list">
+                                <Typography variant="h6">
+                                    Instructions
+                                </Typography>
+                                {instructions.map((instruction, index) => (instruction && (
+                                    <ListItem key={index}>
+                                        <ListItemText primary={instruction} className='instructions-text' />
+                                    </ListItem>
+                                    )
+                                ))}
+                            </List>
+                        </>
                         )
                 }
 
