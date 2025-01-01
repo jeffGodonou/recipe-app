@@ -12,12 +12,39 @@ A user-friendly application to manage and personalize your favorite recipes. Fea
 - **Shopping List:** Generate and manage a shopping list based on recipe ingredients.
 - **Responsive Design:** Compatible with various devices and screen sizes.
 
-## Installation
+## Installations
 
 1. **Clone the repository:**
 
    ```bash
    git clone https://github.com/yourusername/recipe-app.git
+```
+
+2. **Open your browser and go to:**
+
+   ```
+   http://localhost:3000
+   ```
+
+## Technologies Used
+
+- **Frontend:**
+  - React
+  - Material-UI
+  - React Router
+
+- **Backend:**
+  - Node.js
+  - Express
+  - Axios
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and create a pull request with your changes.
+
+## License
+
+This project is licensed under the MIT License.
 ```
 
 ## Available Scripts
