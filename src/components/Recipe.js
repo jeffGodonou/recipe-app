@@ -1,4 +1,4 @@
-import { Button, Card, CardMedia, CardContent, CircularProgress, List, ListItem, ListItemText, TextField, Typography, IconButton } from '@mui/material';
+import { Button, Card, CardMedia, CardContent, CircularProgress, List, ListItem, ListItemText, TextField, Typography, IconButton, Tooltip } from '@mui/material';
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import TextEditor from './TextEditor.js';
@@ -173,16 +173,22 @@ const Recipe = ({recipes, onAddShoppingList}) => {
                         { recipe.strMeal }
                     </Typography>
                     <div>
-                        <Button color='warning' sx={{ marginTop: '20px'}} onClick={() => handleClickOpen()}>
-                            <AddShoppingCartIcon/>
-                        </Button>
-                        <Button component={Link} color='warning' sx={{ marginTop: '20px'}} to='/'>
-                            <HomeTwoToneIcon/>
-                        </Button>
-                        {recipe.personal && (
-                            <Button color='warning' sx={{ marginTop: '20px'}} onClick={handleEditClick}>
-                                <DrawIcon/>
+                        <Tooltip title="Add to Shopping List" arrow>
+                            <Button color='warning' sx={{ marginTop: '20px'}} onClick={() => handleClickOpen()}>
+                                <AddShoppingCartIcon/>
                             </Button>
+                        </Tooltip>
+                        <Tooltip title="Home" arrow>
+                            <Button component={Link} color='warning' sx={{ marginTop: '20px'}} to='/'>
+                                <HomeTwoToneIcon/>
+                            </Button>
+                        </Tooltip>
+                        {recipe.personal && (
+                            <Tooltip title="Edit" arrow>
+                                <Button color='warning' sx={{ marginTop: '20px'}} onClick={handleEditClick}>
+                                    <DrawIcon/>
+                                </Button>
+                            </Tooltip>
                         )}
                         <ShoppingList open={open} handleClose={handleClose} onAddShoppingList={onAddShoppingList}/>
                     </div>
@@ -266,6 +272,7 @@ const Recipe = ({recipes, onAddShoppingList}) => {
                             <List className="instructions-list">
                                 <Typography variant="h6">
                                     Instructions
+                        
                                 </Typography>
                                 {instructions.map((instruction, index) => (instruction && (
                                     <ListItem key={index}>
