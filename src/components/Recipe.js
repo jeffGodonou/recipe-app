@@ -6,10 +6,11 @@ import ShoppingList from './ShoppingList.js';
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
 import DeleteIcon from '@mui/icons-material/Delete';
+import DrawIcon from '@mui/icons-material/Draw';
 import { editRecipe } from '../api.js';
 import './Recipe.scss';
 
-const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
+const Recipe = ({recipes, onAddShoppingList}) => {
     const { id } = useParams();
     const [ fullRecipes, setFullRecipes] = useState(recipes);
     const [ loading, setLoading ] = useState(true);
@@ -61,7 +62,7 @@ const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
 
     const recipe = fullRecipes.find(r => r.idMeal === id);
     const [ isEditing,  setIsEditing ] = useState(false);
-    const [ editableRecipe, setEditableRecipe ] = useState({...recipe, strMealThumb: recipe.strMealThumb || ''});
+    const [ editableRecipe, setEditableRecipe ] = useState({});
 
     useEffect(() => {
         const recipe = fullRecipes.find(r => r.idMeal === id);
@@ -95,11 +96,28 @@ const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
     }
 
     // save the change that had been added 
-    const handleSave = () => {
+    const handleSave = async (event) => {
+        event.preventDefault();
         editableRecipe.id = id;
-        updateRecipe(editableRecipe);
-        editRecipe(editableRecipe);
-        setIsEditing(false);
+        try {
+            const updatedRecipe = await editRecipe(editableRecipe); // or however editRecipe returns promise
+            // Update local recipe state with the new data
+            setEditableRecipe(prev => ({ ...prev, ...updatedRecipe }));
+            // Update the recipe in the fullRecipes state
+            setFullRecipes(prevRecipes => {
+                const index = prevRecipes.findIndex(r => r.idMeal === updatedRecipe.idMeal);
+                if (index !== -1) {
+                    const updatedList = [...prevRecipes];
+                    updatedList[index] = updatedRecipe;
+                    return updatedList;
+                } else {
+                    return [...prevRecipes, updatedRecipe];
+                }
+            });
+            setIsEditing(false);
+        } catch (error) {
+            console.error('Failed to update recipe:', error);
+        }
     }
 
     const handleAddNote = () => {
@@ -146,6 +164,7 @@ const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
 
             <CardContent sx={{backgroundColor: 'rgb(216, 120, 24)'}} >
                 <div className='header-div'> 
+                    <div className='header'>
                     <Typography 
                         gutterBottom variant = "h4" 
                         component = "div" 
@@ -161,18 +180,21 @@ const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
                             <HomeTwoToneIcon/>
                         </Button>
                         {recipe.personal && (
-                            <Button variant="contained" onClick={handleEditClick}>
-                                Edit
+                            <Button color='warning' sx={{ marginTop: '20px'}} onClick={handleEditClick}>
+                                <DrawIcon/>
                             </Button>
                         )}
                         <ShoppingList open={open} handleClose={handleClose} onAddShoppingList={onAddShoppingList}/>
                     </div>
+                    </div>
+                    
+                    
+                    {recipe.personal && (
+                        <Typography variant='body2' color='textSecondary' className='banner'>
+                            Personal Recipe
+                        </Typography>
+                    )}
                 </div>
-                {recipe.personal && (
-                    <Typography variant='body2' color='textSecondary'>
-                        Personal Recipe
-                    </Typography>
-                )}
 
                 {
                     isEditing ? (
@@ -228,31 +250,31 @@ const Recipe = ({recipes, updateRecipe, onAddShoppingList}) => {
                             <Typography variant="h6">
                                 Ingredients
                             </Typography>
-                                <ul>
-                                    {!recipe.personal && (Object.keys(recipe).filter((key) => key.startsWith('strIngredient') && recipe[key])
-                                        .map((key) => (
-                                            <li key={key}>
-                                                {recipe[key]}
-                                            </li>))) }
-                                    {ingredients.map((ingredient, index) => (
-                                        <ListItem key={index}>
-                                            <ListItemText primary={ingredient} />
-                                        </ListItem>
-                                    ))}
-                                </ul>
+                            <ul>
+                                {!recipe.personal && (Object.keys(recipe).filter((key) => key.startsWith('strIngredient') && recipe[key])
+                                    .map((key) => (
+                                        <li key={key}>
+                                            {recipe[key]}
+                                        </li>))) }
+                                {ingredients.map((ingredient, index) => (
+                                    <li key={index}>
+                                        {ingredient}
+                                    </li>
+                                ))}
+                            </ul>
                                 
-                                <List className="instructions-list">
-                                    <Typography variant="h6">
-                                        Instructions
-                                    </Typography>
-                                    {instructions.map((instruction, index) => (instruction && (
-                                        <ListItem key={index}>
-                                            <ListItemText primary={instruction} className='instructions-text' />
-                                        </ListItem>
-                                        )
-                                    ))}
-                                </List>
-                            </>
+                            <List className="instructions-list">
+                                <Typography variant="h6">
+                                    Instructions
+                                </Typography>
+                                {instructions.map((instruction, index) => (instruction && (
+                                    <ListItem key={index}>
+                                        <ListItemText primary={instruction} className='instructions-text' />
+                                    </ListItem>
+                                    )
+                                ))}
+                            </List>
+                        </>
                         )
                 }
 
