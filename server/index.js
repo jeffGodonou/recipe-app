@@ -5,8 +5,24 @@ const cors = require('cors');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+const STORAGE_SERVICE_URL = 'http://localhost:5001/api';
+
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  methods: ['GET', 'POST', 'DELETE', 'PUT'],
+  allowedHeaders: ['Content-Type'],
+};
+
 app.use(express.json({ limit: '10gb' }));
-app.use(cors());
+app.use(cors(corsOptions));
+
+// Request validation middleware
+app.use((req, res, next) => {
+  if (req.method === 'POST' && !req.headers['content-type']?.includes('application/json')) {
+    return res.status(400).json({ error: 'Content-Type must be application/json' });
+  }
+  next();
+});
 
 app.get('/', (req, res) => {
   res.send('Server is running');
@@ -15,8 +31,8 @@ app.get('/', (req, res) => {
 // Add a new recipe
 app.post('/api/recipes', async (req, res) => {
   try {
-    const response = await axios.post('http://localhost:5001/api/recipes', req.body);
-    res.status(response.status).send(response.data);
+    const response = await axios.post(`${STORAGE_SERVICE_URL}/recipes`, req.body);
+    res.json(response.data);
   } catch (error) {
     res.status(500).json({ error: 'Failed to create recipe' });
   }
@@ -25,7 +41,7 @@ app.post('/api/recipes', async (req, res) => {
 // Delete a recipe
 app.delete('/api/recipes/:id', async (req, res) => {
   try {
-    const response = await axios.delete(`http://localhost:5001/api/recipes/${req.params.id}`);
+    const response = await axios.delete(`${STORAGE_SERVICE_URL}/recipes/${req.params.id}`);
     res.status(response.status).send(response.data);
   } catch (error) {
     res.status(500).json({ error: 'Failed to delete recipe' });
@@ -35,10 +51,53 @@ app.delete('/api/recipes/:id', async (req, res) => {
 // Get all recipes
 app.get('/api/recipes', async (req, res) => {
   try {
-    const response = await axios.get('http://localhost:5001/api/recipes');
-    res.send(response.data).json(response.data);
+    const response = await axios.get(`${STORAGE_SERVICE_URL}/recipes`);
+    res.json(response.data);
   } catch (error) {
     res.status(500).json({ error: 'Failed to retrieve recipe' });
+  }
+});
+
+// get a recipe by id
+app.get('/api/recipes/:id', async (req, res) => {
+  try {
+    const response = await axios.get(`http://localhost:5001/api/recipes/${req.params.id}`);
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to retrieve recipe' });
+  }
+});
+
+// get all shopping lists
+app.get('/api/shopping-lists', async (req, res) => { 
+  try {
+    const response = await axios.get(`${STORAGE_SERVICE_URL}/shopping-lists`);
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json('Failed to retrieve shopping list data:', error );
+  }
+});
+
+
+// add a new shopping list
+app.post('/api/shopping-lists', async (req, res) => {
+  try {
+    console.log('Received request body:', req.body); // Add logging
+    const response = await axios.post(`${STORAGE_SERVICE_URL}/shopping-lists`, req.body);
+    console.log('Storage service response:', response.data); // Add logging
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create shopping list' });
+  }
+});
+
+// delete a shopping list
+app.delete('/api/shopping-lists/:id', async (req, res) => {
+  try {
+    const response = await axios.delete(`${STORAGE_SERVICE_URL}/shopping-lists/${req.params.id}`);
+    res.status(response.status).send(response.data);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete shopping list' });
   }
 });
 

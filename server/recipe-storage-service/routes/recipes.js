@@ -79,6 +79,7 @@ router.delete('/:id', (req, res) => {
     }
 });
 
+// Endpoint to update a recipe
 router.put('/:id', (req, res) => {
     try {
         const recipes = readRecipes();

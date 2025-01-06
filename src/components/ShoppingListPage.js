@@ -7,6 +7,7 @@ import './ShoppingListPage.scss';
 import Snackbar from "@mui/material/Snackbar";
 import Alert from '@mui/material/Alert';
 import Navbar from "./Navbar";
+// import { getShoppingLists, updateShoppingList, deleteShoppingList } from "../api";
 
 const ShoppingListPage = ({shoppingLists, onAddShoppingList, onDeleteShoppingList }) => {
     const [openMailBox, setOpenMailBox] = useState(false);
