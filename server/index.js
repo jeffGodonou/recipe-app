@@ -2,6 +2,10 @@ const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
 
+const morgan = require('morgan');
+const { createLogger, format, transports } = require('winston');
+
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -13,8 +17,21 @@ const corsOptions = {
   allowedHeaders: ['Content-Type'],
 };
 
+const logger = createLogger({
+  level: 'info',
+  format: format.combine(
+      format.timestamp(),
+      format.json()
+  ),
+  transports: [
+      new transports.Console(), // log to the console
+      // new transports.File({ filename: 'logs.log' }) // 
+  ]
+});
+
 app.use(express.json({ limit: '10gb' }));
 app.use(cors(corsOptions));
+app.use(morgan('combined')); // Log all requests to the console with more details using morgan
 
 // Request validation middleware
 app.use((req, res, next) => {
@@ -32,6 +49,7 @@ app.get('/', (req, res) => {
 app.post('/api/recipes', async (req, res) => {
   try {
     const response = await axios.post(`${STORAGE_SERVICE_URL}/recipes`, req.body);
+    logger.info('Handling POST / request');
     res.json(response.data);
   } catch (error) {
     res.status(500).json({ error: 'Failed to create recipe' });
