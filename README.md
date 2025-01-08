@@ -1,6 +1,51 @@
-# Getting Started with Create React App
+# Recipe App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Description
+
+A user-friendly application to manage and personalize your favorite recipes. Features include viewing, editing, adding notes, and managing a shopping list for ingredients.
+
+## Features
+
+- **View Recipes:** Browse through a variety of recipes fetched from an external API.
+- **Edit Personal Recipes:** Customize recipes by editing details and uploading images.
+- **Notes:** Add personal notes to your recipes.
+- **Shopping List:** Generate and manage a shopping list based on recipe ingredients.
+- **Responsive Design:** Compatible with various devices and screen sizes.
+
+## Installations
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/yourusername/recipe-app.git
+```
+
+2. **Open your browser and go to:**
+
+   ```
+   http://localhost:3000
+   ```
+
+## Technologies Used
+
+- **Frontend:**
+  - React
+  - Material-UI
+  - React Router
+
+- **Backend:**
+  - Node.js
+  - Express
+  - Axios
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and create a pull request with your changes.
+
+## License
+
+This project is licensed under the MIT License.
+```
 
 ## Available Scripts
 

@@ -7,7 +7,7 @@ import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
 import AddIcon from '@mui/icons-material/Add';
 import { Link, useLocation } from 'react-router-dom';
 import { alpha, styled } from '@mui/material/styles'
-import { AppBar, Button, InputBase, InputAdornment, IconButton, Toolbar, Typography } from "@mui/material";
+import { AppBar, Button, InputBase, InputAdornment, IconButton, Toolbar, Typography, Tooltip } from "@mui/material";
 import ShoppingList from "./ShoppingList";
 import './Navbar.scss';
 
@@ -97,19 +97,27 @@ const Navbar = ({searchTerm, handleSearchChange, handleSearch, onAddShoppingList
                                 Shopping Lists 
                             </Typography>
                             
-                            <Button onClick={() => handleClickOpen()} color='inherit' size='small' className='button'>
-                                <AddIcon/>
-                            </Button>    
+                            <Tooltip title='Add a shopping list' arrow>
+                                <Button onClick={() => handleClickOpen()} color='inherit' size='small' className='button'>
+                                    <AddIcon/>
+                                </Button> 
+                            </Tooltip> 
                             <ShoppingList open={open} handleClose={handleClose} size='small' onAddShoppingList={onAddShoppingList} />
-                            <Button color='inherit' size="small" component={Link} to={`/add-recipe`}>
-                                <EditIcon fontSize="small"/>
-                            </Button>
-                            <Button color='inherit' size="small" component={Link} to={`/mealplan`}>
-                                <CalendarTodayIcon fontSize="small"/>
-                            </Button>
-                            <Button component={Link} to='/' color='inherit' className='button'>
-                                <HomeTwoToneIcon/>
-                            </Button>
+                            <Tooltip title='Add a recipe' arrow>
+                                <Button color='inherit' size="small" component={Link} to={`/add-recipe`}>
+                                    <EditIcon fontSize="small"/>
+                                </Button>
+                            </Tooltip>
+                            <Tooltip title='Meal Plan' arrow>
+                                <Button color='inherit' size="small" component={Link} to={`/mealplan`}>
+                                    <CalendarTodayIcon fontSize="small"/>
+                                </Button>
+                            </Tooltip>
+                            <Tooltip title='Home' arrow>
+                                <Button component={Link} to='/' color='inherit' className='button'>
+                                    <HomeTwoToneIcon/>
+                                </Button>
+                            </Tooltip>
                         </>
                     ) : isMealPlanPage ? (
                         <>
@@ -117,15 +125,21 @@ const Navbar = ({searchTerm, handleSearchChange, handleSearch, onAddShoppingList
                                 Meal Plan 
                             </Typography>
                             
-                            <Button color='inherit' size="small" component={Link} to={`/add-recipe`}>
-                                <EditIcon fontSize="small"/>
-                            </Button>
-                            <Button color='inherit' size="small" component={Link} to={`/shopping-list`}>
-                                <AddShoppingCartIcon fontSize="small"/>
-                            </Button>
-                            <Button component={Link} to='/' color='inherit' className='button'>
-                                <HomeTwoToneIcon/>
-                            </Button>
+                            <Tooltip title='Add a recipe' arrow>
+                                <Button color='inherit' size="small" component={Link} to={`/add-recipe`}>
+                                    <EditIcon fontSize="small"/>
+                                </Button>
+                            </Tooltip>
+                            <Tooltip title='Shopping List' arrow>
+                                <Button color='inherit' size="small" component={Link} to={`/shopping-list`}>
+                                    <AddShoppingCartIcon fontSize="small"/>
+                                </Button>
+                            </Tooltip>
+                            <Tooltip title='Home' arrow>
+                                <Button component={Link} to='/' color='inherit' className='button'>
+                                    <HomeTwoToneIcon/>
+                                </Button>
+                            </Tooltip>
                         </>
                     ) : isAddRecipePage ? (
                         <>
@@ -133,16 +147,21 @@ const Navbar = ({searchTerm, handleSearchChange, handleSearch, onAddShoppingList
                                 Add a recipe
                             </Typography>
                             
-                            
-                            <Button color='inherit' size="small" component={Link} to={`/shopping-list`}>
-                                <AddShoppingCartIcon fontSize="small"/>
-                            </Button>
-                            <Button color='inherit' size="small" component={Link} to={`/mealplan`}>
-                                <CalendarTodayIcon fontSize="small"/>
-                            </Button>
-                            <Button component={Link} to='/' color='inherit' className='button'>
-                                <HomeTwoToneIcon/>
-                            </Button>
+                            <Tooltip title='Shopping List' arrow>
+                                <Button color='inherit' size="small" component={Link} to={`/shopping-list`}>
+                                    <AddShoppingCartIcon fontSize="small"/>
+                                </Button>
+                            </Tooltip>
+                            <Tooltip title='Meal Plan' arrow>
+                                <Button color='inherit' size="small" component={Link} to={`/mealplan`}>
+                                    <CalendarTodayIcon fontSize="small"/>
+                                </Button>
+                            </Tooltip>
+                            <Tooltip title='Home' arrow>
+                                <Button component={Link} to='/' color='inherit' className='button'>
+                                    <HomeTwoToneIcon/>
+                                </Button>
+                            </Tooltip>
                         </>
                     ):(
                         <>
@@ -167,15 +186,21 @@ const Navbar = ({searchTerm, handleSearchChange, handleSearch, onAddShoppingList
                                 inputProps={{ 'aria-label': 'search',}}
                             />
                             </Search>
-                            <Button color='inherit' size="small" component={Link} to={`/add-recipe`}>
-                                <EditIcon fontSize="small"/>
-                            </Button>
-                            <Button color='inherit' size="small" component={Link} to={`/shopping-list`}>
-                                <AddShoppingCartIcon fontSize="small"/>
-                            </Button>
-                            <Button color='inherit' size="small" component={Link} to={`/mealplan`}>
-                                <CalendarTodayIcon fontSize="small"/>
-                            </Button>
+                            <Tooltip title='New Recipe' arrow>
+                                <Button color='inherit' size="small" component={Link} to={`/add-recipe`}>
+                                    <EditIcon fontSize="small"/>
+                                </Button>
+                            </Tooltip>
+                            <Tooltip title='Shopping List' arrow>
+                                <Button color='inherit' size="small" component={Link} to={`/shopping-list`}>
+                                    <AddShoppingCartIcon fontSize="small"/>
+                                </Button>
+                            </Tooltip>
+                            <Tooltip title='Meal Plan' arrow>
+                                <Button color='inherit' size="small" component={Link} to={`/mealplan`}>
+                                    <CalendarTodayIcon fontSize="small"/>
+                                </Button>
+                            </Tooltip>
 
                         </>
                     )

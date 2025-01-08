@@ -24,12 +24,15 @@ const ShoppingList = ({ open, handleClose, onAddShoppingList }) => {
         setItems(items.filter((_, i) => i !== index));
     };
 
-    const handleSaveList = () => {
+    const handleSaveList = async () => {
         if(items.length > 0) {
-            onAddShoppingList({ items: items, createdAt: new Date().toLocaleDateString() });
-            setItems([]);
-        //    setListsAdded(true);
-        //    setTimeout(() => setListsAdded(false), 3000);
+            try {
+                await onAddShoppingList({ items: items, createdAt: new Date().toLocaleDateString() });
+                setItems([]);
+                handleClose();
+            } catch (error) {
+                console.error('Failed to create shopping list:', error);
+            }
         }
     }
 
