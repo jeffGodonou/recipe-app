@@ -95,9 +95,9 @@ app.post('/api/shopping-lists', async (req, res) => {
 app.delete('/api/shopping-lists/:id', async (req, res) => {
   try {
     const response = await axios.delete(`${STORAGE_SERVICE_URL}/shopping-lists/${req.params.id}`);
-    res.status(response.status).send(response.data);
+    res.status(response.status).json(response.data);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to delete shopping list' });
+    res.status(500).json({ error: 'Failed to delete shopping list'});
   }
 });
 

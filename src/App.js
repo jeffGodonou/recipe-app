@@ -6,8 +6,8 @@ import AddRecipeForm from './components/AddRecipeForm';
 import ShoppingListPage from './components/ShoppingListPage';
 import './App.scss'
 import MealPlanPage from './components/MealPlanPage';
-import { getRecipes, addRecipe, deleteRecipe,  } from './api'
-// getShoppingListById, addShoppingList, deleteShoppingList
+import { getRecipes, addRecipe, deleteRecipe, getShoppingLists, deleteShoppingList, addShoppingList } from './api'
+// getShoppingListById, addShoppingList
 const App = () => {
     const [recipes, setRecipes] = useState([]);
     const [shoppingLists, setShoppingLists] = useState([]);
@@ -35,9 +35,16 @@ const App = () => {
     }, []);
     
     useEffect(() => {
-        // fetch locally stored shopping lists
-        const storedShoppingLists = JSON.parse(localStorage.getItem('shoppingLists')) || [];
-        setShoppingLists(storedShoppingLists);
+        const fetchShoppingLists = async () => {
+            try {  
+                    const shoppingLists = await getShoppingLists();
+                    setShoppingLists(shoppingLists);
+                } catch (error) {
+                    console.error('Failed to fetch shopping lists :', error);
+            }
+        }
+
+        fetchShoppingLists();
     }, []);
 
     useEffect(() => {
@@ -85,14 +92,25 @@ const App = () => {
         }
     };
 
-    const handleAddShoppingList = (newList) => {
-        const updatedShoppingLists = [...shoppingLists, {...newList, id: Date.now()}];
-        setShoppingLists(updatedShoppingLists);
+    const handleAddShoppingList = async (newList) => {
+        try {
+            const updatedShoppingLists = await addShoppingList(newList); 
+            console.log('Updated Shopping List:', updatedShoppingLists);
+            setShoppingLists([...shoppingLists, updatedShoppingLists]);
+        } catch (error) {
+            console.error('Failed to create shopping list:', error);
+        }
     };
 
-    const handleDeleteShoppingLists = (id) => {
-        const updatedShoppingLists = shoppingLists.filter(list => list.id !== id);
-        setShoppingLists(updatedShoppingLists);
+    const handleDeleteShoppingLists = async (id) => {
+        try {
+            await deleteShoppingList(id);
+
+            // update the shopping lists state by removing the deleted list
+            setShoppingLists((prevLists) => prevLists.filter((list) => list.id !== id));
+        } catch (error) {
+            console.error('Failed to delete shopping list:', error);
+        }
     };
 
     return (

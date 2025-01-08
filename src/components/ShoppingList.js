@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import { Button, Dialog, List, ListItem, ListItemText, IconButton, TextField, DialogTitle, DialogContent, DialogActions } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
-import { addShoppingList } from "../api";
 import './ShoppingList.scss';
 
 const ShoppingList = ({ open, handleClose, onAddShoppingList }) => {
@@ -28,14 +27,12 @@ const ShoppingList = ({ open, handleClose, onAddShoppingList }) => {
     const handleSaveList = async () => {
         if(items.length > 0) {
             try {
-                await addShoppingList({ items: items, createdAt: new Date().toLocaleDateString() });
+                await onAddShoppingList({ items: items, createdAt: new Date().toLocaleDateString() });
                 setItems([]);
                 handleClose();
             } catch (error) {
                 console.error('Failed to create shopping list:', error);
             }
-            onAddShoppingList({ items: items, createdAt: new Date().toLocaleDateString() });
-            setItems([]);
         }
     }
 
