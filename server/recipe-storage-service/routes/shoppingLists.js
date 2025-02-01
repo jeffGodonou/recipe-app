@@ -40,7 +40,7 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
     try {
         const shoppingLists = readShoppingLists();
-        const { items, createdAt } = req.body;
+        const { name, items, createdAt } = req.body;
 
         if (!items || !Array.isArray(items)) {
             return res.status(400).json({ error: 'Invalid shopping list data' });
@@ -48,6 +48,7 @@ router.post('/', (req, res) => {
 
         const newShoppingList = {
             id: Date.now().toString(),
+            name: name || '',
             items: items || [],
             createdAt: createdAt || new Date().toLocaleDateString()
         };

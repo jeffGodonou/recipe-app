@@ -70,7 +70,7 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onDeleteShoppingLis
                                     <Card key={list.id} className="shopping-list-card">
                                         <CardContent>
                                             <Typography variant="h6">
-                                                Shopping List
+                                                {list.name}
                                                 <Typography variant="body2" color="textSecondary" style={{ float: 'right' }}> {list.createdAt} </Typography>
                                             </Typography>
                                             <List>
