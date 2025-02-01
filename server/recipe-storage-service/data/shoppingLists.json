@@ -11,21 +11,5 @@
       "water bottle"
     ],
     "createdAt": "2025-01-11"
-  },
-  {
-    "id": "1736792871380",
-    "name": "Shopping List",
-    "items": [
-      "water"
-    ],
-    "createdAt": "2025-01-13"
-  },
-  {
-    "id": "1738418108067",
-    "name": "Shopping List 9",
-    "items": [
-      "palm oil"
-    ],
-    "createdAt": "2025-02-01"
   }
 ]

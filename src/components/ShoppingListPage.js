@@ -7,8 +7,9 @@ import './ShoppingListPage.scss';
 import Snackbar from "@mui/material/Snackbar";
 import Alert from '@mui/material/Alert';
 import Navbar from "./Navbar";
+import Checkbox from "@mui/material/Checkbox";
 
-const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList, onDeleteShoppingList }) => {
+const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList, onDeleteShoppingList, onDeleteMultipleShoppingLists }) => {
     const [openMailBox, setOpenMailBox] = useState(false);
     const [selectedList, setSelectedList] = useState(null);
     const [email, setEmail] = useState('');
@@ -20,6 +21,7 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList,
     });
     const [isEditing, setIsEditing] = useState(false);
     const [editList, setEditList] = useState(null);
+    const [selectedLists, setSelectedLists] = useState([]);
     const { openMessage, vertical, horizontal, message } = state;
 
     const handleClickOpenMailBox = (list) => { 
@@ -52,6 +54,23 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList,
             }
         }
     };  
+
+    const handleSelectList = (id) => {
+        setSelectedLists((prevSelected) =>
+            prevSelected.includes(id)
+                ? prevSelected.filter((listId) => listId !== id)
+                : [...prevSelected, id]
+        );
+    };
+
+    const handleDeleteSelectedLists = async () => {
+        try {
+            await onDeleteMultipleShoppingLists(selectedLists);
+            setSelectedLists([]);
+        } catch (error) {   
+            console.error('Failed to delete shopping list:', error);
+        }
+    };
 
     const sendEmail = () => {
         if(!selectedList) return;
@@ -88,6 +107,10 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList,
                                 <Grid item xs={12} sm={6} md={4} key={list.id}>
                                     <Card key={list.id} className="shopping-list-card">
                                         <CardContent>
+                                            <Checkbox
+                                                checked={selectedLists.includes(list.id)}
+                                                onChange={() => handleSelectList(list.id)}
+                                            />
                                             <Typography variant="h6">
                                                 {list.name}
                                                 <Typography variant="body2" color="textSecondary" style={{ float: 'right' }}> {list.createdAt} </Typography>
@@ -132,6 +155,15 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList,
                     </Grid>
                 )}
             </div>
+            <Button
+                    variant="contained"
+                    color="secondary"
+                    startIcon={<DeleteIcon />}
+                    onClick={handleDeleteSelectedLists}
+                    disabled={selectedLists.length === 0}
+                >
+                    Delete Selected
+            </Button>
         </div>
         
         <Dialog open={isEditing} onClose={() => setIsEditing(false)}>

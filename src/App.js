@@ -112,6 +112,17 @@ const App = () => {
         }
     };
 
+    const handleDeleteMultipleShoppingLists = async (selectedLists) => {
+        try {
+            await Promise.all(selectedLists.map((id) => deleteShoppingList(id)));
+            setShoppingLists((prevLists) =>
+                prevLists.filter((list) => !selectedLists.includes(list.id))
+            );
+        } catch (error) {
+            console.error('Failed to delete selected shopping lists:', error);
+        }
+    }
+
     const handleEditShoppingList = async (editedList) => {
         try {
             const updatedShoppingList = await updateShoppingList(editedList);
@@ -133,7 +144,13 @@ const App = () => {
                 <Route exact path="/" element={<Home recipes={recipes} onDeleteRecipe={handleDeleteRecipe} recipeAdded={recipeAdded} recipeDeleted={recipeDeleted} errorRequest={errorRequest}/>} />
                 <Route path="/recipe/:id" element={<Recipe recipes={recipes} onAddShoppingList={handleAddShoppingList}/>}/>
                 <Route path="/add-recipe" element={<AddRecipeForm onAddRecipe={handleAddRecipe}/>} />
-                <Route path="/shopping-list" element={<ShoppingListPage shoppingLists={shoppingLists} onAddShoppingList={handleAddShoppingList} onEditShoppingList={handleEditShoppingList} onDeleteShoppingList={handleDeleteShoppingLists} />} />
+                <Route path="/shopping-list" element={<ShoppingListPage 
+                                                        shoppingLists={shoppingLists} 
+                                                        onAddShoppingList={handleAddShoppingList} 
+                                                        onEditShoppingList={handleEditShoppingList} 
+                                                        onDeleteShoppingList={handleDeleteShoppingLists}
+                                                        onDeleteMultipleShoppingLists={handleDeleteMultipleShoppingLists}
+                                                        />} />
                 <Route path="/mealplan" element={<MealPlanPage recipes={recipes}/>}/>
             </Routes>
         </Router>
