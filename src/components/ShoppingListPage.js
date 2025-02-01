@@ -8,7 +8,7 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from '@mui/material/Alert';
 import Navbar from "./Navbar";
 
-const ShoppingListPage = ({shoppingLists, onAddShoppingList, onDeleteShoppingList }) => {
+const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList, onDeleteShoppingList }) => {
     const [openMailBox, setOpenMailBox] = useState(false);
     const [selectedList, setSelectedList] = useState(null);
     const [email, setEmail] = useState('');
@@ -18,6 +18,8 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onDeleteShoppingLis
         horizontal: 'center',
         message: "Your shoppinglist was sent successfully"
     });
+    const [isEditing, setIsEditing] = useState(false);
+    const [editList, setEditList] = useState(null);
     const { openMessage, vertical, horizontal, message } = state;
 
     const handleClickOpenMailBox = (list) => { 
@@ -33,6 +35,23 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onDeleteShoppingLis
         setOpenMailBox(false);
         setEmail('');
     };
+
+    const handleEditClick = (list) => {
+        setIsEditing(true);
+        setEditList(list);
+    };
+
+    const handleSaveEdit = async () => {
+        if(editList.items.length > 0) { 
+            try {
+                await onEditShoppingList(editList);
+                setIsEditing(false);
+                setEditList(null);
+            } catch (error) {
+                console.error('Failed to edit shopping list:', error);
+            }
+        }
+    };  
 
     const sendEmail = () => {
         if(!selectedList) return;
@@ -97,6 +116,14 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onDeleteShoppingLis
                                             >
                                                 Send to email
                                             </Button>
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={() => handleEditClick(list)}   
+                                                style={{ marginLeft: '10px' }}
+                                            >
+                                                Edit
+                                            </Button>
                                         </CardContent>
                                     </Card>
                                 </Grid>
@@ -106,6 +133,43 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onDeleteShoppingLis
                 )}
             </div>
         </div>
+        
+        <Dialog open={isEditing} onClose={() => setIsEditing(false)}>
+                <DialogTitle>Edit Shopping List</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        label="Name"
+                        value={editList?.name || ''}
+                        onChange={(e) => setEditList({ ...editList, name: e.target.value })}
+                        fullWidth
+                    />
+                    <List>
+                        {editList?.items.map((item, index) => (
+                            <ListItem key={index}>
+                                <TextField
+                                    label={`Item ${index + 1}`}
+                                    value={item}
+                                    onChange={(e) => {
+                                        const newItems = [...editList.items];
+                                        newItems[index] = e.target.value;
+                                        setEditList({ ...editList, items: newItems });
+                                    }}
+                                    fullWidth
+                                />
+                            </ListItem>
+                        ))}
+                    </List>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setIsEditing(false)} color="primary">
+                        Cancel
+                    </Button>
+                    <Button onClick={handleSaveEdit} color="primary">
+                        Save
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
         <Dialog open={openMailBox} onClose={handleCloseMailBox} aria-labelledby="form-dialog-title">
             <DialogTitle id="form-dialog-title" sx={{backgroundColor:'green', color:'white', fontFamily:'Montserrat, sans-serif', fontStyle: 'italic'}}> Email </DialogTitle>
             <DialogContent>

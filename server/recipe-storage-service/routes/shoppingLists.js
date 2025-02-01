@@ -88,8 +88,8 @@ router.delete('/:id', (req, res) => {
 router.put('/:id', (req, res) => {
     try {
         const shoppingLists = readShoppingLists();
-        const shoppingListIndex = shoppingLists.findIndex(list => list.createdAt === req.params.id);
-        
+        const shoppingListIndex = shoppingLists.findIndex(list => list.id === req.params.id);
+        console.log('Shopping list index:', shoppingListIndex);
         if(shoppingListIndex === -1) {
             res.status(404).json({ error: 'Shopping list not found' }); // return 404 Not Found if shopping list not found
             return;

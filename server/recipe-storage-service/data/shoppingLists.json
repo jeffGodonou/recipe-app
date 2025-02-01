@@ -1,23 +1,5 @@
 [
   {
-    "id": "1736291829773",
-    "items": [
-      "olive oil",
-      "milk",
-      "cashew"
-    ],
-    "createdAt": "2025-01-07"
-  },
-  {
-    "id": "1736300699546",
-    "items": [
-      "egg",
-      "milk",
-      "floor"
-    ],
-    "createdAt": "2025-01-07"
-  },
-  {
     "id": "1736618218422",
     "name": "Christmas list",
     "items": [
@@ -26,97 +8,23 @@
       "ham",
       "red wine",
       "lemon",
-      "butter"
+      "water bottle"
     ],
     "createdAt": "2025-01-11"
-  },
-  {
-    "id": "1736792657867",
-    "name": "",
-    "items": [
-      "flour",
-      "sugar"
-    ],
-    "createdAt": "2025-01-13"
-  },
-  {
-    "id": "1736792797156",
-    "name": "",
-    "items": [
-      "mineral water"
-    ],
-    "createdAt": "2025-01-13"
   },
   {
     "id": "1736792871380",
     "name": "Shopping List",
     "items": [
-      "ukj h"
+      "water"
     ],
     "createdAt": "2025-01-13"
-  },
-  {
-    "id": "1738417066535",
-    "name": "",
-    "items": [
-      "tgjjud",
-      "jdxj"
-    ],
-    "createdAt": "2025-02-01"
-  },
-  {
-    "id": "1738417311022",
-    "name": "",
-    "items": [
-      "gfdcrg"
-    ],
-    "createdAt": "2025-02-01"
-  },
-  {
-    "id": "1738417417692",
-    "name": "",
-    "items": [
-      "FDSG"
-    ],
-    "createdAt": "2025-02-01"
-  },
-  {
-    "id": "1738417485990",
-    "name": "",
-    "items": [
-      "HBNSR"
-    ],
-    "createdAt": "2025-02-01"
-  },
-  {
-    "id": "1738417595928",
-    "name": "",
-    "items": [
-      "khfvguli"
-    ],
-    "createdAt": "2025-02-01"
-  },
-  {
-    "id": "1738417661348",
-    "name": "",
-    "items": [
-      "bh sfzrdfhb"
-    ],
-    "createdAt": "2025-02-01"
-  },
-  {
-    "id": "1738417741212",
-    "name": "",
-    "items": [
-      "htgdrf"
-    ],
-    "createdAt": "2025-02-01"
   },
   {
     "id": "1738418108067",
     "name": "Shopping List 9",
     "items": [
-      ",hjliu;l"
+      "palm oil"
     ],
     "createdAt": "2025-02-01"
   }
