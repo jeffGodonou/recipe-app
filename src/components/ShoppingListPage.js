@@ -21,6 +21,7 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList,
     });
     const [isEditing, setIsEditing] = useState(false);
     const [editList, setEditList] = useState(null);
+    const [newItem, setNewItem] = useState('');
     const [selectedLists, setSelectedLists] = useState([]);
     const { openMessage, vertical, horizontal, message } = state;
 
@@ -72,6 +73,16 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList,
         }
     };
 
+    const handleAddNewItem = () => {
+        if (newItem.trim()) {
+            setEditList((prevList) => ({
+                ...prevList,
+                items: [...prevList.items, newItem.trim()]
+            }));
+            setNewItem('');
+        }
+    };
+
     const sendEmail = () => {
         if(!selectedList) return;
         const formattedItems =  selectedList.items.map(item => `${item}`);
@@ -107,46 +118,104 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList,
                                 <Grid item xs={12} sm={6} md={4} key={list.id}>
                                     <Card key={list.id} className="shopping-list-card">
                                         <CardContent>
-                                            <Checkbox
-                                                checked={selectedLists.includes(list.id)}
-                                                onChange={() => handleSelectList(list.id)}
-                                            />
-                                            <Typography variant="h6">
-                                                {list.name}
-                                                <Typography variant="body2" color="textSecondary" style={{ float: 'right' }}> {list.createdAt} </Typography>
-                                            </Typography>
-                                            <List>
-                                                {list.items.map((item, index) => (
-                                                    <ListItem key={index}>
-                                                        <ListItemText primary={item} />
-                                                    </ListItem>
-                                                ))}
-                                            </List>
-                                            <Button
-                                                variant="contained"
-                                                color="secondary"
-                                                startIcon={<DeleteIcon />}
-                                                onClick={() => onDeleteShoppingList(list.id)}
-                                            >
-                                                Delete
-                                            </Button>
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={() => handleClickOpenMailBox(list)}
-                                                style={{ marginLeft: '10px' }}
-                                                endIcon={ <SendIcon /> }
-                                            >
-                                                Send to email
-                                            </Button>
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={() => handleEditClick(list)}   
-                                                style={{ marginLeft: '10px' }}
-                                            >
-                                                Edit
-                                            </Button>
+                                            {isEditing && editList?.id === list.id ? (
+                                                <>
+                                                    <TextField
+                                                        label="Name"
+                                                        value={editList?.name || ''}
+                                                        onChange={(e) => setEditList({ ...editList, name: e.target.value })}
+                                                        fullWidth
+                                                    />
+                                                    <List>
+                                                        {editList?.items.map((item, index) => (
+                                                            <ListItem key={index}>
+                                                                <TextField
+                                                                    label={`Item ${index + 1}`}
+                                                                    value={item}
+                                                                    onChange={(e) => {
+                                                                        const newItems = [...editList.items];
+                                                                        newItems[index] = e.target.value;
+                                                                        setEditList({ ...editList, items: newItems });
+                                                                    }}
+                                                                    fullWidth
+                                                                />
+                                                            </ListItem>
+                                                        ))}
+                                                    </List>
+                                                    <TextField
+                                                        label="New Item"
+                                                        value={newItem}
+                                                        onChange={(e) => setNewItem(e.target.value)}
+                                                        fullWidth
+                                                    />
+                                                    <Button
+                                                        variant="contained"
+                                                        color="primary"
+                                                        onClick={handleAddNewItem}
+                                                        style={{ marginTop: '10px' }}
+                                                    >
+                                                        Add Item
+                                                    </Button>
+                                                    <Button
+                                                        variant="contained"
+                                                        color="primary"
+                                                        onClick={handleSaveEdit}
+                                                    >
+                                                        Save
+                                                    </Button>
+                                                    <Button
+                                                        variant="contained"
+                                                        color="secondary"
+                                                        onClick={() => setIsEditing(false)}
+                                                        style={{ marginLeft: '10px' }}
+                                                    >
+                                                        Cancel
+                                                    </Button>
+                                                </>
+                                            ): (
+                                                <>
+                                                    <Checkbox
+                                                        checked={selectedLists.includes(list.id)}
+                                                        onChange={() => handleSelectList(list.id)}
+                                                    />
+                                                    <Typography variant="h6">
+                                                        {list.name}
+                                                        <Typography variant="body2" color="textSecondary" style={{ float: 'right' }}> {list.createdAt} </Typography>
+                                                    </Typography>
+                                                    <List>
+                                                        {list.items.map((item, index) => (
+                                                            <ListItem key={index}>
+                                                                <ListItemText primary={item} />
+                                                            </ListItem>
+                                                        ))}
+                                                    </List>
+                                                    <Button
+                                                        variant="contained"
+                                                        color="secondary"
+                                                        startIcon={<DeleteIcon />}
+                                                        onClick={() => onDeleteShoppingList(list.id)}
+                                                    >
+                                                        Delete
+                                                    </Button>
+                                                    <Button
+                                                        variant="contained"
+                                                        color="primary"
+                                                        onClick={() => handleClickOpenMailBox(list)}
+                                                        style={{ marginLeft: '10px' }}
+                                                        endIcon={ <SendIcon /> }
+                                                    >
+                                                        Send to email
+                                                    </Button>
+                                                    <Button
+                                                        variant="contained"
+                                                        color="primary"
+                                                        onClick={() => handleEditClick(list)}   
+                                                        style={{ marginLeft: '10px' }}
+                                                    >
+                                                        Edit
+                                                    </Button>
+                                                </>
+                                            )}
                                         </CardContent>
                                     </Card>
                                 </Grid>
@@ -165,42 +234,6 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList,
                     Delete Selected
             </Button>
         </div>
-        
-        <Dialog open={isEditing} onClose={() => setIsEditing(false)}>
-                <DialogTitle>Edit Shopping List</DialogTitle>
-                <DialogContent>
-                    <TextField
-                        label="Name"
-                        value={editList?.name || ''}
-                        onChange={(e) => setEditList({ ...editList, name: e.target.value })}
-                        fullWidth
-                    />
-                    <List>
-                        {editList?.items.map((item, index) => (
-                            <ListItem key={index}>
-                                <TextField
-                                    label={`Item ${index + 1}`}
-                                    value={item}
-                                    onChange={(e) => {
-                                        const newItems = [...editList.items];
-                                        newItems[index] = e.target.value;
-                                        setEditList({ ...editList, items: newItems });
-                                    }}
-                                    fullWidth
-                                />
-                            </ListItem>
-                        ))}
-                    </List>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setIsEditing(false)} color="primary">
-                        Cancel
-                    </Button>
-                    <Button onClick={handleSaveEdit} color="primary">
-                        Save
-                    </Button>
-                </DialogActions>
-            </Dialog>
 
         <Dialog open={openMailBox} onClose={handleCloseMailBox} aria-labelledby="form-dialog-title">
             <DialogTitle id="form-dialog-title" sx={{backgroundColor:'green', color:'white', fontFamily:'Montserrat, sans-serif', fontStyle: 'italic'}}> Email </DialogTitle>
