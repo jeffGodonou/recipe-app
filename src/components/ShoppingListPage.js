@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { Button, Card, CardContent, List, ListItem, ListItemText, Grid, Typography, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField } from "@mui/material";
+import { Button, Card, CardContent, List, ListItem, ListItemText, Grid, Typography, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField, Tooltip } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SendIcon from "@mui/icons-material/Send"
 import emailjs from 'emailjs-com';
@@ -8,6 +8,10 @@ import Snackbar from "@mui/material/Snackbar";
 import Alert from '@mui/material/Alert';
 import Navbar from "./Navbar";
 import Checkbox from "@mui/material/Checkbox";
+import EditIcon from '@mui/icons-material/Edit';
+import AddIcon  from "@mui/icons-material/Add";
+import SaveIcon  from "@mui/icons-material/Save";
+import CancelIcon  from "@mui/icons-material/Cancel";
 
 const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList, onDeleteShoppingList, onDeleteMultipleShoppingLists }) => {
     const [openMailBox, setOpenMailBox] = useState(false);
@@ -143,34 +147,29 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList,
                                                         ))}
                                                     </List>
                                                     <TextField
-                                                        label="New Item"
+                                                        label="New Item ..."
                                                         value={newItem}
                                                         onChange={(e) => setNewItem(e.target.value)}
                                                         fullWidth
                                                     />
-                                                    <Button
-                                                        variant="contained"
-                                                        color="primary"
-                                                        onClick={handleAddNewItem}
-                                                        style={{ marginTop: '10px' }}
-                                                    >
-                                                        Add Item
-                                                    </Button>
-                                                    <Button
-                                                        variant="contained"
-                                                        color="primary"
-                                                        onClick={handleSaveEdit}
-                                                    >
-                                                        Save
-                                                    </Button>
-                                                    <Button
-                                                        variant="contained"
-                                                        color="secondary"
-                                                        onClick={() => setIsEditing(false)}
-                                                        style={{ marginLeft: '10px' }}
-                                                    >
-                                                        Cancel
-                                                    </Button>
+
+                                                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
+                                                        <Tooltip title='Add Item' arrow>
+                                                            <Button color="inherit" onClick={handleAddNewItem}>
+                                                                <AddIcon fontSize="small"/>
+                                                            </Button>
+                                                        </Tooltip>
+                                                        <Tooltip title='Save' arrow>
+                                                            <Button color="inherit" onClick={handleSaveEdit}>
+                                                                <SaveIcon fontSize="small"/>
+                                                            </Button>
+                                                        </Tooltip>
+                                                        <Tooltip title='Cancel' arrow>
+                                                            <Button color="inherit" onClick={() => setIsEditing(false)}>
+                                                                <CancelIcon fontSize="small"/>
+                                                            </Button>
+                                                        </Tooltip>
+                                                    </div>
                                                 </>
                                             ): (
                                                 <>
@@ -189,31 +188,23 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList,
                                                             </ListItem>
                                                         ))}
                                                     </List>
-                                                    <Button
-                                                        variant="contained"
-                                                        color="secondary"
-                                                        startIcon={<DeleteIcon />}
-                                                        onClick={() => onDeleteShoppingList(list.id)}
-                                                    >
-                                                        Delete
-                                                    </Button>
-                                                    <Button
-                                                        variant="contained"
-                                                        color="primary"
-                                                        onClick={() => handleClickOpenMailBox(list)}
-                                                        style={{ marginLeft: '10px' }}
-                                                        endIcon={ <SendIcon /> }
-                                                    >
-                                                        Send to email
-                                                    </Button>
-                                                    <Button
-                                                        variant="contained"
-                                                        color="primary"
-                                                        onClick={() => handleEditClick(list)}   
-                                                        style={{ marginLeft: '10px' }}
-                                                    >
-                                                        Edit
-                                                    </Button>
+                                                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                                    <Tooltip title='Delete' arrow>
+                                                        <Button color="inherit" onClick={() => onDeleteShoppingList(list.id)} >
+                                                            <DeleteIcon fontSize="small"/>
+                                                        </Button>
+                                                    </Tooltip>
+                                                    <Tooltip title='Send Email' arrow>
+                                                        <Button color="inherit" onClick={() => handleClickOpenMailBox(list)}>
+                                                            <SendIcon fontSize="small"/>
+                                                        </Button>
+                                                    </Tooltip>
+                                                    <Tooltip title='Edit' arrow>
+                                                        <Button color="inherit" onClick={() => handleEditClick(list)}>
+                                                            <EditIcon fontSize="small"/>
+                                                        </Button>
+                                                    </Tooltip>
+                                                    </div>
                                                 </>
                                             )}
                                         </CardContent>
