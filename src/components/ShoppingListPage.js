@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { Button, Card, CardContent, List, ListItem, ListItemText, Grid, Typography, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField, Tooltip } from "@mui/material";
+import { Button, Card, CardContent, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Grid, List, ListItem, ListItemText, Menu, MenuItem, Typography,  TextField, Tooltip } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SendIcon from "@mui/icons-material/Send"
 import emailjs from 'emailjs-com';
@@ -12,6 +12,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import AddIcon  from "@mui/icons-material/Add";
 import SaveIcon  from "@mui/icons-material/Save";
 import CancelIcon  from "@mui/icons-material/Cancel";
+import SelectAllIcon  from "@mui/icons-material/SelectAll";
 
 const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList, onDeleteShoppingList, onDeleteMultipleShoppingLists }) => {
     const [openMailBox, setOpenMailBox] = useState(false);
@@ -28,6 +29,8 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList,
     const [newItem, setNewItem] = useState('');
     const [selectedLists, setSelectedLists] = useState([]);
     const { openMessage, vertical, horizontal, message } = state;
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
 
     const handleClickOpenMailBox = (list) => { 
         setSelectedList(list);
@@ -72,6 +75,7 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList,
         try {
             await onDeleteMultipleShoppingLists(selectedLists);
             setSelectedLists([]);
+            handleClose();
         } catch (error) {   
             console.error('Failed to delete shopping list:', error);
         }
@@ -85,6 +89,50 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList,
             }));
             setNewItem('');
         }
+    };
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+    
+    const handleSelectAll = () => {
+        setSelectedLists(shoppingLists.map((list) => list.id));
+    };
+
+    const handleUnselectAll = () => {
+        setSelectedLists([]);
+    };
+
+    const handleSendSelectedToEmail = () => {
+        if(selectedLists.length === 0) return;
+        const selectedListsData = shoppingLists.filter((list) => selectedLists.includes(list.id));  
+        const formattedItems = selectedListsData.map((list) => {
+            return { 
+                name: list.name,
+                items: list.items.map(item => `${item}`)
+            };
+        });
+
+        const templateParams = {    
+            lists: formattedItems,
+            email: email,
+            subject: 'Your shopping lists',
+        };
+
+
+        emailjs.send('service_sifbatl', 'template_h54yvs5', templateParams, 'H7KVuvjhT3UJK7fHS')
+                .then((response) => {
+                    console.log('Email sent', response.status, response.text);
+                    handleCloseMailBox();
+                    setState({ message: 'Your shopping lists were sent successfully!', openMessage: true });
+                }, (error) => {
+                    console.log('Email sending failed', error);
+                    setState({ message: 'There were an issue with your mail!', openMessage:true });
+                });
     };
 
     const sendEmail = () => {
@@ -110,7 +158,69 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList,
     return (
         <>
             <Navbar onAddShoppingList={onAddShoppingList}/>
-
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
+                <Tooltip title='More Options' arrow>
+                    <Button
+                        color="inherit"
+                        onClick={handleClick}
+                        disabled={selectedLists.length === 0}
+                        style={{ marginRight: '10px' }}
+                    >
+                        '...'
+                    </Button>
+                </Tooltip>
+                <Menu 
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    onClick={handleClose}
+                    PaperProps={{
+                        elevation: 0,
+                        sx: {
+                            overflow: 'visible',
+                            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                            mt: 1.5,
+                            '& .MuiAvatar-root': {
+                                width: 32,
+                                height: 32,
+                                ml: -0.5,
+                                mr: 1,
+                            },
+                            '&:before': {
+                                content: '""',
+                                display: 'block',
+                                position: 'absolute',
+                                top: 0,
+                                right: 14,
+                                width: 10,
+                                height: 10,
+                                bgcolor: 'background.paper',
+                                transform: 'translateY(-50%) rotate(45deg)',
+                                zIndex: 0,
+                            },
+                        },
+                    }}
+                    transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                    anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                    >
+                        <MenuItem onClick={handleSelectAll}> 
+                            <SelectAllIcon fontSize="small" />
+                            Select All 
+                        </MenuItem>
+                        <MenuItem onClick={handleUnselectAll}>
+                            <SelectAllIcon fontSize="small" />
+                            Unselect All
+                        </MenuItem>
+                        <MenuItem onClick={handleSendSelectedToEmail}>
+                            <SendIcon fontSize="small" />
+                            Send Selected to Email
+                        </MenuItem>
+                        <MenuItem onClick={handleDeleteSelectedLists}>
+                            <DeleteIcon fontSize="small" />
+                            Delete Selected
+                        </MenuItem>
+                    </Menu>
+            </div>
             <div className="shopping-list-page">
                 <div className="lists-container">
                 {shoppingLists.length === 0 ? (
@@ -189,21 +299,21 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList,
                                                         ))}
                                                     </List>
                                                     <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                                    <Tooltip title='Delete' arrow>
-                                                        <Button color="inherit" onClick={() => onDeleteShoppingList(list.id)} >
-                                                            <DeleteIcon fontSize="small"/>
-                                                        </Button>
-                                                    </Tooltip>
-                                                    <Tooltip title='Send Email' arrow>
-                                                        <Button color="inherit" onClick={() => handleClickOpenMailBox(list)}>
-                                                            <SendIcon fontSize="small"/>
-                                                        </Button>
-                                                    </Tooltip>
-                                                    <Tooltip title='Edit' arrow>
-                                                        <Button color="inherit" onClick={() => handleEditClick(list)}>
-                                                            <EditIcon fontSize="small"/>
-                                                        </Button>
-                                                    </Tooltip>
+                                                        <Tooltip title='Delete' arrow>
+                                                            <Button color="inherit" onClick={() => onDeleteShoppingList(list.id)} >
+                                                                <DeleteIcon fontSize="small"/>
+                                                            </Button>
+                                                        </Tooltip>
+                                                        <Tooltip title='Send Email' arrow>
+                                                            <Button color="inherit" onClick={() => handleClickOpenMailBox(list)}>
+                                                                <SendIcon fontSize="small"/>
+                                                            </Button>
+                                                        </Tooltip>
+                                                        <Tooltip title='Edit' arrow>
+                                                            <Button color="inherit" onClick={() => handleEditClick(list)}>
+                                                                <EditIcon fontSize="small"/>
+                                                            </Button>
+                                                        </Tooltip>
                                                     </div>
                                                 </>
                                             )}
@@ -215,15 +325,6 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList,
                     </Grid>
                 )}
             </div>
-            <Button
-                    variant="contained"
-                    color="secondary"
-                    startIcon={<DeleteIcon />}
-                    onClick={handleDeleteSelectedLists}
-                    disabled={selectedLists.length === 0}
-                >
-                    Delete Selected
-            </Button>
         </div>
 
         <Dialog open={openMailBox} onClose={handleCloseMailBox} aria-labelledby="form-dialog-title">

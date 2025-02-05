@@ -12,5 +12,23 @@
       "flour"
     ],
     "createdAt": "2025-01-11"
+  },
+  {
+    "id": "1738735832369",
+    "name": "weekly shopping list",
+    "items": [
+      "Chips",
+      "Muesli",
+      "cookies",
+      "Butter",
+      "Fish",
+      "tomatoes",
+      "Carrot",
+      "Frozen fries",
+      "Potatoes",
+      "olive oil",
+      "maccaroni"
+    ],
+    "createdAt": "2025-02-05"
   }
 ]
