@@ -1,18 +1,12 @@
 import React, {useState} from "react";
 import { Button, Card, CardContent, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Grid, List, ListItem, ListItemText, Menu, MenuItem, Typography,  TextField, Tooltip } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import SendIcon from "@mui/icons-material/Send"
+import { Trash, EnvelopeSimple, PencilLine, Plus, DotsThreeVertical, CheckSquare, Envelope, TrashSimple, FloppyDiskBack, SelectionSlash, X } from 'phosphor-react';
 import emailjs from 'emailjs-com';
 import './ShoppingListPage.scss';
 import Snackbar from "@mui/material/Snackbar";
 import Alert from '@mui/material/Alert';
 import Navbar from "./Navbar";
 import Checkbox from "@mui/material/Checkbox";
-import EditIcon from '@mui/icons-material/Edit';
-import AddIcon  from "@mui/icons-material/Add";
-import SaveIcon  from "@mui/icons-material/Save";
-import CancelIcon  from "@mui/icons-material/Cancel";
-import SelectAllIcon  from "@mui/icons-material/SelectAll";
 
 const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList, onDeleteShoppingList, onDeleteMultipleShoppingLists }) => {
     const [openMailBox, setOpenMailBox] = useState(false);
@@ -166,7 +160,7 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList,
                         disabled={selectedLists.length === 0}
                         style={{ marginRight: '10px' }}
                     >
-                        '...'
+                        <DotsThreeVertical size={20}/>
                     </Button>
                 </Tooltip>
                 <Menu 
@@ -204,19 +198,19 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList,
                     anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                     >
                         <MenuItem onClick={handleSelectAll}> 
-                            <SelectAllIcon fontSize="small" />
+                            <CheckSquare size="20" style={{marginRight: "10px"}}/> 
                             Select All 
                         </MenuItem>
                         <MenuItem onClick={handleUnselectAll}>
-                            <SelectAllIcon fontSize="small" />
+                            <SelectionSlash size="20" style={{marginRight: "10px"}}/> 
                             Unselect All
                         </MenuItem>
                         <MenuItem onClick={handleSendSelectedToEmail}>
-                            <SendIcon fontSize="small" />
-                            Send Selected to Email
+                            <Envelope size="20" style={{marginRight: "10px"}}/> 
+                            Send to Email
                         </MenuItem>
                         <MenuItem onClick={handleDeleteSelectedLists}>
-                            <DeleteIcon fontSize="small" />
+                            <TrashSimple size="20" style={{marginRight: "10px"}}/>
                             Delete Selected
                         </MenuItem>
                     </Menu>
@@ -266,17 +260,17 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList,
                                                     <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
                                                         <Tooltip title='Add Item' arrow>
                                                             <Button color="inherit" onClick={handleAddNewItem}>
-                                                                <AddIcon fontSize="small"/>
+                                                                <Plus size="20"/>
                                                             </Button>
                                                         </Tooltip>
                                                         <Tooltip title='Save' arrow>
                                                             <Button color="inherit" onClick={handleSaveEdit}>
-                                                                <SaveIcon fontSize="small"/>
+                                                                <FloppyDiskBack size={20} />
                                                             </Button>
                                                         </Tooltip>
                                                         <Tooltip title='Cancel' arrow>
                                                             <Button color="inherit" onClick={() => setIsEditing(false)}>
-                                                                <CancelIcon fontSize="small"/>
+                                                                <X size="20"/>
                                                             </Button>
                                                         </Tooltip>
                                                     </div>
@@ -301,17 +295,17 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList,
                                                     <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                                                         <Tooltip title='Delete' arrow>
                                                             <Button color="inherit" onClick={() => onDeleteShoppingList(list.id)} >
-                                                                <DeleteIcon fontSize="small"/>
+                                                                <Trash size={20}/>
                                                             </Button>
                                                         </Tooltip>
                                                         <Tooltip title='Send Email' arrow>
                                                             <Button color="inherit" onClick={() => handleClickOpenMailBox(list)}>
-                                                                <SendIcon fontSize="small"/>
+                                                                <EnvelopeSimple size={20}/>
                                                             </Button>
                                                         </Tooltip>
                                                         <Tooltip title='Edit' arrow>
                                                             <Button color="inherit" onClick={() => handleEditClick(list)}>
-                                                                <EditIcon fontSize="small"/>
+                                                                <PencilLine size={20}/>
                                                             </Button>
                                                         </Tooltip>
                                                     </div>
