@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { Button, Card, CardContent, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Grid, List, ListItem, ListItemText, Menu, MenuItem, Typography,  TextField, Tooltip } from "@mui/material";
-import { Trash, EnvelopeSimple, PencilLine, Plus, DotsThreeVertical, CheckSquare, Envelope, TrashSimple, FloppyDiskBack, SelectionSlash, X } from 'phosphor-react';
+import { Trash, EnvelopeSimple, PencilLine, Plus, DotsThreeVertical, CheckSquare, Envelope, TrashSimple, FloppyDiskBack, SelectionSlash, SortAscending, SortDescending, X } from 'phosphor-react';
 import emailjs from 'emailjs-com';
 import './ShoppingListPage.scss';
 import Snackbar from "@mui/material/Snackbar";
@@ -22,6 +22,7 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList,
     const [editList, setEditList] = useState(null);
     const [newItem, setNewItem] = useState('');
     const [selectedLists, setSelectedLists] = useState([]);
+    const [sortOrder, setSortOrder] = useState('date');
     const { openMessage, vertical, horizontal, message } = state;
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -129,6 +130,16 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList,
                 });
     };
 
+    const handleSortByDate = () => {
+        setSortOrder('date');
+        handleClose();
+    }
+
+    const handleSortByName = () => {
+        setSortOrder('name');
+        handleClose();
+    }
+
     const sendEmail = () => {
         if(!selectedList) return;
         const formattedItems =  selectedList.items.map(item => `${item}`);
@@ -148,6 +159,16 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList,
                     setState({ message: 'There were an issue with your mail!', openMessage:true });
                 });
     };
+
+    const sortedShoppingLists = [...shoppingLists].sort((a, b) => {
+        if (sortOrder === 'date') {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+        } else if (sortOrder === 'name') {
+            return a.name.localeCompare(b.name);
+        }
+        
+        return 0;
+    });
 
     return (
         <>
@@ -213,6 +234,14 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList,
                             <TrashSimple size="20" style={{marginRight: "10px"}}/>
                             Delete Selected
                         </MenuItem>
+                        <MenuItem onClick={handleSortByName}>
+                            <SortAscending size={20} style={{ marginRight: '10px' }} />
+                            Sort by Name
+                        </MenuItem>
+                        <MenuItem onClick={handleSortByDate}>
+                            <SortDescending size={20} style={{ marginRight: '10px' }} />
+                            Sort by Date
+                        </MenuItem>
                     </Menu>
             </div>
             <div className="shopping-list-page">
@@ -221,7 +250,7 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList,
                     <Typography> No shopping lists saved </Typography>
                 ) : (
                     <Grid container spacing={2}>
-                        {shoppingLists.map(
+                        {sortedShoppingLists.map(
                             list => (
                                 <Grid item xs={12} sm={6} md={4} key={list.id}>
                                     <Card key={list.id} className="shopping-list-card">
