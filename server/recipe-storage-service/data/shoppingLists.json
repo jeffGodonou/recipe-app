@@ -30,5 +30,21 @@
       "maccaroni"
     ],
     "createdAt": "2025-02-05"
+  },
+  {
+    "id": "1738844171089",
+    "name": "weekly list 1",
+    "items": [
+      "egg",
+      "turkey",
+      "bread",
+      "nutella",
+      "maple sirup",
+      "salt",
+      "couscous",
+      "plantain",
+      "atieke"
+    ],
+    "createdAt": "2025-02-06"
   }
 ]

@@ -252,8 +252,8 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList,
                     <Grid container spacing={2}>
                         {sortedShoppingLists.map(
                             list => (
-                                <Grid item xs={12} sm={6} md={4} key={list.id}>
-                                    <Card key={list.id} className="shopping-list-card">
+                                <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={list.id}>
+                                    <Card key={list.id} sx={{backgroundColor: 'rgba(0, 0, 0, 0.1)'}} className="shopping-list-card">
                                         <CardContent>
                                             {isEditing && editList?.id === list.id ? (
                                                 <>
