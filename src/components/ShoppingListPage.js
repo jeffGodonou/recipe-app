@@ -1,14 +1,14 @@
 import React, {useState} from "react";
-import { Button, Card, CardContent, List, ListItem, ListItemText, Grid, Typography, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import SendIcon from "@mui/icons-material/Send"
+import { Button, Card, CardContent, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Grid, List, ListItem, ListItemText, Menu, MenuItem, Typography,  TextField, Tooltip } from "@mui/material";
+import { Trash, EnvelopeSimple, PencilLine, Plus, DotsThreeVertical, CheckSquare, Envelope, TrashSimple, FloppyDiskBack, SelectionSlash, SortAscending, SortDescending, X } from 'phosphor-react';
 import emailjs from 'emailjs-com';
 import './ShoppingListPage.scss';
 import Snackbar from "@mui/material/Snackbar";
 import Alert from '@mui/material/Alert';
 import Navbar from "./Navbar";
+import Checkbox from "@mui/material/Checkbox";
 
-const ShoppingListPage = ({shoppingLists, onAddShoppingList, onDeleteShoppingList }) => {
+const ShoppingListPage = ({shoppingLists, onAddShoppingList, onEditShoppingList, onDeleteShoppingList, onDeleteMultipleShoppingLists }) => {
     const [openMailBox, setOpenMailBox] = useState(false);
     const [selectedList, setSelectedList] = useState(null);
     const [email, setEmail] = useState('');
@@ -18,7 +18,14 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onDeleteShoppingLis
         horizontal: 'center',
         message: "Your shoppinglist was sent successfully"
     });
+    const [isEditing, setIsEditing] = useState(false);
+    const [editList, setEditList] = useState(null);
+    const [newItem, setNewItem] = useState('');
+    const [selectedLists, setSelectedLists] = useState([]);
+    const [sortOrder, setSortOrder] = useState('date');
     const { openMessage, vertical, horizontal, message } = state;
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
 
     const handleClickOpenMailBox = (list) => { 
         setSelectedList(list);
@@ -33,6 +40,105 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onDeleteShoppingLis
         setOpenMailBox(false);
         setEmail('');
     };
+
+    const handleEditClick = (list) => {
+        setIsEditing(true);
+        setEditList(list);
+    };
+
+    const handleSaveEdit = async () => {
+        if(editList.items.length > 0) { 
+            try {
+                await onEditShoppingList(editList);
+                setIsEditing(false);
+                setEditList(null);
+            } catch (error) {
+                console.error('Failed to edit shopping list:', error);
+            }
+        }
+    };  
+
+    const handleSelectList = (id) => {
+        setSelectedLists((prevSelected) =>
+            prevSelected.includes(id)
+                ? prevSelected.filter((listId) => listId !== id)
+                : [...prevSelected, id]
+        );
+    };
+
+    const handleDeleteSelectedLists = async () => {
+        try {
+            await onDeleteMultipleShoppingLists(selectedLists);
+            setSelectedLists([]);
+            handleClose();
+        } catch (error) {   
+            console.error('Failed to delete shopping list:', error);
+        }
+    };
+
+    const handleAddNewItem = () => {
+        if (newItem.trim()) {
+            setEditList((prevList) => ({
+                ...prevList,
+                items: [...prevList.items, newItem.trim()]
+            }));
+            setNewItem('');
+        }
+    };
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+    
+    const handleSelectAll = () => {
+        setSelectedLists(shoppingLists.map((list) => list.id));
+    };
+
+    const handleUnselectAll = () => {
+        setSelectedLists([]);
+    };
+
+    const handleSendSelectedToEmail = () => {
+        if(selectedLists.length === 0) return;
+        const selectedListsData = shoppingLists.filter((list) => selectedLists.includes(list.id));  
+        const formattedItems = selectedListsData.map((list) => {
+            return { 
+                name: list.name,
+                items: list.items.map(item => `${item}`)
+            };
+        });
+
+        const templateParams = {    
+            lists: formattedItems,
+            email: email,
+            subject: 'Your shopping lists',
+        };
+
+
+        emailjs.send('service_sifbatl', 'template_h54yvs5', templateParams, 'H7KVuvjhT3UJK7fHS')
+                .then((response) => {
+                    console.log('Email sent', response.status, response.text);
+                    handleCloseMailBox();
+                    setState({ message: 'Your shopping lists were sent successfully!', openMessage: true });
+                }, (error) => {
+                    console.log('Email sending failed', error);
+                    setState({ message: 'There were an issue with your mail!', openMessage:true });
+                });
+    };
+
+    const handleSortByDate = () => {
+        setSortOrder('date');
+        handleClose();
+    }
+
+    const handleSortByName = () => {
+        setSortOrder('name');
+        handleClose();
+    }
 
     const sendEmail = () => {
         if(!selectedList) return;
@@ -54,49 +160,186 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onDeleteShoppingLis
                 });
     };
 
+    const sortedShoppingLists = [...shoppingLists].sort((a, b) => {
+        if (sortOrder === 'date') {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+        } else if (sortOrder === 'name') {
+            return a.name.localeCompare(b.name);
+        }
+        
+        return 0;
+    });
+
     return (
         <>
             <Navbar onAddShoppingList={onAddShoppingList}/>
-
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
+                <Tooltip title='More Options' arrow>
+                    <Button
+                        color="inherit"
+                        onClick={handleClick}
+                        disabled={selectedLists.length === 0}
+                        style={{ marginRight: '10px' }}
+                    >
+                        <DotsThreeVertical size={20}/>
+                    </Button>
+                </Tooltip>
+                <Menu 
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    onClick={handleClose}
+                    PaperProps={{
+                        elevation: 0,
+                        sx: {
+                            overflow: 'visible',
+                            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+                            mt: 1.5,
+                            '& .MuiAvatar-root': {
+                                width: 32,
+                                height: 32,
+                                ml: -0.5,
+                                mr: 1,
+                            },
+                            '&:before': {
+                                content: '""',
+                                display: 'block',
+                                position: 'absolute',
+                                top: 0,
+                                right: 14,
+                                width: 10,
+                                height: 10,
+                                bgcolor: 'background.paper',
+                                transform: 'translateY(-50%) rotate(45deg)',
+                                zIndex: 0,
+                            },
+                        },
+                    }}
+                    transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                    anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                    >
+                        <MenuItem onClick={handleSelectAll}> 
+                            <CheckSquare size="20" style={{marginRight: "10px"}}/> 
+                            Select All 
+                        </MenuItem>
+                        <MenuItem onClick={handleUnselectAll}>
+                            <SelectionSlash size="20" style={{marginRight: "10px"}}/> 
+                            Unselect All
+                        </MenuItem>
+                        <MenuItem onClick={handleSendSelectedToEmail}>
+                            <Envelope size="20" style={{marginRight: "10px"}}/> 
+                            Send to Email
+                        </MenuItem>
+                        <MenuItem onClick={handleDeleteSelectedLists}>
+                            <TrashSimple size="20" style={{marginRight: "10px"}}/>
+                            Delete Selected
+                        </MenuItem>
+                        <MenuItem onClick={handleSortByName}>
+                            <SortAscending size={20} style={{ marginRight: '10px' }} />
+                            Sort by Name
+                        </MenuItem>
+                        <MenuItem onClick={handleSortByDate}>
+                            <SortDescending size={20} style={{ marginRight: '10px' }} />
+                            Sort by Date
+                        </MenuItem>
+                    </Menu>
+            </div>
             <div className="shopping-list-page">
                 <div className="lists-container">
                 {shoppingLists.length === 0 ? (
                     <Typography> No shopping lists saved </Typography>
                 ) : (
                     <Grid container spacing={2}>
-                        {shoppingLists.map(
+                        {sortedShoppingLists.map(
                             list => (
-                                <Grid item xs={12} sm={6} md={4} key={list.id}>
-                                    <Card key={list.id} className="shopping-list-card">
+                                <Grid item xs={12} sm={6} md={4} lg={3} xl={2} key={list.id}>
+                                    <Card key={list.id} sx={{backgroundColor: 'rgba(0, 0, 0, 0.1)'}} className="shopping-list-card">
                                         <CardContent>
-                                            <Typography variant="h6">
-                                                Shopping List
-                                                <Typography variant="body2" color="textSecondary" style={{ float: 'right' }}> {list.createdAt} </Typography>
-                                            </Typography>
-                                            <List>
-                                                {list.items.map((item, index) => (
-                                                    <ListItem key={index}>
-                                                        <ListItemText primary={item} />
-                                                    </ListItem>
-                                                ))}
-                                            </List>
-                                            <Button
-                                                variant="contained"
-                                                color="secondary"
-                                                startIcon={<DeleteIcon />}
-                                                onClick={() => onDeleteShoppingList(list.id)}
-                                            >
-                                                Delete
-                                            </Button>
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={() => handleClickOpenMailBox(list)}
-                                                style={{ marginLeft: '10px' }}
-                                                endIcon={ <SendIcon /> }
-                                            >
-                                                Send to email
-                                            </Button>
+                                            {isEditing && editList?.id === list.id ? (
+                                                <>
+                                                    <TextField
+                                                        label="Name"
+                                                        value={editList?.name || ''}
+                                                        onChange={(e) => setEditList({ ...editList, name: e.target.value })}
+                                                        fullWidth
+                                                    />
+                                                    <List>
+                                                        {editList?.items.map((item, index) => (
+                                                            <ListItem key={index}>
+                                                                <TextField
+                                                                    label={`Item ${index + 1}`}
+                                                                    value={item}
+                                                                    onChange={(e) => {
+                                                                        const newItems = [...editList.items];
+                                                                        newItems[index] = e.target.value;
+                                                                        setEditList({ ...editList, items: newItems });
+                                                                    }}
+                                                                    fullWidth
+                                                                />
+                                                            </ListItem>
+                                                        ))}
+                                                    </List>
+                                                    <TextField
+                                                        label="New Item ..."
+                                                        value={newItem}
+                                                        onChange={(e) => setNewItem(e.target.value)}
+                                                        fullWidth
+                                                    />
+
+                                                    <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
+                                                        <Tooltip title='Add Item' arrow>
+                                                            <Button color="inherit" onClick={handleAddNewItem}>
+                                                                <Plus size="20"/>
+                                                            </Button>
+                                                        </Tooltip>
+                                                        <Tooltip title='Save' arrow>
+                                                            <Button color="inherit" onClick={handleSaveEdit}>
+                                                                <FloppyDiskBack size={20} />
+                                                            </Button>
+                                                        </Tooltip>
+                                                        <Tooltip title='Cancel' arrow>
+                                                            <Button color="inherit" onClick={() => setIsEditing(false)}>
+                                                                <X size="20"/>
+                                                            </Button>
+                                                        </Tooltip>
+                                                    </div>
+                                                </>
+                                            ): (
+                                                <>
+                                                    <Checkbox
+                                                        checked={selectedLists.includes(list.id)}
+                                                        onChange={() => handleSelectList(list.id)}
+                                                    />
+                                                    <Typography variant="h6">
+                                                        {list.name}
+                                                        <Typography variant="body2" color="textSecondary" style={{ float: 'right' }}> {list.createdAt} </Typography>
+                                                    </Typography>
+                                                    <List>
+                                                        {list.items.map((item, index) => (
+                                                            <ListItem key={index}>
+                                                                <ListItemText primary={item} />
+                                                            </ListItem>
+                                                        ))}
+                                                    </List>
+                                                    <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                                        <Tooltip title='Delete' arrow>
+                                                            <Button color="inherit" onClick={() => onDeleteShoppingList(list.id)} >
+                                                                <Trash size={20}/>
+                                                            </Button>
+                                                        </Tooltip>
+                                                        <Tooltip title='Send Email' arrow>
+                                                            <Button color="inherit" onClick={() => handleClickOpenMailBox(list)}>
+                                                                <EnvelopeSimple size={20}/>
+                                                            </Button>
+                                                        </Tooltip>
+                                                        <Tooltip title='Edit' arrow>
+                                                            <Button color="inherit" onClick={() => handleEditClick(list)}>
+                                                                <PencilLine size={20}/>
+                                                            </Button>
+                                                        </Tooltip>
+                                                    </div>
+                                                </>
+                                            )}
                                         </CardContent>
                                     </Card>
                                 </Grid>
@@ -106,6 +349,7 @@ const ShoppingListPage = ({shoppingLists, onAddShoppingList, onDeleteShoppingLis
                 )}
             </div>
         </div>
+
         <Dialog open={openMailBox} onClose={handleCloseMailBox} aria-labelledby="form-dialog-title">
             <DialogTitle id="form-dialog-title" sx={{backgroundColor:'green', color:'white', fontFamily:'Montserrat, sans-serif', fontStyle: 'italic'}}> Email </DialogTitle>
             <DialogContent>

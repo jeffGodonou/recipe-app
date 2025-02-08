@@ -40,7 +40,7 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
     try {
         const shoppingLists = readShoppingLists();
-        const { items, createdAt } = req.body;
+        const { name, items, createdAt } = req.body;
 
         if (!items || !Array.isArray(items)) {
             return res.status(400).json({ error: 'Invalid shopping list data' });
@@ -48,6 +48,7 @@ router.post('/', (req, res) => {
 
         const newShoppingList = {
             id: Date.now().toString(),
+            name: name || '',
             items: items || [],
             createdAt: createdAt || new Date().toLocaleDateString()
         };
@@ -87,8 +88,8 @@ router.delete('/:id', (req, res) => {
 router.put('/:id', (req, res) => {
     try {
         const shoppingLists = readShoppingLists();
-        const shoppingListIndex = shoppingLists.findIndex(list => list.createdAt === req.params.id);
-        
+        const shoppingListIndex = shoppingLists.findIndex(list => list.id === req.params.id);
+        console.log('Shopping list index:', shoppingListIndex);
         if(shoppingListIndex === -1) {
             res.status(404).json({ error: 'Shopping list not found' }); // return 404 Not Found if shopping list not found
             return;

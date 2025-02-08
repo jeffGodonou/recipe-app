@@ -119,6 +119,16 @@ app.delete('/api/shopping-lists/:id', async (req, res) => {
   }
 });
 
+// edit a shopping list
+app.put('/api/shopping-lists/:id', async (req, res) => {
+  try {
+    const response = await axios.put(`${STORAGE_SERVICE_URL}/shopping-lists/${req.params.id}`, req.body);
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to edit shopping list' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

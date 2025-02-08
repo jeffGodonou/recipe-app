@@ -1,11 +1,50 @@
 [
   {
-    "id": "1736291829773",
+    "id": "1736618218422",
+    "name": "Christmas list",
     "items": [
-      "olive oil",
       "milk",
-      "cashew"
+      "egg",
+      "ham",
+      "red wine",
+      "lemon + lime",
+      "water bottle",
+      "flour"
     ],
-    "createdAt": "2025-01-07"
+    "createdAt": "2025-01-11"
+  },
+  {
+    "id": "1738735832369",
+    "name": "weekly shopping list",
+    "items": [
+      "Chips",
+      "Muesli",
+      "cookies",
+      "Butter",
+      "Fish",
+      "tomatoes",
+      "Carrot",
+      "Frozen fries",
+      "Potatoes",
+      "olive oil",
+      "maccaroni"
+    ],
+    "createdAt": "2025-02-05"
+  },
+  {
+    "id": "1738844171089",
+    "name": "weekly list 1",
+    "items": [
+      "egg",
+      "turkey",
+      "bread",
+      "nutella",
+      "maple sirup",
+      "salt",
+      "couscous",
+      "plantain",
+      "atieke"
+    ],
+    "createdAt": "2025-02-06"
   }
 ]
