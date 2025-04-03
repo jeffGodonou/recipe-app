@@ -1,12 +1,11 @@
-import React, {useState, useEffect} from 'react';
+/*import React, {useState, useEffect} from 'react';
 import { Button, Card, CardContent, Dialog, DialogActions, DialogContent, DialogTitle, Grid, IconButton, List, ListItem, ListItemText, TextField, Typography } from '@mui/material';
+import { PencilSimpleLine, X, TrashSimple } from 'phosphor-react';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { StaticDatePicker } from '@mui/x-date-pickers';
 import { loadMealPlan, saveMealPlans } from './localStorageUtils.js';
 import Navbar from './Navbar.js';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 import './MealPlanPage.scss';
 
 const MealPlanPage = ({ recipes }) => {
@@ -131,8 +130,12 @@ const MealPlanPage = ({ recipes }) => {
                                                 <div key={index} className='meal-item'>
                                                     <Typography variant='body1'> {meal} </Typography>
                                                     <div>
-                                                        <Button onClick={() => handleRemoveMeal(dateKey, index)} startIcon={<DeleteIcon/>} color='secondary' />
-                                                        <Button onClick={() => handleEditMeal(dateKey, index)} startIcon={<EditIcon/>} color='primary' />
+                                                        <Button onClick={() => handleEditMeal(dateKey, index)} color='inherit'> 
+                                                            <PencilSimpleLine size={14}/>
+                                                        </Button>
+                                                        <Button onClick={() => handleRemoveMeal(dateKey, index)} color='inherit'> 
+                                                            <TrashSimple size={14}/> 
+                                                        </Button>
                                                     </div>
                                                 </div>
                                             ))
@@ -169,7 +172,7 @@ const MealPlanPage = ({ recipes }) => {
                                                                         edge='end'
                                                                         aria-label='delete'
                                                                         onClick={() => handleDeleteItem(index)}>
-                                                                    <DeleteIcon />
+                                                                    <X />
                                                                     </IconButton>}>
                                                                     <ListItemText primary={item} />
                             </ListItem>
@@ -188,6 +191,103 @@ const MealPlanPage = ({ recipes }) => {
         </div>
         </>
     );
-}
+} */
 
+    import React, { useState, useEffect } from 'react';
+    import { ScheduleComponent, Day, Week, WorkWeek, Month, Agenda, Inject } from '@syncfusion/ej2-react-schedule';
+    import { ChartComponent, SeriesCollectionDirective, SeriesDirective, ColumnSeries, Category, Tooltip, Legend, DataLabel, Inject as ChartInject } from '@syncfusion/ej2-react-charts';
+    import { loadMealPlan, saveMealPlans } from './localStorageUtils.js';
+    import Navbar from './Navbar.js';
+    import '@syncfusion/ej2-base/styles/material.css';
+    import '@syncfusion/ej2-buttons/styles/material.css';
+    import '@syncfusion/ej2-calendars/styles/material.css';
+    import '@syncfusion/ej2-dropdowns/styles/material.css';
+    import '@syncfusion/ej2-inputs/styles/material.css';
+    import '@syncfusion/ej2-navigations/styles/material.css';
+    import '@syncfusion/ej2-popups/styles/material.css';
+    import '@syncfusion/ej2-splitbuttons/styles/material.css';
+    import '@syncfusion/ej2-react-schedule/styles/material.css';
+    import '@syncfusion/ej2-react-charts';
+    import './MealPlanPage.scss';
+    
+    const MealPlanPage = () => {
+        const [mealPlan, setMealPlan] = useState([]);
+        //const [selectedDate, setSelectedDate] = useState(new Date());
+    
+        useEffect(() => {
+            const savedMealsPlan = loadMealPlan();
+            if (Array.isArray(savedMealsPlan)) {
+                setMealPlan(savedMealsPlan);    
+            } else {
+                console.error('Invalid meal plan:', savedMealsPlan);
+            }
+        }, []);
+    
+        let dataSource = [];
+        try {
+            dataSource = mealPlan.map((meal, index) => ({
+                Id: index + 1,
+                Subject: meal.name,
+                StartTime: new Date(meal.date),
+                EndTime: new Date(new Date(meal.date).setHours(new Date(meal.date).getHours() + 1))
+            }));
+        } catch (e) {
+            console.error(e);
+        }
+
+        const eventSettings = {
+            dataSource: dataSource
+        };
+    
+        const handleActionComplete = (args) => {
+            if (args.requestType === 'eventCreated' || args.requestType === 'eventChanged' || args.requestType === 'eventRemoved') {
+                const updatedMealPlan = args.data.map(event => ({
+                    name: event.Subject,
+                    date: event.StartTime
+                }));
+                setMealPlan(updatedMealPlan);
+                saveMealPlans(updatedMealPlan);
+            }
+        };
+    
+        const chartData = mealPlan.reduce((acc, meal) => {
+            const date = new Date(meal.date).toDateString();
+            if (!acc[date]) {
+                acc[date] = 0;
+            }
+            acc[date]++;
+            return acc;
+        }, {});
+    
+        const chartSeries = Object.keys(chartData).map(date => ({
+            x: date,
+            y: chartData[date]
+        }));
+    
+        return (
+            <>
+                <Navbar />
+                <div className='meal-plan-container'>
+                    <ScheduleComponent
+                        currentView='Month'
+                        eventSettings={eventSettings}
+                        actionComplete={handleActionComplete}
+                    >
+                        <Inject services={[Day, Week, WorkWeek, Month, Agenda]} />
+                    </ScheduleComponent>
+                    <ChartComponent
+                        primaryXAxis={{ valueType: 'Category' }}
+                        title='Meal Plan Habits'
+                    >
+                        <SeriesCollectionDirective>
+                            <SeriesDirective dataSource={chartSeries} xName='x' yName='y' type='Column' />
+                        </SeriesCollectionDirective>
+                        <ChartInject services={[ColumnSeries, Category, Tooltip, Legend, DataLabel]} />
+                    </ChartComponent>
+                </div>
+            </>
+        );
+    };
+    
+        
 export default MealPlanPage;
