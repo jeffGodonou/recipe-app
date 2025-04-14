@@ -46,10 +46,6 @@ router.post('/', async (req, res) => {
     try {
         const meals = await readMealPlans();
         const { name, date} = req.body;
-        
-        /*if (!name || !items) {
-            return res.status(400).json({ error: 'Name and items are required' }); // return 400 Bad Request if name or items are missing
-        }*/
 
         // Parse and format the date properly
         const parsedDate = date ? new Date(date).toISOString() : new Date().toISOString();
