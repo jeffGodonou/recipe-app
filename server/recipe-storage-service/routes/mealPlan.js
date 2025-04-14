@@ -51,11 +51,14 @@ router.post('/', async (req, res) => {
             return res.status(400).json({ error: 'Name and items are required' }); // return 400 Bad Request if name or items are missing
         }*/
 
+        // Parse and format the date properly
+        const parsedDate = date ? new Date(date).toISOString() : new Date().toISOString();
+
         const newMealPlan = {
-            id: Date.now().toString(),
+            id: req.body.id || Date.now().toString(), // generate a unique ID if not provided
             name: name || '',
             // items: items || [],
-            date: date || new Date().toISOString()
+            date: parsedDate
         };
 
         meals.push(newMealPlan);
@@ -78,7 +81,16 @@ router.put('/:id', async (req, res) => {
             return;
         }
 
-        const updatedMealPlan = { ...meals[mealPlanIndex], ...req.body };
+        const { name, date } = req.body;
+        const parsedDate = date ? new Date(date).toISOString() : new Date().toISOString();
+
+        const meal = {
+            id: req.params.id,
+            name: name || '',
+            date: parsedDate
+        };
+
+        const updatedMealPlan = { ...meals[mealPlanIndex], ...meal };
         meals[mealPlanIndex] = updatedMealPlan;
         await writeMealPlans(meals);
 

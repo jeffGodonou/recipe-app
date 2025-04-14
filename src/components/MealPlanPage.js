@@ -33,8 +33,8 @@
     
         let dataSource = [];
         try {
-            dataSource = mealPlan.map((meal, index) => ({
-                Id: index + 1,
+            dataSource = mealPlan.map((meal) => ({
+                Id: Date.now().toString(),
                 Subject: meal.name,
                 StartTime: new Date(meal.date),
                 EndTime: new Date(new Date(meal.date).setHours(new Date(meal.date).getHours() + 1))
@@ -52,6 +52,7 @@
             try{
                 if (args.requestType === 'eventCreated') {
                     const newMeals = args.data.map(event => ({
+                        id: event.Id,
                         name: event.Subject,
                         date: event.StartTime
                     }));
