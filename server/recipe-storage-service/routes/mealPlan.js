@@ -69,6 +69,27 @@ router.post('/', async (req, res) => {
     }
 });
 
+router.put('/:id', async (req, res) => {
+    try {
+        const meals = await readMealPlans();
+        const mealPlanIndex = meals.findIndex(list => list.id === req.params.id);
+        if(mealPlanIndex === -1) {
+            res.status(404).json({ error: 'Meal plan not found' }); // return 404 Not Found if meal plan not found
+            return;
+        }
+
+        const updatedMealPlan = { ...meals[mealPlanIndex], ...req.body };
+        meals[mealPlanIndex] = updatedMealPlan;
+        await writeMealPlans(meals);
+
+        res.json(updatedMealPlan); // return the updated meal plan
+    } catch (error) {
+        console.error('Failed to update meal plan:', error.message);
+        res.status(500).json({ error: error.message });
+    }
+}
+);
+
 // Endpoint to delete a meal plan
 router.delete('/:id', async (req, res) => {
     try {
