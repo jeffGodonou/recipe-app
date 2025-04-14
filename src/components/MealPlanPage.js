@@ -196,7 +196,7 @@ const MealPlanPage = ({ recipes }) => {
     import React, { useState, useEffect } from 'react';
     import { ScheduleComponent, Day, Week, WorkWeek, Month, Agenda, Inject } from '@syncfusion/ej2-react-schedule';
     import { ChartComponent, SeriesCollectionDirective, SeriesDirective, ColumnSeries, Category, Tooltip, Legend, DataLabel, Inject as ChartInject } from '@syncfusion/ej2-react-charts';
-    import { loadMealPlan, saveMealPlans } from './localStorageUtils.js';
+    import { getMealPlans, addMealPlan, updateMealPlan, deleteMealPlan } from '../api.js';
     import Navbar from './Navbar.js';
     import '@syncfusion/ej2-base/styles/material.css';
     import '@syncfusion/ej2-buttons/styles/material.css';
@@ -212,15 +212,18 @@ const MealPlanPage = ({ recipes }) => {
     
     const MealPlanPage = () => {
         const [mealPlan, setMealPlan] = useState([]);
-        //const [selectedDate, setSelectedDate] = useState(new Date());
-    
+        
+        // Fetch meal plans from the server when the component loads
         useEffect(() => {
-            const savedMealsPlan = loadMealPlan();
-            if (Array.isArray(savedMealsPlan)) {
-                setMealPlan(savedMealsPlan);    
-            } else {
-                console.error('Invalid meal plan:', savedMealsPlan);
-            }
+            const fetchMeals = async () => {
+                try {
+                    const meals = await getMealPlans();
+                    setMealPlan(meals);
+                } catch (error) {
+                    console.error('Failed to fetch meals:', error);
+                }
+            };
+            fetchMeals();
         }, []);
     
         let dataSource = [];
@@ -235,21 +238,42 @@ const MealPlanPage = ({ recipes }) => {
             console.error(e);
         }
 
+        // Define the event settings for the schedule component
         const eventSettings = {
             dataSource: dataSource
         };
     
-        const handleActionComplete = (args) => {
-            if (args.requestType === 'eventCreated' || args.requestType === 'eventChanged' || args.requestType === 'eventRemoved') {
-                const updatedMealPlan = args.data.map(event => ({
-                    name: event.Subject,
-                    date: event.StartTime
-                }));
-                setMealPlan(updatedMealPlan);
-                saveMealPlans(updatedMealPlan);
+        const handleActionComplete = async (args) => {
+            try{
+                if (args.requestType === 'eventCreated') {
+                    const newMeals = args.data.map(event => ({
+                        name: event.Subject,
+                        date: event.StartTime
+                    }));
+                    const savedMeals = await Promise.all(newMeals.map(addMealPlan));
+                    setMealPlan(prev => [...prev, ...savedMeals]);
+                } else if (args.requestType === 'eventChanged') {
+                    const updatedMeals = args.data.map(event => ({
+                        id: event.Id,
+                        name: event.Subject,
+                        date: event.StartTime
+                    }));
+                    const savedMeals = await Promise.all(updatedMeals.map(updateMealPlan));
+                    setMealPlan(prev => prev.map(meal => savedMeals.find(m => m.id === meal.id) || meal));
+                } else if (args.requestType === 'eventRemoved') {
+                    const removedMeals = args.data.map(event => ({
+                        id: event.Id
+                    }));
+                    await Promise.all(removedMeals.map(deleteMealPlan));
+                    setMealPlan(prev => prev.filter(meal => !removedMeals.some(m => m.id === meal.id)));
+                }
+            } catch (error) {
+                console.error('Failed to update meals:', error);
             }
         };
     
+        // Prepare data for the chart
+        // Assuming mealPlan is an array of objects with a date property
         const chartData = mealPlan.reduce((acc, meal) => {
             const date = new Date(meal.date).toDateString();
             if (!acc[date]) {

@@ -96,7 +96,6 @@ app.get('/api/shopping-lists', async (req, res) => {
   }
 });
 
-
 // add a new shopping list
 app.post('/api/shopping-lists', async (req, res) => {
   try {
@@ -126,6 +125,48 @@ app.put('/api/shopping-lists/:id', async (req, res) => {
     res.json(response.data);
   } catch (error) {
     res.status(500).json({ error: 'Failed to edit shopping list' });
+  }
+});
+
+// get the meal plan
+app.get('/api/mealPlan', async (req, res) => { 
+  try {
+    const response = await axios.get(`${STORAGE_SERVICE_URL}/mealPlan`);
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json('Failed to retrieve the meal plan:', error );
+  }
+});
+
+// add a new meal plan
+app.post('/api/mealPlan', async (req, res) => {
+  try {
+    console.log('Received request body:', req.body); // Add logging
+    const response = await axios.post(`${STORAGE_SERVICE_URL}/mealPlan`, req.body);
+    console.log('Storage service response:', response.data); // Add logging
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create meal plan' });
+  }
+});
+
+// delete a meal plan
+app.delete('/api/mealPlan/:id', async (req, res) => {
+  try {
+    const response = await axios.delete(`${STORAGE_SERVICE_URL}/mealPlan/${req.params.id}`);
+    res.status(response.status).json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to delete meal plan'});
+  }
+});
+
+// edit a shopping list
+app.put('/api/mealPlan/:id', async (req, res) => {
+  try {
+    const response = await axios.put(`${STORAGE_SERVICE_URL}/mealPlan/${req.params.id}`, req.body);
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to edit meal plan' });
   }
 });
 
