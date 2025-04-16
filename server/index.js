@@ -138,6 +138,16 @@ app.get('/api/mealPlan', async (req, res) => {
   }
 });
 
+// analyse the meal plan
+app.get('/api/mealPlan/analyse', async (req, res) => {
+  try {
+    const response = await axios.get(`${STORAGE_SERVICE_URL}/mealPlan/analyze`, { params: req.query });
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json('Failed to retrieve the meal plan analysis data:', error );
+  }
+});
+
 // add a new meal plan
 app.post('/api/mealPlan', async (req, res) => {
   try {

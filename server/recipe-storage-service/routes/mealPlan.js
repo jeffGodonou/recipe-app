@@ -41,6 +41,39 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/analyze', async (req, res) => {
+    try {
+        const { keyword, startDate, endDate } = req.query;
+        const meals = await readMealPlans();
+
+        // Filter meals based on keyword and date range
+        // Convert startDate and endDate to Date objects for comparison
+        const filteredMeals = meals.filter(meal => {
+            const mealDate = new Date(meal.date);
+            const matchesKeyword = keyword ? meal.name.toLowerCase().includes(keyword.toLowerCase()) : true;
+            const withinDateRange = (!startDate || mealDate >= new Date(startDate)) && 
+                                    (!endDate || mealDate <= new Date(endDate));
+            return matchesKeyword && withinDateRange;
+        })
+
+        const aggregatedData = filteredMeals.reduce((acc, meal) => {
+            const mealDate = new Date(meal.date).toDateString();
+            acc[mealDate] = (acc[mealDate] || 0) + 1; // count meals per date
+            return acc;
+        }, {});
+
+        const chartData = Object.entries(aggregatedData).map(date => ({
+            x: date,
+            y: aggregatedData[date]
+        }));
+
+        res.json(chartData); // return the aggregated data for charting
+    } catch (error) {
+        console.error('Failed to analyze meal plan data:', error.message);
+        res.status(500).json({ error: 'Failed to analyze meal plan data' });
+    }
+});
+
 // Endpoint to add a new meal plan
 router.post('/', async (req, res) => {
     try {
@@ -53,7 +86,6 @@ router.post('/', async (req, res) => {
         const newMealPlan = {
             id: req.body.id || Date.now().toString(), // generate a unique ID if not provided
             name: name || '',
-            // items: items || [],
             date: parsedDate
         };
 

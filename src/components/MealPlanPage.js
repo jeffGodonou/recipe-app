@@ -1,19 +1,20 @@
-    import React, { useState, useEffect } from 'react';
-    import { ScheduleComponent, Day, Week, WorkWeek, Month, Agenda, Inject } from '@syncfusion/ej2-react-schedule';
-    import { ChartComponent, SeriesCollectionDirective, SeriesDirective, ColumnSeries, Category, Tooltip, Legend, DataLabel, Inject as ChartInject } from '@syncfusion/ej2-react-charts';
-    import { getMealPlans, addMealPlan, updateMealPlan, deleteMealPlan } from '../api.js';
-    import Navbar from './Navbar.js';
-    import '@syncfusion/ej2-base/styles/material.css';
-    import '@syncfusion/ej2-buttons/styles/material.css';
-    import '@syncfusion/ej2-calendars/styles/material.css';
-    import '@syncfusion/ej2-dropdowns/styles/material.css';
-    import '@syncfusion/ej2-inputs/styles/material.css';
-    import '@syncfusion/ej2-navigations/styles/material.css';
-    import '@syncfusion/ej2-popups/styles/material.css';
-    import '@syncfusion/ej2-splitbuttons/styles/material.css';
-    import '@syncfusion/ej2-react-schedule/styles/material.css';
-    import '@syncfusion/ej2-react-charts';
-    import './MealPlanPage.scss';
+import React, { useState, useEffect } from 'react';
+import { ScheduleComponent, Day, Week, WorkWeek, Month, Agenda, Inject } from '@syncfusion/ej2-react-schedule';
+import { ChartComponent, SeriesCollectionDirective, SeriesDirective, ColumnSeries, Category, Tooltip, Legend, DataLabel, Inject as ChartInject } from '@syncfusion/ej2-react-charts';
+import { getMealPlans, addMealPlan, updateMealPlan, deleteMealPlan } from '../api.js';
+import Navbar from './Navbar.js';
+import '@syncfusion/ej2-base/styles/material.css';
+import '@syncfusion/ej2-buttons/styles/material.css';
+import '@syncfusion/ej2-calendars/styles/material.css';
+import '@syncfusion/ej2-dropdowns/styles/material.css';
+import '@syncfusion/ej2-inputs/styles/material.css';
+import '@syncfusion/ej2-navigations/styles/material.css';
+import '@syncfusion/ej2-popups/styles/material.css';
+import '@syncfusion/ej2-splitbuttons/styles/material.css';
+import '@syncfusion/ej2-react-schedule/styles/material.css';
+import '@syncfusion/ej2-react-charts';
+import './MealPlanPage.scss';
+import MealPlanAnalysis from './MealPlanAnalysis.js';
     
     const MealPlanPage = () => {
         const [mealPlan, setMealPlan] = useState([]);
@@ -114,6 +115,8 @@
                         </SeriesCollectionDirective>
                         <ChartInject services={[ColumnSeries, Category, Tooltip, Legend, DataLabel]} />
                     </ChartComponent>
+
+                    <MealPlanAnalysis />
                 </div>
             </>
         );
