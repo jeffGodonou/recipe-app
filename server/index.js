@@ -139,7 +139,7 @@ app.get('/api/mealPlan', async (req, res) => {
 });
 
 // analyse the meal plan
-app.get('/api/mealPlan/analyse', async (req, res) => {
+app.get('/api/mealPlan/analyze', async (req, res) => {
   try {
     const response = await axios.get(`${STORAGE_SERVICE_URL}/mealPlan/analyze`, { params: req.query });
     res.json(response.data);

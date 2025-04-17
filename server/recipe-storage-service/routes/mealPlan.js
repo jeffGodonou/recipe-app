@@ -55,18 +55,20 @@ router.get('/analyze', async (req, res) => {
                                     (!endDate || mealDate <= new Date(endDate));
             return matchesKeyword && withinDateRange;
         })
+        console.log('Filtered meals:', filteredMeals); // log the filtered meals
+
 
         const aggregatedData = filteredMeals.reduce((acc, meal) => {
             const mealDate = new Date(meal.date).toDateString();
             acc[mealDate] = (acc[mealDate] || 0) + 1; // count meals per date
             return acc;
         }, {});
+        console.log('Aggregated meal plan data:', aggregatedData); // log the aggregated data
 
-        const chartData = Object.entries(aggregatedData).map(date => ({
-            x: date,
-            y: aggregatedData[date]
-        }));
+        const chartData = Object.entries(aggregatedData).map(([date, count]) => ({ x: date, y: count })); // format data for charting
+        chartData.sort((a, b) => new Date(a.x) - new Date(b.x)); // sort data by date
 
+        console.log('Meal plan analysis data:', chartData); // log the analysis data
         res.json(chartData); // return the aggregated data for charting
     } catch (error) {
         console.error('Failed to analyze meal plan data:', error.message);

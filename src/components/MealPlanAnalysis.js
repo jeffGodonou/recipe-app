@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ChartComponent, ColumnSeries, SeriesCollectionDirective, SeriesDirective, Inject, Legend, Tooltip, Category } from '@syncfusion/ej2-react-charts';
 
 const MealPlanAnalysis = () => {
@@ -23,10 +23,10 @@ const MealPlanAnalysis = () => {
         }
     };
 
-    useEffect(() => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
         fetchAnalysisData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [keyword, startDate, endDate]);
+    };
 
     return (
         <div className="meal-plan-analysis">
@@ -48,6 +48,7 @@ const MealPlanAnalysis = () => {
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
                 />
+                <button onClick={handleSubmit}>Analyze</button>
             </div>
             
             <ChartComponent id='charts' primaryXAxis={{ valueType: 'Category' }} title='Meal Frequency Analysis'>
