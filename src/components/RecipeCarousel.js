@@ -96,8 +96,8 @@ const RecipeCarousel = ({recipes, onDeleteRecipe}) => {
                 const cardClass = getCardClass(index);
                 return (
                 <div key={recipe.idMeal} className={`carousel-card ${cardClass}`}>
-                    <Card key={recipe.idMeal} sx={{ maxWidth: 345, margin: 'auto', boxShadow: 3, backgroundColor: 'rgb(216, 120, 24)' }} className='recipe-card'>
-                        <div className='banier'>
+                    <Card key={recipe.idMeal} sx={{ maxWidth: 345, margin: 'auto', boxShadow: 3, backgroundColor: '#216e34' }} className='recipe-card'>
+                        <div className='banner'>
                         {recipe.personal && (
                             <>
                                 <Typography variant='body2' color='textSecondary' className='personal-sticker'>
