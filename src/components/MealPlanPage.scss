@@ -1,70 +1,7 @@
-.MuiPickerStaticWrapper-root{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 10px;
-    background-color: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    width: 40%; 
-    height: auto;
-
-    .css-xelq0e-MuiPickerStaticWrapper-content{
-        background-color: rgba(0, 0, 0, 0.1);
-        width: 100%;
-        height: 100%;
-    }
-
-    .css-1b5wve8-MuiButtonBase-root-MuiPickersDay-root{
-        background-color: rgba(0, 0, 0, 0);
-        border-radius: 0;
-        font-size: medium;
-        //width: 25%;
-    }
-
-    .css-hvdmc-MuiButtonBase-root-MuiPickersDay-root.Mui-selected{
-        background-color: rgba(233, 152, 138, 0.438);
-        border-radius: 0;
-        //width: 25%;
-    }
-
-    .css-hvdmc-MuiButtonBase-root-MuiPickersDay-root:focus.Mui-selected{
-        background-color: rgba(4, 36, 4, 0.856);
-        border-radius: 0;
-    }
-
-    .css-hvdmc-MuiButtonBase-root-MuiPickersDay-root:hover.Mui-selected{
-        background-color: rgba(4, 36, 4, 0.856);
-        border-radius: 0;
-    }
-
-
-    .css-hvdmc-MuiButtonBase-root-MuiPickersDay-root:focus.Mui-selected {
-        will-change: background-color;
-        background-color: rgba(4, 36, 4, 0.856);
-    }
-
-    .css-hvdmc-MuiButtonBase-root-MuiPickersDay-root.Mui-selected {
-        color: #fff;
-        background-color: rgba(4, 36, 4, 0.856);
-        font-weight: 500;
-        -webkit-transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-        transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-        transition-property: background-color;
-        transition-duration: 250ms;
-        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-        transition-delay: 0ms;
-        transition-behavior: normal;
-    }
-}
-
-.MuiPickerStaticWrapper-content{
-    background-color: rgba(0, 0, 0, 0.1);
-}
-
 .meal-plan-container {
     display: flex;
     justify-content: center;
-    // flex-direction: column;
+    flex-direction: row;
     align-items: start;
 
     .meal-field {
@@ -72,23 +9,44 @@
     }
 }
 
-.meal-plan-cards {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 1rem;
-    margin-left: 5rem;
+.e-chart {
+    flex: 1;
+    width: 80%;
+    height: 400px;
+    position: relative;
+    z-index: 1;
 }
 
-.meal-plan-card {
-    padding: 1rem;
-    width: 350px;
-    margin-top: 2rem;
+.sidebar {
+    width: 200px;
+    height: 89vh;
+    //position: fixed;
+    //top: 65px;
+    //left: 0;
+    background-color: #f4f4f4;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-right: 1px solid #ddd;
 }
 
-.meal-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 0.5rem;
+.sidebar button {
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.sidebar button:hover {
+    background-color: #0056b3;
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
 }

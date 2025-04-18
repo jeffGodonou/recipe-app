@@ -3,6 +3,7 @@ import axios from 'axios';
 const MAIN_SERVER_URL = 'http://localhost:5000/api'; // URL of the server
 const RECIPES_API_URL = `${MAIN_SERVER_URL}/recipes`; // URL of the recipes endpoint
 const SHOPPING_LISTS_API_URL = `${MAIN_SERVER_URL}/shopping-lists`; // URL of the shopping lists endpoint
+const MEAL_PLAN_API_URL = `${MAIN_SERVER_URL}/mealPlan`; // URL of the meal plan endpoint
 
 // Recipes API functions
 
@@ -104,6 +105,63 @@ export const deleteShoppingList = async (id) => {
         return response.data;
     } catch (error) {
         console.error('Failed to delete shopping list', error);
+        throw error;
+    }
+}
+
+// Meal plan API functions
+
+// Function to fetch meal plans from the server 
+export const getMealPlans = async () => {
+    try {
+        const response = await axios.get(MEAL_PLAN_API_URL);
+        return response.data;
+    } catch (error) {
+        console.error('Failed to retrieve meal plans', error);
+        throw error;
+    }
+}
+
+// Function to add a meal plan to the server
+export const addMealPlan = async (mealPlan) => {
+    try {
+        const response = await axios.post(MEAL_PLAN_API_URL, mealPlan);
+        return response.data;
+    } catch (error) {
+        console.error('Failed to add meal plan', error);
+        throw error;
+    }
+}
+
+// Function to update a meal plan on the server
+export const updateMealPlan = async (mealPlan) => {
+    try {
+        const response = await axios.put(`${MEAL_PLAN_API_URL}/${mealPlan.id}`, mealPlan);
+        return response.data;
+    } catch (error) {
+        console.error('Failed to update meal plan', error);
+        throw error;
+    }
+}
+
+// Function to delete a meal plan from the server
+export const deleteMealPlan = async (id) => {
+    try {
+        const response = await axios.delete(`${MEAL_PLAN_API_URL}/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Failed to delete meal plan', error);
+        throw error;
+    }
+}
+
+// Function to delete multiple meal plans from the server
+export const deleteMultipleMealPlans = async (ids) => {
+    try {
+        const response = await axios.delete(`${MEAL_PLAN_API_URL}`, { data: { ids } });
+        return response.data;
+    } catch (error) {
+        console.error('Failed to delete meal plans', error);
         throw error;
     }
 }
