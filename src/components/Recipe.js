@@ -152,7 +152,7 @@ const Recipe = ({recipes, onAddShoppingList}) => {
     const instructions = recipe.strInstructions ? recipe.strInstructions.split(/(?:Step \d+|\.|:)/).filter(instruction => instruction.trim() !== '') : []
 
     return (
-        <Card key={recipe.idMeal} sx={{backgroundColor: 'rgb(173, 51, 10)'}} className="recipe-card">
+        <Card key={recipe.idMeal} sx={{backgroundColor: 'rgb(234, 232, 206)'}} className="recipe-card">
             <div className='image-container'>
                 <CardMedia 
                     component = "img"
@@ -162,7 +162,7 @@ const Recipe = ({recipes, onAddShoppingList}) => {
                 />
             </div>
 
-            <CardContent sx={{backgroundColor: 'rgb(216, 120, 24)'}} >
+            <CardContent sx={{backgroundColor: 'rgba(0, 0, 0, 0.1)'}} >
                 <div className='header-div'> 
                     <div className='header'>
                     <Typography 
