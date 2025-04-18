@@ -18,6 +18,7 @@ import MealPlanAnalysis from './MealPlanAnalysis.js';
     
     const MealPlanPage = () => {
         const [mealPlan, setMealPlan] = useState([]);
+        const [view, setView] = useState('habitChart');
         
         // Fetch meal plans from the server when the component loads
         useEffect(() => {
@@ -99,24 +100,37 @@ import MealPlanAnalysis from './MealPlanAnalysis.js';
             <>
                 <Navbar />
                 <div className='meal-plan-container'>
+                    
+                    <div className='sidebar'>
+                        <button onClick={() => setView('habitChart')}>Habit Chart</button>
+                        <button onClick={() => setView('analysis')}>Analysis</button>
+                    </div>
+                    <div className='content'>
+                        { view === 'habitChart' && (
+                            <ChartComponent
+                                primaryXAxis={{ valueType: 'Category' }}
+                                title='Meal Plan Habits'
+                            >
+                                <SeriesCollectionDirective>
+                                    <SeriesDirective dataSource={chartSeries} xName='x' yName='y' type='Column' />
+                                </SeriesCollectionDirective>
+                                <ChartInject services={[ColumnSeries, Category, Tooltip, Legend, DataLabel]} />
+                            </ChartComponent>
+                        )}
+                        { view === 'analysis' && ( 
+                            <MealPlanAnalysis />
+                        )}
+                    </div>
                     <ScheduleComponent
+                        id='schedule'
+                        width='100%'
+                        height='93vh'
                         currentView='Month'
                         eventSettings={eventSettings}
                         actionComplete={handleActionComplete}
                     >
                         <Inject services={[Day, Week, WorkWeek, Month, Agenda]} />
                     </ScheduleComponent>
-                    <ChartComponent
-                        primaryXAxis={{ valueType: 'Category' }}
-                        title='Meal Plan Habits'
-                    >
-                        <SeriesCollectionDirective>
-                            <SeriesDirective dataSource={chartSeries} xName='x' yName='y' type='Column' />
-                        </SeriesCollectionDirective>
-                        <ChartInject services={[ColumnSeries, Category, Tooltip, Legend, DataLabel]} />
-                    </ChartComponent>
-
-                    <MealPlanAnalysis />
                 </div>
             </>
         );

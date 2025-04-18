@@ -1,7 +1,7 @@
 .meal-plan-container {
     display: flex;
     justify-content: center;
-    flex-direction: column;
+    flex-direction: row;
     align-items: start;
 
     .meal-field {
@@ -17,3 +17,36 @@
     z-index: 1;
 }
 
+.sidebar {
+    width: 200px;
+    height: 89vh;
+    //position: fixed;
+    //top: 65px;
+    //left: 0;
+    background-color: #f4f4f4;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-right: 1px solid #ddd;
+}
+
+.sidebar button {
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.sidebar button:hover {
+    background-color: #0056b3;
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+}
